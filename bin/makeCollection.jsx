@@ -12,6 +12,8 @@ var makeLayout = {
 	output_path: makeLayout.work_root + 'output\\',
 	ill: undefined,			// Application
 	template: undefined,	// Document
+	print_list: undefined,	// Array
+	cutLayerName: 'cut',
 
 	// ========== Functions: ========== //
 
@@ -29,7 +31,7 @@ var makeLayout = {
 
 	/*
 	 * Возвращает папку с этикетками 
-	 * @return: string
+	 * @return string
 	 */
 	getJobName: function () {
 		// TODO: Stub
@@ -40,7 +42,7 @@ var makeLayout = {
 
 	/*
 	 * Возварщает имя файла шаблона
-	 * @return: string
+	 * @return string
 	 */
 	getTemplateName: function () {
 		// TODO: Stub
@@ -52,7 +54,7 @@ var makeLayout = {
 
 	/*
 	 * Открыть шаблон и вернуть ссылку на него
-	 * @return: Document object
+	 * @return Document object
 	 */
 	getTemplateDoc: function() {
 		var template_file_name = this.getTemplateName();
@@ -68,6 +70,38 @@ var makeLayout = {
 	},
 
 	/*
+	 * Возвращает слой высечки
+	 * @return Layer object
+	 */
+
+	getCutLayer: function() {
+		layers = this.template.layers;
+		cut_layer = layers.getByName(this.cutLayerName);
+		// TODO: add check on undefined
+		return cut_layer;
+	},
+
+	/*
+	 * Возвращает нижний элемент слоя
+	 * @return pathItem object
+	 */
+
+	getCutOrigin: function(cutLayer) {
+		lowermost = 0;
+		pathItems = cutLayer.pathItems;
+		ic = pathItems.length;
+		for (var i=1; i <= ic; i++) {
+			originCandidate = pathItems[i];
+            this.test(originCandidate);
+		}
+		this.paths = pathItems;
+	},
+
+    test: function(candidate) {
+        return true;
+        },
+    
+	/*
 	 * Инициализацая переменных
 	 * @param object Illustrator Application
 	 * @return object this
@@ -77,8 +111,12 @@ var makeLayout = {
 		//открыть файл $шаблона (template.ai);
 		this.template = this.getTemplateDoc();
 		//считать из файла массив этикеток $print_list;
+		this.print_list = this.getPrintList();
 		//получить ссылку на слой cut файла шаблона;
+		cutLayer = this.getCutLayer();
 		//найти самый нижний элемент слоя cut;
+		tmpEl = this.getCutOrigin(cutLayer);
+
 		//сохранить $координаты самого нижнего элемента слоя cut;
 		//получить ссылку на слой $Layer файла шаблона;
 		//получить ссылку на коллекцию стилей в шаблоне;
