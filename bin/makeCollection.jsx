@@ -7,13 +7,14 @@ var makeLayout = {
 	// TODO: Use Folder objects
 	// TODO: Потому что на маке разделитель другой
 	work_root: 'W:\\', 
-	template_path: makeLayout.work_root + 'docs\\template\\',
-	jobs_path: makeLayout.work_root + 'docs\\jobcontainer\\',
-	output_path: makeLayout.work_root + 'output\\',
-	ill: undefined,			// Application
-	template: undefined,	// Document
-	print_list: undefined,	// Array
+	template_path: 'W:\\docs\\template\\',
+	jobs_path: 'W:\\docs\\jobcontainer\\',
+	output_path: 'W:\\output\\',
+	ill: null,			// Application
+	template: null,	// Document
+	print_list: null,	// Array
 	cutLayerName: 'cut',
+	landingPoint: [], 
 
 	// ========== Functions: ========== //
 
@@ -24,7 +25,7 @@ var makeLayout = {
 	getPrintList: function () {
 		// TODO: Stub
 		// get aray from real source (plain text, xml, database)
-		p = makeLayout.getJobName();
+		p = this.getJobName();
 		pl = [p+'label_one.eps',p+'label_two.eps',p+'label_three.eps',p+'label_four.eps'];
 		return pl;
 	},
@@ -36,7 +37,7 @@ var makeLayout = {
 	getJobName: function () {
 		// TODO: Stub
 		// return real job name;
-		fakeName = makeLayout.jobs_path + "d1234567\\";
+		fakeName = this.jobs_path + "d1234567\\";
 		return fakeName;
 	},
 
@@ -48,7 +49,7 @@ var makeLayout = {
 		// TODO: Stub
 		// return real template;
 		fakeName = "1064003.ai";
-		result = makeLayout.template_path + fakeName;
+		result = this.template_path + fakeName;
 		return result;
 	},
 
@@ -70,6 +71,30 @@ var makeLayout = {
 	},
 
 	/*
+	 * Сбросить начало координат на левый нижний угол
+	 * @return void
+	 */
+	resetOrigin: function() {
+		this.template.rulerOrigin = [0,0];
+	},
+
+	/*
+	 * Установить координаты первоначального плейса
+	 * @param array position top left [x,y]
+	 * @return void
+	 */
+	setLandingPoint: function(position) {
+		// TODO: add check some process logic
+		// this test always pass now
+		if ((position[0] > 0) && (position[1] > 0)) {
+			this.landingPoint = position;
+		} else {
+			//TODO: add error[] explanation
+			throw "target out of artboard";
+		}
+	},
+
+	/*
 	 * Возвращает слой высечки
 	 * @return Layer object
 	 */
@@ -83,24 +108,32 @@ var makeLayout = {
 
 	/*
 	 * Возвращает нижний элемент слоя
+	 * @param layer object
 	 * @return pathItem object
 	 */
 
-	getCutOrigin: function(cutLayer) {
-		lowermost = 0;
+	getCutLowerest: function(cutLayer) {
 		pathItems = cutLayer.pathItems;
 		ic = pathItems.length;
-		for (var i=1; i <= ic; i++) {
-			originCandidate = pathItems[i];
-            this.test(originCandidate);
+		if (ic > 0) {
+			comparsion = pathItems[0];
+			for (var i=0; i < ic; i++) {
+				originCandidate = pathItems[i];
+				// check position properties (in [x,y] form) of pathItem's
+				// pathItem.position[0] : left
+				// pathItem.position[1] : top 
+				if (originCandidate.position[1] < comparsion.position[1]) {
+					comparsion = originCandidate;
+				}
+			}
+		} else {
+			//TODO: add error[] explanation
+			throw "empty cut layer";
 		}
-		this.paths = pathItems;
+		// Here, lowerest pathItem element of cut layer;
+		return originCandidate.position;
 	},
 
-    test: function(candidate) {
-        return true;
-        },
-    
 	/*
 	 * Инициализацая переменных
 	 * @param object Illustrator Application
@@ -110,25 +143,19 @@ var makeLayout = {
 		this.ill = app;
 		//открыть файл $шаблона (template.ai);
 		this.template = this.getTemplateDoc();
+		// сбросить 0
+		this.resetOrigin();
 		//считать из файла массив этикеток $print_list;
 		this.print_list = this.getPrintList();
 		//получить ссылку на слой cut файла шаблона;
 		cutLayer = this.getCutLayer();
 		//найти самый нижний элемент слоя cut;
-		tmpEl = this.getCutOrigin(cutLayer);
-
 		//сохранить $координаты самого нижнего элемента слоя cut;
+		this.setLandingPoint(this.getCutLowerest(cutLayer));
 		//получить ссылку на слой $Layer файла шаблона;
 		//получить ссылку на коллекцию стилей в шаблоне;
 		//выбрать $стиль, который будет применяться к этикетке;
 	},
-
-	/*
-	 * Script entry point
-	 */
-	main: function() {
-
-	}
 }
 
 pill = makeLayout.setup(app);
