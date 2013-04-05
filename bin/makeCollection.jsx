@@ -16,12 +16,14 @@ var makeLayout = {
 	cutLayerName: 'cut',
 	landingPoint: [], 
 	landingLayer: null,	// Layer object
+	labelStyle: null,	// GraphicStyle object
 
 	error: [],			// Error messages array
 	warnings: [],		// Warning messages array
 	info: [],			// Info messages array
 	strictLayerCount: 3, // Exact number of layers in template
 	strictLayerNames: ['mark','cut'], // Order of elements is critical
+	strictStyleName: 'dup', // TODO: Name of style to apply; n.b.: 'dup' is a Polish 'ass'
 	templateValid: false, // Flag indicates what template is safe to use
 
 	// ========== Functions: ========== //
@@ -84,6 +86,7 @@ var makeLayout = {
 	 */
 	checkTemplate: function() {
 		this.checkLayers();
+		this.checkStyles();
 		this.templateValid = true;
 		return true;
 	},
@@ -111,6 +114,29 @@ var makeLayout = {
 		// layer for placing eps'es - its template.layers[2]
 		return true;
 	},
+	
+	/*
+	 * Проверка стилей в шаблоне на соответствие соглашениям:
+	 * TODO: Должен быть стиль с именем например dup 
+	 * @return boolean
+	 */
+	checkStyles: function() {
+		sn = '[' + this.strictStyleName + ']';
+		return true;
+		// TODO:
+		try {
+			style = this.template.graphicStyles.getByName(sn);
+			this.labelStyle = style;
+			}
+		catch (e) {
+			// TODO: always pass
+			}
+		if (this.labelStyle === null) {
+			throw "no style";
+			}
+		return true;
+	},
+
 	/*
 	 * Сбросить начало координат на левый нижний угол
 	 * @return void
@@ -188,6 +214,18 @@ var makeLayout = {
 	},
 
 	/*
+	 * Устанавливает стиль для этикетки
+	 * (предполагается, что их в шаблоне всего 3
+	 * и он последний)
+	 * @return void
+	 */
+	setLabelStyle: function() {
+		// TODO: select by style name
+		// see checkStyles above for details
+		this.labelStyle = this.template.graphicStyles[2];
+	},
+
+	/*
 	 * Инициализацая переменных
 	 * @param object Illustrator Application
 	 * @return object this
@@ -211,6 +249,9 @@ var makeLayout = {
 		this.landingLayer = this.getLandingLayer();
 		//получить ссылку на коллекцию стилей в шаблоне;
 		//выбрать $стиль, который будет применяться к этикетке;
+		this.setLabelStyle();
+
+		return this;
 	},
 }
 
