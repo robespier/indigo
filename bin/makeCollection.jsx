@@ -16,6 +16,11 @@ var makeLayout = {
 	cutLayerName: 'cut',
 	landingPoint: [], 
 
+	error: [],			// Error messages array
+	warnings: [],		// Warning messages array
+	strictLayerCount: 3, // Exact number of layers in template
+	strictLayerNames: ['mark','cut'], // Order of elements is critical
+
 	// ========== Functions: ========== //
 
 	/*
@@ -70,6 +75,38 @@ var makeLayout = {
 		}
 	},
 
+	/*
+	 * Валидация шаблона
+	 * @return boolean
+	 */
+	checkTemplate: function() {
+		this.checkLayers();
+		return true;
+	},
+
+	/*
+	 * Проверка слоев в шаблоне на соответствие соглашениям:
+	 * должно быть ровно 3 слоя
+	 * 1: имя "mark"
+	 * 2: имя "cut", TODO: не печатается
+	 * 3: произволное имя
+	 * @return boolean
+	 */
+	checkLayers: function() {
+		if (this.template.layers.length !== this.strictLayerCount) {
+			//TODO: add error[] explanation
+			throw "Wrong layers count";
+		}
+		for (var i=0; i < this.strictLayerNames.length; i++) {
+			if (this.strictLayerNames[i] !== this.template.layers[i].name) {
+			//TODO: add error[] explanation
+			throw "Wrong layers names or layer order";
+			}
+		}
+		// by the way, from this point we absolutely sure about unnamed
+		// layer for placing eps'es - its template.layers[2]
+		return true;
+	},
 	/*
 	 * Сбросить начало координат на левый нижний угол
 	 * @return void
@@ -143,6 +180,8 @@ var makeLayout = {
 		this.ill = app;
 		//открыть файл $шаблона (template.ai);
 		this.template = this.getTemplateDoc();
+		// optional:
+		this.checkTemplate();
 		// сбросить 0
 		this.resetOrigin();
 		//считать из файла массив этикеток $print_list;
