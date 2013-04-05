@@ -10,16 +10,19 @@ var makeLayout = {
 	template_path: 'W:\\docs\\template\\',
 	jobs_path: 'W:\\docs\\jobcontainer\\',
 	output_path: 'W:\\output\\',
-	ill: null,			// Application
-	template: null,	// Document
+	ill: null,			// Illustrator Application object
+	template: null,		// Document object
 	print_list: null,	// Array
 	cutLayerName: 'cut',
 	landingPoint: [], 
+	landingLayer: null,	// Layer object
 
 	error: [],			// Error messages array
 	warnings: [],		// Warning messages array
+	info: [],			// Info messages array
 	strictLayerCount: 3, // Exact number of layers in template
 	strictLayerNames: ['mark','cut'], // Order of elements is critical
+	templateValid: false, // Flag indicates what template is safe to use
 
 	// ========== Functions: ========== //
 
@@ -81,6 +84,7 @@ var makeLayout = {
 	 */
 	checkTemplate: function() {
 		this.checkLayers();
+		this.templateValid = true;
 		return true;
 	},
 
@@ -172,6 +176,18 @@ var makeLayout = {
 	},
 
 	/*
+	 * Возвращает слой с этикеткой
+	 * @see checkLayers
+	 * @return Layer object
+	 */
+	getLandingLayer: function() {
+		if (this.templateValid) {
+			return this.template.layers[2];
+		}
+		//TODO: make alternative search landing layer
+	},
+
+	/*
 	 * Инициализацая переменных
 	 * @param object Illustrator Application
 	 * @return object this
@@ -192,6 +208,7 @@ var makeLayout = {
 		//сохранить $координаты самого нижнего элемента слоя cut;
 		this.setLandingPoint(this.getCutLowerest(cutLayer));
 		//получить ссылку на слой $Layer файла шаблона;
+		this.landingLayer = this.getLandingLayer();
 		//получить ссылку на коллекцию стилей в шаблоне;
 		//выбрать $стиль, который будет применяться к этикетке;
 	},
