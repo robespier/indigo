@@ -3,65 +3,91 @@
 
 #target illustrator-13
 
-//Задаем переменные для паспорта. шаблона и намотки
+//Определяем переменные для паспорта. шаблона и намотки,
+//которые задаются в окне диалога
+
 var task = 5006006;
 var temp = 4090354;
-var roll = 2;
+var roll = 0;
 
 	//Рисуем окно диалога
 	//var dlg = new Window('dialog', 'Make Collection',[600,450,1000,750]);
 	//dlg.show();
 
-	//alert ('В окне диалога Make Collection вводятся номер задания,
-	//\nномер шаблона высечки, а также выбирается тип намотки.');
+//Определяем переменные для рабочего каталога и папки паспорта
+
+var jobFolder = new Folder ('\\exchange1\\DESIGN_IBM');
+var taskFolder = new Folder (jobFolder + '\\d' + task);
 
 
-
-//Проверяем наличие папки паспорта (в jobcontainer)
-//В случае отсутствия, выдаем сообщение: "Указанный паспорт не найден"
-
-var jobFolder = new Folder ('\\exchange1\DESIGN_IBM');
-var taskFolder = new Folder (jobFolder + '\\d' + task + '.csv');
-
-
-
-//Проверяем наличие принт-листа (файл с номером паспорта в базе принт-листов)
-//В случае отсутствия, выдаем сообщение: "Принт-лист не найден "
+//Определяем переменные для принт-листа:
+//папку, где будет находится принт-лист
+//и ссылку на файл принт-листа
 
 var prListFolder = new Folder ('D:\\work\\print_list');
 var prList = new File (prListFolder + '\\d' + task + '.csv');
 
 
-//Проверяем соответствие...
-
-
-
-//Проверяем наличие указанного шаблона сборки (в базе шаблонов)
-//Если шаблон существует, открываем его
-//В противном случае - выдаем сообщение: "Указанный шаблон отсутствует в базе шаблонов"
+//Определяем переменную для каталога шаблонов сборки
+//и ссылку на файл шаблона
+//а также открываем шаблон
 
 var templateFolder = new Folder ('D:\\work\\template');
 var template = new File (templateFolder + '\\' + temp + '.ai');
-
-
 app.open (template);
 
+//Создаем слой для этикеток
+//называем его именем label
+//и помещаем его в самый низ в пачке слоев документа
+
+newlayer = activeDocument.layers.add();
+newlayer.name = 'label';
+newlayer.zOrder(ZOrderMethod.SENDTOBACK);
 
 
+//Определяем размер этикетки (без припусков)
+
+var cuts = app.activeDocument.layers['cut'].pathItems;
+var LsizeX = cuts[0].width;
+var LsizeY = cuts[0].height;
 
 
-//Находим левый нижний контур высечки (целевой контур)
+//Находим левый нижний контур высечки
 
-var allCuts = app.activeDocument.layers[1].pathItems;
-var targetCut = allCuts[0];
+sumXY = new Array (cuts.length);
 
-for (i=1; i<allCuts.length; i++){
-if (targetCut.position[0] > allCuts[i].position[0]);
+for (i=0; i < cuts.length; i++) {
+var xPos = cuts[i].position[0];
+var yPos = cuts[i].position[1];
+sumXY[i] = xPos+yPos;
+
+alert (sumXY[i]);
 
 }
 
-//Сохраняем координаты целевого контура
 
-//Сохраняем размеры этикетки с припусками (размеры целевого контура + 2 мм)
 
-//Считать массив этикеток из print_list
+
+
+
+
+
+//Проверяем правильной нахождения целевого объекта
+//с помощью его удаления
+
+//targetCut.remove();
+
+
+
+
+
+
+
+//Считываем массив этикеток из print_list
+
+
+
+//Закрываем активный документ
+
+var doc = app.activeDocument;
+doc.close (SaveOptions.DONOTSAVECHANGES);
