@@ -7,7 +7,7 @@
 //которые задаются в окне диалога
 
 var task = 5006006;
-var temp = 4090354;
+var temp =4090354;
 var roll = 0;
 
 	//Рисуем окно диалога
@@ -32,8 +32,8 @@ var prList = new File (prListFolder + '\\d' + task + '.csv');
 //и ссылку на файл шаблона
 //а также открываем шаблон
 
-var templateFolder = new Folder ('D:\\work\\template');
-var template = new File (templateFolder + '\\' + temp + '.ai');
+var templateFolder = new Folder ('D:\\work\\template\\short');
+var template = new File (templateFolder + '\\' + temp + '_short.ai');
 app.open (template);
 
 //Создаем слой для этикеток
@@ -44,43 +44,52 @@ newlayer = activeDocument.layers.add();
 newlayer.name = 'label';
 newlayer.zOrder(ZOrderMethod.SENDTOBACK);
 
-
-//Определяем размер этикетки (без припусков)
-
-var cuts = app.activeDocument.layers['cut'].pathItems;
-var LsizeX = cuts[0].width;
-var LsizeY = cuts[0].height;
-
 //Обнуляем центр координат
 
 var myDoc = app.activeDocument;
-myDoc.rulerOrigin.pageOrigin;
+myDoc.rulerOrigin = [0,0];
 
+//Создаем ссылку на массив высечек
 
-//Находим левый нижний контур высечки
+var cuts = app.activeDocument.layers['cut'].pathItems;
+
+//Определяем размер единичного контура
+
+//var LsizeX = cuts[0].width;
+//var LsizeY = cuts[0].height;
+
+			//Находим левый нижний контур высечки
+
+//Cоздаем массив, в котором сохраняем сумму X и Y-позиций
+//всех элементов массива высечек.
 
 sumXY = new Array (cuts.length);
-
 for (i=0; i < cuts.length; i++) {
-var xPos = cuts[i].position[0] + (LsizeX/2);
-var yPos = cuts[i].position[1] + (LsizeY/2);
+	var xPos = cuts[i].position[0];
+	var yPos = cuts[i].position[1];
 sumXY[i] = xPos+yPos;
-
-//alert (sumXY[i]);
-
 }
 
+//Находим индекс мин. значения массива
 
+var target_index = 0;
+target_sum = sumXY[0];
 
+for (i=0; i<sumXY.length;i++) {
+	if (sumXY[i] <= target_sum) {
+		target_index = i;
+		target_sum = sumXY[i];
+		}
+	}
 
+//Определяем целевой контур
 
-
-
+var targetCut = cuts[target_index];
 
 //Проверяем правильной нахождения целевого объекта
 //с помощью его удаления
 
-//targetCut.remove();
+targetCut.remove();
 
 
 
