@@ -51,17 +51,22 @@ var cuts = app.activeDocument.layers['cut'].pathItems;
 var LsizeX = cuts[0].width;
 var LsizeY = cuts[0].height;
 
+//Обнуляем центр координат
+
+var myDoc = app.activeDocument;
+myDoc.rulerOrigin.pageOrigin;
+
 
 //Находим левый нижний контур высечки
 
 sumXY = new Array (cuts.length);
 
 for (i=0; i < cuts.length; i++) {
-var xPos = cuts[i].position[0];
-var yPos = cuts[i].position[1];
+var xPos = cuts[i].position[0] + (LsizeX/2);
+var yPos = cuts[i].position[1] + (LsizeY/2);
 sumXY[i] = xPos+yPos;
 
-alert (sumXY[i]);
+//alert (sumXY[i]);
 
 }
 
@@ -89,5 +94,5 @@ alert (sumXY[i]);
 
 //Закрываем активный документ
 
-var doc = app.activeDocument;
-doc.close (SaveOptions.DONOTSAVECHANGES);
+//var doc = app.activeDocument;
+//doc.close (SaveOptions.DONOTSAVECHANGES);
