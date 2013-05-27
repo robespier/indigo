@@ -7,16 +7,16 @@
 //которые задаются в окне диалога
 
 var task = 5006006;
-var temp = 4090354;
-var roll = 0;
+var temp =4090354;
+var roll = 2;
 
-	//Рисуем окно диалога
-	//var dlg = new Window('dialog', 'Make Collection',[600,450,1000,750]);
-	//dlg.show();
+//Рисуем окно диалога
+//var dlg = new Window('dialog', 'Make Collection',[600,450,1000,750]);
+//dlg.show();
 
 //Определяем переменные для рабочего каталога и папки паспорта
 
-var jobFolder = new Folder ('\\exchange1\\DESIGN_IBM');
+var jobFolder = new Folder ('Z:\\');
 var taskFolder = new Folder (jobFolder + '\\d' + task);
 
 
@@ -44,55 +44,98 @@ newlayer = activeDocument.layers.add();
 newlayer.name = 'label';
 newlayer.zOrder(ZOrderMethod.SENDTOBACK);
 
-
-//Определяем размер этикетки (без припусков)
-
-var cuts = app.activeDocument.layers['cut'].pathItems;
-var LsizeX = cuts[0].width;
-var LsizeY = cuts[0].height;
-
 //Обнуляем центр координат
 
 var myDoc = app.activeDocument;
-myDoc.rulerOrigin.pageOrigin;
+myDoc.rulerOrigin = [0,0];
 
+//Создаем ссылку на массив высечек
+
+var cuts = myDoc.layers['cut'].pathItems;
+
+//Определяем размер единичного контура
+
+var LsizeX = cuts[0].width;
+var LsizeY = cuts[0].height;
 
 //Находим левый нижний контур высечки
 
+//Cоздаем массив, в котором сохраняем сумму X и Y-позиций
+//всех элементов массива высечек.
+
 sumXY = new Array (cuts.length);
-
 for (i=0; i < cuts.length; i++) {
-var xPos = cuts[i].position[0] + (LsizeX/2);
-var yPos = cuts[i].position[1] + (LsizeY/2);
-sumXY[i] = xPos+yPos;
-
-//alert (sumXY[i]);
-
+	var xPos = cuts[i].position[0];
+	var yPos = cuts[i].position[1];
+	sumXY[i] = xPos+yPos;
 }
 
+//Находим индекс мин. значения массива
 
+var target_index = 0;
+target_sum = sumXY[0];
 
+for (i=0; i<sumXY.length;i++) {
+	if (sumXY[i] <= target_sum) {
+		target_index = i;
+		target_sum = sumXY[i];
+	}
+}
 
+//Определяем целевой контур
 
-
-
+var targetCut = cuts[target_index];
 
 //Проверяем правильной нахождения целевого объекта
 //с помощью его удаления
 
 //targetCut.remove();
 
+//
 
 
+var printList = []; //Массив строк из принт-листа
 
+prList.open();
 
+// Считываем массив намоток (графических стилей) документа
 
+var myRolls = myDoc.graphicStyles;
 
-//Считываем массив этикеток из print_list
+// Определяем графический стиль
+roll='roll_2_5';
+myStyle=myRolls[roll];
 
+// Настройки экспорта в PDF
+var PDFSettings = new PDFSaveOptions();
+PDFSettings.acrobatLayers = false;
 
+while (line=prList.readln()) {
+	printList.push(line); //Считываем одну строку из print_list
+
+	var file_parts = line.split(";");
+	file_parts[0]; //Берем из строки номер этикетки
+	file_parts[1]; //Берем из строки наименование этикетки
+
+	file_name = taskFolder + '\\' + file_parts[1];
+	var labelObjectFile= new File (file_name); //Создаем ссылку на файл этикетки
+
+	var label = newlayer.placedItems.add();
+
+	label.file = labelObjectFile; //Помещаем на слой layer файл этикетки
+	label.position = new Array (targetCut.position[0]+(LsizeX/2) - (label.width/2), targetCut.position[1]-(LsizeY/2)+(label.height/2));
+
+	// Применям графический стиль к этикетке
+	myStyle.applyTo(label);
+
+	// Экспорт в PDF
+	var PDFName = taskFolder + '\\'  + file_parts[0] + '_' + file_parts[1].replace ('eps', 'pdf'); 
+	var ResultFilePDF = new File (PDFName);
+	myDoc.saveAs(ResultFilePDF, PDFSettings);
+	// Удалить  объект label
+	label.remove();
+}
+prList.close();
 
 //Закрываем активный документ
-
-//var doc = app.activeDocument;
-//doc.close (SaveOptions.DONOTSAVECHANGES);
+myDoc.close (SaveOptions.DONOTSAVECHANGES);
