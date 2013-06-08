@@ -109,7 +109,7 @@ while (line=prList.readln()) {
 	// Экспорт в PDF
 	var PDFName = jobFolder + '\\d' + task + '_'  + file_parts[0] + '_' + file_parts[1].replace ('eps', 'pdf'); //Задаем имя файла сборки
 	var ResultFilePDF = new File (PDFName);
-	//	myDoc.saveAs(ResultFilePDF, PDFSettings); //Сохраняем файл сборки
+	myDoc.saveAs(ResultFilePDF, PDFSettings); //Сохраняем файл сборки
 
 	label.remove(); // Удаляем объект label
 }
@@ -149,6 +149,30 @@ var i=0;
 
 while (line=prList.readln()) {
 	printList.push(line); //Считываем одну строку из print_list
+	if (i >= cuts.length) {
+		// Экспорт в PDF
+		// d + 7267004 + _UTV.pdf
+		var PDFName = jobFolder + '\\d' + task + '_UTV2.pdf'; //Задаем имя файла сборки
+		var ResultFilePDF = new File (PDFName);
+		myDoc.saveAs(ResultFilePDF, PDFSettings); //Сохраняем файл сборки
+
+		//Закрываем активный документ
+		myDoc.close (SaveOptions.DONOTSAVECHANGES);
+
+		// Открываем короткий шаблон заново
+		var template_utv = new File (templateFolder + '\\short\\' + temp + '_short.ai'); //Ссылка на файл короткого шаблона
+
+		app.open (template_utv); //Открываем короткий шаблон
+
+		newlayer = activeDocument.layers.add(); //Создаем слой для размещения этикеток
+		newlayer.name = 'label'; //называем его именем label
+		newlayer.zOrder(ZOrderMethod.SENDTOBACK); //и помещаем его в самый низ в пачке слоев документа
+
+		var myDoc = app.activeDocument; //Создаем ссылку на активный документ
+		myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
+
+		var cuts = myDoc.layers['cut'].pathItems; //Создаем ссылку на массив высечек
+	}
 
 	var file_parts = line.split(";");
 	file_parts[0]; //Берем из строки номер этикетки
