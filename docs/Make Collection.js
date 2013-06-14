@@ -3,9 +3,9 @@
 
 #target illustrator-13
 
-var task = 7267004; //Определяем переменные для паспорта 
-var temp =1152418; //шаблона
-var roll_number = 0; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
+var task = 1111111; //Определяем переменные для паспорта 
+var temp =1152510; //шаблона
+var roll_number = 4; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
 
 //Рисуем окно диалога
 //var dlg = new Window('dialog', 'Make Collection',[600,450,1000,750]);
@@ -75,17 +75,17 @@ while (line=prList.readln()) {
 	var labelObjectFile= new File (file_name); //Создаем ссылку на файл этикетки
 
 	var label = newlayer.placedItems.add();
-
 	label.file = labelObjectFile; //Помещаем на слой layer файл этикетки
-	label.position = new Array (targetCut.position[0]+(LsizeX/2) - (label.width/2), targetCut.position[1]-(LsizeY/2)+(label.height/2));
+	
+	label.position = new Array (targetCut.position[0]+(LsizeX/2) - (label.width/2), targetCut.position[1]-(LsizeY/2)+(label.height/2)); //Выравниваем этикетку по целевому контуру
 
 	//  Выбор намоток
 	switch(roll_number) {
 		case 0:
 			// Ручная намотка
-			// ПРЯМОУГОЛЬНАЯ ЭТИКЕТКА
+			// ПРЯМОУГОЛЬНАЯ / ОВАЛЬНАЯ ЭТИКЕТКА
 			// 1 - квадрат, крутить не надо;
-			// 0.999 ширина меньше высоты, крутим в любую сторону на 90 градусов
+			// 0.999 ширина меньше высоты, крутим на -90 градусов
 			// 1.999 ширина больше высоты, крутить не надо
 			targetCutRate = targetCut.width/targetCut.height;
 			labelRate = label.width/label.height;
@@ -97,6 +97,28 @@ while (line=prList.readln()) {
 			}
 			break;
 		case 1:
+			myStyle=myRolls['roll_1_6']
+			break;
+		case 2:
+			myStyle=myRolls['roll_2_5']
+			break;
+		case 3:
+			myStyle=myRolls['roll_3_7']
+			break;
+		case 4:
+			myStyle=myRolls['roll_4_8']
+			break;
+		case 5:
+			myStyle=myRolls['roll_2_5']
+			break;
+		case 6:
+			myStyle=myRolls['roll_1_6']
+			break;
+		case 7:
+			myStyle=myRolls['roll_3_7']
+			break;
+		case 8:
+			myStyle=myRolls['roll_4_8']
 			break;
 		default:
 			alert ('No such roll');
@@ -205,6 +227,28 @@ while (line=prList.readln()) {
 			}
 			break;
 		case 1:
+			myStyle=myRolls['roll_1_6']
+			break;
+		case 2:
+			myStyle=myRolls['roll_2_5']
+			break;
+		case 3:
+			myStyle=myRolls['roll_3_7']
+			break;
+		case 4:
+			myStyle=myRolls['roll_4_8']
+			break;
+		case 5:
+			myStyle=myRolls['roll_2_5']
+			break;
+		case 6:
+			myStyle=myRolls['roll_1_6']
+			break;
+		case 7:
+			myStyle=myRolls['roll_3_7']
+			break;
+		case 8:
+			myStyle=myRolls['roll_4_8']
 			break;
 		default:
 			alert ('No such roll');
@@ -232,5 +276,43 @@ myDoc.close (SaveOptions.DONOTSAVECHANGES);
 //
 //
 //Делаем сборку-внимание
+//
+//
+//
+//
+
+var template_utv = new File (templateFolder + '\\short\\' + temp + '_short.ai'); //Ссылка на файл короткого шаблона
+app.open (template_utv); //Открываем короткий шаблон
+
+newlayer = activeDocument.layers.add(); //Создаем слой для размещения этикеток
+newlayer.name = 'label'; //называем его именем label
+newlayer.zOrder(ZOrderMethod.SENDTOBACK); //и помещаем его в самый низ в пачке слоев документа
+
+var myDoc = app.activeDocument; //Создаем ссылку на активный документ
+myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
+
+
+
+var jobcontainer = new Folder ('Z:\\'); //Папка рабочего каталога
+//var achtung = new File (jobcontainer + 'ACHTUNG.eps'); //Ссылка на файл ACHTUNG.eps
+
+var achtung = new File ('Z:\\ACHTUNG.eps'); //Ссылка на файл ACHTUNG.eps
+
+var achtungPlace = newlayer.placedItems.add();
+achtungPlace.file = achtung; //Помещаем на слой layer файл ACHTUNG.eps
+
+var targetPlace = new Array ((myDoc.width/2)-(achtungPlace.width/2), (myDoc.height/2)+(achtungPlace.height/2));
+
+//Помещаем ахтунг в центр арбоарда
+achtungPlace.position = targetPlace; //Выравниваем этикетку по целевому контуру
+
+//Корректируем размеры ахтунга
+
+//Закрываем активный документ
+//myDoc.close (SaveOptions.DONOTSAVECHANGES);
+
+
+
+
 
 
