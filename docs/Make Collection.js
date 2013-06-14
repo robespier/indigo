@@ -4,7 +4,7 @@
 #target illustrator-13
 
 var task = 1111111; //Определяем переменные для паспорта 
-var temp =1152510; //шаблона
+var temp =1064034; //шаблона
 var roll_number = 4; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
 
 //Рисуем окно диалога
@@ -294,8 +294,6 @@ myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
 
 
 var jobcontainer = new Folder ('Z:\\'); //Папка рабочего каталога
-//var achtung = new File (jobcontainer + 'ACHTUNG.eps'); //Ссылка на файл ACHTUNG.eps
-
 var achtung = new File ('Z:\\ACHTUNG.eps'); //Ссылка на файл ACHTUNG.eps
 
 var achtungPlace = newlayer.placedItems.add();
@@ -308,8 +306,14 @@ achtungPlace.position = targetPlace; //Выравниваем этикетку �
 
 //Корректируем размеры ахтунга
 
+var width_percent = (myDoc.width*88)/achtungPlace.width;
+var height_percent = (myDoc.height*99)/achtungPlace.height;
+
+achtungPlace.resize (width_percent, height_percent);
+
+
 //Закрываем активный документ
-//myDoc.close (SaveOptions.DONOTSAVECHANGES);
+myDoc.close (SaveOptions.DONOTSAVECHANGES);
 
 
 
