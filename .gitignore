@@ -4,3 +4,4 @@ docs/soft/
 *.rar
 docs/jobcontainer/*/*.eps
 docs/jobcontainer/*/*.pdf
+tmp/
