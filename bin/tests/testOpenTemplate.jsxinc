@@ -1,0 +1,21 @@
+#target Illustrator-13
+
+/*
+ * Commons
+ */
+function testOpenTemplate() {};
+testOpenTemplate.prototype = new testSuite(app);
+testOpenTemplate.prototype.name = "testOpenTemplate";
+testOpenTemplate.prototype.constructor = testOpenTemplate;
+
+/*
+ * Test
+ */
+testOpenTemplate.prototype.setUp = function () {
+	mc.setup(this.app);
+};
+testOpenTemplate.prototype.run = function() {
+	template = mc.openTemplate();
+	result = this.assertInstanceOf(template,Document);
+	$.writeln(result + this.name);
+};

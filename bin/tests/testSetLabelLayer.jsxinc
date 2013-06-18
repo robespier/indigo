@@ -1,0 +1,27 @@
+#target Illustrator-13
+
+/*
+ * Commons
+ */
+function testSetLabelLayer() {};
+testSetLabelLayer.prototype = new testSuite(app);
+testSetLabelLayer.prototype.name = 'testSetLabelLayer';
+testSetLabelLayer.prototype.constructor = testSetLabelLayer;
+
+/*
+ * Test
+ */
+testSetLabelLayer.prototype.setUp = function () {
+	mc.setup(this.app);
+	mc.openTemplate();
+};
+
+testSetLabelLayer.prototype.run = function() {
+	layer = mc.setLabelLayer();
+	result = this.assertInstanceOf(layer,Layer);
+	$.writeln(result + this.name + '.Type');
+	result = this.assertEq(layer.name,'label');
+	$.writeln(result + this.name + '.Name');
+	result = this.assertEq(layer.zOrderPosition,1);
+	$.writeln(result + this.name + '.Position');
+};
