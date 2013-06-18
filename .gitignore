@@ -1,2 +1,7 @@
 docs/tutorial/
+docs/soft/
 *.swp
+*.rar
+docs/jobcontainer/*/*.eps
+docs/jobcontainer/*/*.pdf
+tmp/
