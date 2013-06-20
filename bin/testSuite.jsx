@@ -74,4 +74,8 @@ for (var i=0, l = testsFiles.length; i < l; i++) {
 
 ts = new testSuite(app);
 ts.tests = testNames;
-ts.runAllTests();
+// Запустить все тесты:
+//ts.runAllTests();
+// Запустить один тест:
+test = new testGetLowerCut();
+ts.execute(test);

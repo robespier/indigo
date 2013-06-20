@@ -3,31 +3,9 @@
 
 #target illustrator-13
 
-var cuts = myDoc.layers['cut'].pathItems; //Создаем ссылку на массив высечек
 
 var LsizeX = cuts[0].width; //Определяем ширину единичного контура высечки
 var LsizeY = cuts[0].height; //Определяем высоту единичного контура высечки
-
-//Находим левый нижний контур высечки
-
-sumXY = new Array (cuts.length); //Cоздаем массив, в котором сохраняем сумму X и Y-позиций всех элементов массива высечек.
-for (i=0; i < cuts.length; i++) {
-	var xPos = cuts[i].position[0];
-	var yPos = cuts[i].position[1];
-	sumXY[i] = xPos+yPos;
-}
-
-var target_index = 0; ////Находим индекс мин. значения массива
-target_sum = sumXY[0];
-
-for (i=0; i<sumXY.length;i++) {
-	if (sumXY[i] <= target_sum) {
-		target_index = i;
-		target_sum = sumXY[i];
-	}
-}
-
-var targetCut = cuts[target_index]; //Определяем целевой контур
 
 prList.open(); //Открываем принт-лист
 

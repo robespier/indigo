@@ -30,21 +30,42 @@ var mc = {
 	 * @returns Layer Object
 	 */
 	setLabelLayer: function() {
-		newlayer = this.template.layers.add(); //Создаем слой для размещения этикеток
-		newlayer.name = 'label'; //называем его именем label
-		newlayer.zOrder(ZOrderMethod.SENDTOBACK); //и помещаем его в самый низ в пачке слоев документа
+		newlayer = this.template.layers.add(); // Создаем слой для размещения этикеток
+		newlayer.name = 'label'; // называем его именем label
+		newlayer.zOrder(ZOrderMethod.SENDTOBACK); // и помещаем его в самый низ в пачке слоев документа
 		return this.template.layers['label'];
 	},
 	/*
-	 *
+	 * Находим левый нижний контур высечки
+	 * @returns PathItem
 	 */
 	getLowerCut: function() {
+		var cuts = this.template.layers['cut'].pathItems; // Создаем ссылку на массив высечек
+		sumXY = new Array (cuts.length); // Cоздаем массив, в котором сохраняем сумму X и Y-позиций всех элементов массива высечек.
+		for (i=0, l=cuts.length; i < l; i++) {
+			var xPos = cuts[i].position[0];
+			var yPos = cuts[i].position[1];
+			sumXY[i] = xPos+yPos;
+		}
+		var target_index = 0; // Находим индекс мин. значения массива
+		target_sum = sumXY[0];
+
+		for (i=0, l=sumXY.length; i < l; i++) {
+			if (sumXY[i] <= target_sum) {
+				target_index = i;
+				target_sum = sumXY[i];
+			}
+		}
+		var targetCut = cuts[target_index]; // Определяем целевой контур
+		this.targetCut = targetCut;
+		return this.targetCut;
 	},
 	/*
 	 * Шаблонный метод -- Make Collection
 	 */
 	run: function(app) {
-		mc.openTemplate();
-		mc.setLabelLayer();
+		this.openTemplate();
+		this.setLabelLayer();
+		this.getLowerCut();
 	}
 }

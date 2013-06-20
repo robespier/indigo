@@ -1,0 +1,32 @@
+#target Illustrator-13
+
+/*
+ * Commons
+ */
+function testGetLowerCut() {};
+testGetLowerCut.prototype = new testSuite(app);
+testGetLowerCut.prototype.name = "testGetLowerCut";
+testGetLowerCut.prototype.constructor = testGetLowerCut;
+
+/*
+ * Test
+ */
+testGetLowerCut.prototype.setUp = function () {
+	mc.setup(this.app);
+	/* 
+	 * Fake template injection
+	 */
+	mc.templateFolder = 'tests\\' + this.name;
+	mc.temp = this.name;
+	mc.openTemplate();
+	mc.setLabelLayer();
+};
+
+testGetLowerCut.prototype.run = function() {
+	lowerCut = mc.getLowerCut();
+	result = this.assertInstanceOf(lowerCut,PathItem);
+	$.writeln(result + this.name + '.Type');
+	result = this.assertEq(lowerCut.name,'testTargetPass');
+	$.writeln(result + this.name + '.Name');
+
+};
