@@ -1,0 +1,46 @@
+//  Выбор намоток
+switch(roll_number) {
+	case 0:
+		// Ручная намотка
+		// ПРЯМОУГОЛЬНАЯ ЭТИКЕТКА
+		// 1 - квадрат, крутить не надо;
+		// 0.999 ширина меньше высоты, крутим в любую сторону на 90 градусов
+		// 1.999 ширина больше высоты, крутить не надо
+		targetCutRate = cuts[i].width/cuts[i].height;
+		labelRate = label.width/label.height;
+
+		if (((targetCutRate < 1) && (labelRate > 1)) || ((targetCutRate > 1) && (labelRate < 1)))  {
+			myStyle=myRolls['roll_1_6']; // Крутить
+		} else {
+			myStyle=myRolls['roll_4_8']; // Не крутить
+		}
+		break;
+	case 1:
+		myStyle=myRolls['roll_1_6']
+			break;
+	case 2:
+		myStyle=myRolls['roll_2_5']
+			break;
+	case 3:
+		myStyle=myRolls['roll_3_7']
+			break;
+	case 4:
+		myStyle=myRolls['roll_4_8']
+			break;
+	case 5:
+		myStyle=myRolls['roll_2_5']
+			break;
+	case 6:
+		myStyle=myRolls['roll_1_6']
+			break;
+	case 7:
+		myStyle=myRolls['roll_3_7']
+			break;
+	case 8:
+		myStyle=myRolls['roll_4_8']
+			break;
+	default:
+		alert ('No such roll');
+		break;
+}
+

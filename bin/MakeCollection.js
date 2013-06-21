@@ -7,22 +7,8 @@
 var LsizeX = cuts[0].width; //Определяем ширину единичного контура высечки
 var LsizeY = cuts[0].height; //Определяем высоту единичного контура высечки
 
-prList.open(); //Открываем принт-лист
 
 var myRolls = myDoc.graphicStyles; // Считываем массив намоток (графических стилей) документа
-
-var PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
-PDFSettings.acrobatLayers = false;
-
-while (line=prList.readln()) {
-	printList.push(line); //Считываем одну строку из print_list
-
-	var file_parts = line.split(";");
-	file_parts[0]; //Берем из строки номер этикетки
-	file_parts[1]; //Берем из строки наименование этикетки
-
-	file_name = jobFolder + '\\' + file_parts[1];
-	var labelObjectFile= new File (file_name); //Создаем ссылку на файл этикетки
 
 	var label = newlayer.placedItems.add();
 	label.file = labelObjectFile; //Помещаем на слой layer файл этикетки
@@ -84,9 +70,7 @@ while (line=prList.readln()) {
 	myDoc.saveAs(ResultFilePDF, PDFSettings); //Сохраняем файл сборки
 
 	label.remove(); // Удаляем объект label
-}
 
-prList.close();
 
 //Закрываем активный документ
 myDoc.close (SaveOptions.DONOTSAVECHANGES);

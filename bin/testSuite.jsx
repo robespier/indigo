@@ -12,6 +12,7 @@
  */
 function testSuite(app) {
 	this.app = app;
+	this.testsFolder = 'tests\\';
 };
 
 testSuite.prototype = {
@@ -74,8 +75,9 @@ for (var i=0, l = testsFiles.length; i < l; i++) {
 
 ts = new testSuite(app);
 ts.tests = testNames;
-// Запустить все тесты:
-//ts.runAllTests();
-// Запустить один тест:
-test = new testGetLowerCut();
-ts.execute(test);
+// Запустить все тесты...
+ts.runAllTests();
+
+// ...или запустить один тест:
+//test = new testGetLabels();
+//ts.execute(test);

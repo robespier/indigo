@@ -12,6 +12,9 @@ var mc = {
 		this.prListFolder = new Folder ('D:\\work\\print_list'); //Папка, где находятся принт-листы
 		this.prList = new File (this.prListFolder + '\\d' + this.task + '.csv'); //Ссылка на файл принт-листа
 		this.printList = []; //Массив строк из принт-листа
+		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
+		this.PDFSettings.acrobatLayers = false;
+
 	},
 	/*
 	 * Открытие шаблона
@@ -59,6 +62,25 @@ var mc = {
 		var targetCut = cuts[target_index]; // Определяем целевой контур
 		this.targetCut = targetCut;
 		return this.targetCut;
+	},
+	/*
+	 * Получить массив этикеток для печати
+	 * @returns Array of File Objects
+	 */
+	getLabels: function() {
+		this.labels = []; // Экземплярная переменная для хранения этикеток
+		this.prList.open(); //Открываем принт-лист ; TODO Слишком жесткая связь
+		while (line=this.prList.readln()) {
+			//printList.push(line); //Считываем одну строку из print_list
+			var file_parts = line.split(";");
+			file_parts[0]; //Берем из строки номер этикетки
+			file_parts[1]; //Берем из строки наименование этикетки
+			file_name = this.jobFolder + '\\' + file_parts[1];
+			var labelObjectFile= new File (file_name); //Создаем ссылку на файл этикетки
+			this.labels.push(labelObjectFile); // Сохраняем ссылку на файл в экземплярной переменной
+		}
+		this.prList.close();
+		return this.labels;
 	},
 	/*
 	 * Шаблонный метод -- Make Collection

@@ -1,0 +1,34 @@
+#target Illustrator-13
+
+/*
+ * Commons
+ */
+function testGetLabels() {};
+testGetLabels.prototype = new testSuite(app);
+testGetLabels.prototype.name = "testGetLabels";
+testGetLabels.prototype.constructor = testGetLabels;
+
+/*
+ * Test
+ */
+testGetLabels.prototype.setUp = function () {
+	mc.setup(this.app);
+	/* 
+	 * Fake printlist and jobfolder injection
+	 */
+	mc.prList = new File(this.testsFolder + this.name + '\\print_list.csv');
+	mc.jobFolder = this.testsFolder + this.name;
+};
+
+testGetLabels.prototype.run = function() {
+	mc.getLabels();
+	labels = mc.labels;
+	result = this.assertInstanceOf(labels, Array);
+	$.writeln(result + this.name + '.Type');
+	result = this.assertEq(labels.length,2);
+	$.writeln(result + this.name + '.Length');
+};
+
+testGetLabels.prototype.tearDown = function() {
+	// Superclass override: do nothing;
+}

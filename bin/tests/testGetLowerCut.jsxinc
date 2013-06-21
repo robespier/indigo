@@ -16,7 +16,7 @@ testGetLowerCut.prototype.setUp = function () {
 	/* 
 	 * Fake template injection
 	 */
-	mc.templateFolder = 'tests\\' + this.name;
+	mc.templateFolder = this.testsFolder + this.name;
 	mc.temp = this.name;
 	mc.openTemplate();
 	mc.setLabelLayer();
