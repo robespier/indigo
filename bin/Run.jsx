@@ -1,20 +1,18 @@
 #target Illustrator-13
 
 #include "mc.jsx"
-#include "Assembly.jsx"
 
 /*
  * Обычная сборка
  */
-
-/*
+#include "Assembly.jsx"
 make = new assembly(app);
 
 make.setup();
-make.roll_number = 0;
+make.roll_number = 2;
 make.task = '5006006'; //Определяем переменные для паспорта 
 make.temp = 4090354;
-//make.run();
+make.run();
 
 /*
  * Сборка-утверждение

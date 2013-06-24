@@ -71,14 +71,14 @@ mc.prototype = {
 	 */
 	getLabels: function() {
 		this.labels = []; // Экземплярная переменная для хранения этикеток
-		this.prList.open(); //Открываем принт-лист ; TODO Слишком жесткая связь
+		this.prList.open(); // Открываем принт-лист ; TODO Слишком жесткая связь
 		while (line=this.prList.readln()) {
-			//printList.push(line); //Считываем одну строку из print_list
+			//printList.push(line); // Считываем одну строку из print_list
 			var file_parts = line.split(";");
-			file_parts[0]; //Берем из строки номер этикетки
-			file_parts[1]; //Берем из строки наименование этикетки
+			file_parts[0]; // Берем из строки номер этикетки
+			file_parts[1]; // Берем из строки наименование этикетки
 			file_name = this.jobFolder + '\\' + file_parts[1];
-			var labelObjectFile= new File (file_name); //Создаем ссылку на файл этикетки
+			var labelObjectFile= new File (file_name); // Создаем ссылку на файл этикетки
 			this.labels.push(labelObjectFile); // Сохраняем ссылку на файл в экземплярной переменной
 		}
 		this.prList.close();
@@ -129,9 +129,46 @@ mc.prototype = {
 		}
 		return myStyle;
 	},
-	getPDFName: function() {
+	/*
+	 * Логика определения намотки
+	 * Вызывается из getStyle.switch...
+	 * @returns boolean
+	 */
+	transform: function() {
+		// Ручная намотка
+		// ПРЯМОУГОЛЬНАЯ / ОВАЛЬНАЯ ЭТИКЕТКА
+		// 1 - квадрат, крутить не надо;
+		// 0.999 ширина меньше высоты, крутим на -90 градусов
+		// 1.999 ширина больше высоты, крутить не надо
+		targetCutRate = this.targetCut.width/this.targetCut.height;
+		labelRate = this.currentLabel.width/this.currentLabel.height;
+		return (((targetCutRate < 1) && (labelRate > 1)) || ((targetCutRate > 1) && (labelRate < 1)));
 	},
-
+	/*
+	 * Поместить и позиционировать этикетку на слой labels
+	 * @param origin - pathItem, arrange target;
+	 * @param file - File object to place on;
+	 * @returns void;
+	 */ 
+	placeLabel: function(origin, file) {
+		var LsizeX = this.targetCut.width; //Определяем ширину единичного контура высечки
+		var LsizeY = this.targetCut.height; //Определяем высоту единичного контура высечки
+		this.currentLabel = newlayer.placedItems.add();
+		cl = this.currentLabel;
+		cl.file = file;
+		clX = origin.position[0]+(LsizeX/2) - (cl.width/2);
+		clY = origin.position[1]-(LsizeY/2) + (cl.height/2);
+		cl.position = new Array (clX, clY); //Выравниваем этикетку по целевому контуру
+	},
+	/*
+	 * Применить шаблон к ТЕКУЩЕЙ этикетке
+	 * @param label PlacedItem object
+	 * @returns void
+	 */
+	applyStyle: function() {
+		myStyle = this.getStyle();
+		myStyle.applyTo(this.currentLabel); // Применям графический стиль к этикетке
+	},
 	/*
 	 * Экспорт готовой продукции
 	 * @returns void
@@ -158,5 +195,4 @@ mc.prototype = {
 		this.imposeLabels();
 		this.closeTemplate();
 	},
-
 }
