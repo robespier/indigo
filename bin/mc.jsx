@@ -6,7 +6,7 @@ function mc(app) {
 
 mc.prototype = {
 	setup: function() {
-		this.task = 1111111; //Определяем переменные для паспорта 
+		this.task = '5006006'; //Определяем переменные для паспорта 
 		this.temp = 4090354; //шаблона
 		this.roll_number = 4; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
 		this.jobFolder = new Folder ('Z:\\d' + this.task); //Папка паспорта (рабочего каталога)
@@ -81,7 +81,61 @@ mc.prototype = {
 			this.labels.push(labelObjectFile); // Сохраняем ссылку на файл в экземплярной переменной
 		}
 		this.prList.close();
+		// TODO: Array sort?
 		return this.labels;
+	},
+	/*
+	 * Выбор намоток
+	 * @returns graphicStyle object
+	 */
+	getStyle: function() {
+		var myRolls = this.template.graphicStyles; // Считываем массив намоток (графических стилей) документа
+		switch(this.roll_number) {
+			case 0:
+				if (this.transform()) {
+					myStyle=myRolls['roll_1_6']; // Крутить
+				} else {
+					myStyle=myRolls['roll_4_8']; // Не крутить
+				}
+				break;
+			case 1:
+				myStyle=myRolls['roll_1_6']
+					break;
+			case 2:
+				myStyle=myRolls['roll_2_5']
+					break;
+			case 3:
+				myStyle=myRolls['roll_3_7']
+					break;
+			case 4:
+				myStyle=myRolls['roll_4_8']
+					break;
+			case 5:
+				myStyle=myRolls['roll_2_5']
+					break;
+			case 6:
+				myStyle=myRolls['roll_1_6']
+					break;
+			case 7:
+				myStyle=myRolls['roll_3_7']
+					break;
+			case 8:
+				myStyle=myRolls['roll_4_8']
+					break;
+			default:
+				alert ('No such roll');
+				break;
+		}
+		return myStyle;
+	},
+	getPDFName: function() {
+	},
+	/*
+	 * Закрываем активный документ
+	 * @returns void;
+	 */
+	closeTemplate: function() {
+		this.template.close (SaveOptions.DONOTSAVECHANGES);
 	},
 	/*
 	 * Шаблонный метод -- Make Collection
@@ -91,8 +145,8 @@ mc.prototype = {
 		this.setLabelLayer();
 		this.getLowerCut();
 		this.getLabels();
-		this.placeLabel();
-		this.alignLabel();
+		this.imposeLabels();
+		this.closeTemplate();
 	},
 	/*
 	 * Экспорт
