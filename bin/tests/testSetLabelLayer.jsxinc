@@ -12,12 +12,13 @@ testSetLabelLayer.prototype.constructor = testSetLabelLayer;
  * Test
  */
 testSetLabelLayer.prototype.setUp = function () {
+	mc = this.assembler;
 	mc.setup(this.app);
 	mc.openTemplate();
 };
 
 testSetLabelLayer.prototype.run = function() {
-	layer = mc.setLabelLayer();
+	layer = this.assembler.setLabelLayer();
 	result = this.assertInstanceOf(layer,Layer);
 	$.writeln(result + this.name + '.Type');
 	result = this.assertEq(layer.name,'label');

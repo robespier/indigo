@@ -12,6 +12,7 @@ testGetLabels.prototype.constructor = testGetLabels;
  * Test
  */
 testGetLabels.prototype.setUp = function () {
+	mc = this.assembler;
 	mc.setup(this.app);
 	/* 
 	 * Fake printlist and jobfolder injection
@@ -21,6 +22,7 @@ testGetLabels.prototype.setUp = function () {
 };
 
 testGetLabels.prototype.run = function() {
+	mc = this.assembler;
 	mc.getLabels();
 	labels = mc.labels;
 	result = this.assertInstanceOf(labels, Array);

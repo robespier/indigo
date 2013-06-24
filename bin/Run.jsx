@@ -1,9 +1,13 @@
 #target Illustrator-13
 
 #include "mc.jsx"
+#include "Assembly.jsx"
 
-mc.setup(app);
 /*
- * Пока что есть возможность переопределить чёнть
+ * Обычная сборка
  */
-mc.run();
+
+make = new assembly(app);
+
+make.setup();
+make.run();

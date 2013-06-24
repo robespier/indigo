@@ -1,9 +1,11 @@
 #target Illustrator-13
 
-var mc = {
-	illustrator: null, // Illustrator Application Object
-	setup: function(app) {
-		this.illustrator = app;
+function mc(app) {
+	this.illustrator = app;
+}
+
+mc.prototype = {
+	setup: function() {
 		this.task = 1111111; //Определяем переменные для паспорта 
 		this.temp = 4090354; //шаблона
 		this.roll_number = 4; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
@@ -14,7 +16,6 @@ var mc = {
 		this.printList = []; //Массив строк из принт-листа
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
-
 	},
 	/*
 	 * Открытие шаблона
@@ -85,9 +86,16 @@ var mc = {
 	/*
 	 * Шаблонный метод -- Make Collection
 	 */
-	run: function(app) {
+	run: function() {
 		this.openTemplate();
 		this.setLabelLayer();
 		this.getLowerCut();
-	}
+		this.getLabels();
+		this.placeLabel();
+		this.alignLabel();
+	},
+	/*
+	 * Экспорт
+	 */
+
 }

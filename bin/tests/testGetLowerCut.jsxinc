@@ -12,6 +12,7 @@ testGetLowerCut.prototype.constructor = testGetLowerCut;
  * Test
  */
 testGetLowerCut.prototype.setUp = function () {
+	mc = this.assembler;
 	mc.setup(this.app);
 	/* 
 	 * Fake template injection
@@ -23,7 +24,7 @@ testGetLowerCut.prototype.setUp = function () {
 };
 
 testGetLowerCut.prototype.run = function() {
-	lowerCut = mc.getLowerCut();
+	lowerCut = this.assembler.getLowerCut();
 	result = this.assertInstanceOf(lowerCut,PathItem);
 	$.writeln(result + this.name + '.Type');
 	result = this.assertEq(lowerCut.name,'testTargetPass');

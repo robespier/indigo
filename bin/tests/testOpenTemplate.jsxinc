@@ -12,7 +12,7 @@ testOpenTemplate.prototype.constructor = testOpenTemplate;
  * Test
  */
 testOpenTemplate.prototype.setUp = function () {
-	mc.setup(this.app);
+	this.assembler.setup(this.app);
 };
 testOpenTemplate.prototype.run = function() {
 	template = mc.openTemplate();

@@ -12,6 +12,7 @@
  */
 function testSuite(app) {
 	this.app = app;
+	this.assembler = new mc(app);
 	this.testsFolder = 'tests\\';
 };
 
