@@ -13,21 +13,6 @@
 //
 //
 
-var template_utv = new File (templateFolder + '\\short\\' + temp + '_short.ai'); //Ссылка на файл короткого шаблона
-
-app.open (template_utv); //Открываем короткий шаблон
-
-newlayer = activeDocument.layers.add(); //Создаем слой для размещения этикеток
-newlayer.name = 'label'; //называем его именем label
-newlayer.zOrder(ZOrderMethod.SENDTOBACK); //и помещаем его в самый низ в пачке слоев документа
-
-var myDoc = app.activeDocument; //Создаем ссылку на активный документ
-myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
-
-var cuts = myDoc.layers['cut'].pathItems; //Создаем ссылку на массив высечек
-
-prList.open(); //Открываем принт-лист
-
 var i=0;
 
 while (line=prList.readln()) {
@@ -57,18 +42,9 @@ while (line=prList.readln()) {
 		var cuts = myDoc.layers['cut'].pathItems; //Создаем ссылку на массив высечек
 	}
 
-	var file_parts = line.split(";");
-	file_parts[0]; //Берем из строки номер этикетки
-	file_parts[1]; //Берем из строки наименование этикетки
 
-	file_name = jobFolder + '\\' + file_parts[1];
-	var labelObjectFile= new File (file_name); //Создаем ссылку на файл этикетки
 
-	var label = newlayer.placedItems.add();
 
-	label.file = labelObjectFile; //Помещаем на слой layer файл этикетки
-
-	label.position = new Array (cuts[i].position[0]+(LsizeX/2) - (label.width/2), cuts[i].position[1]-(LsizeY/2)+(label.height/2));
 
 	//  Выбор намоток
 	switch(roll_number) {
@@ -128,8 +104,6 @@ var PDFName = jobFolder + '\\d' + task + '_UTV.pdf'; //Задаем имя фа�
 var ResultFilePDF = new File (PDFName);
 myDoc.saveAs(ResultFilePDF, PDFSettings); //Сохраняем файл сборки
 
-//Закрываем активный документ
-myDoc.close (SaveOptions.DONOTSAVECHANGES);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //

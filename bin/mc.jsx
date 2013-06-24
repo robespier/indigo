@@ -34,6 +34,7 @@ mc.prototype = {
 	 * @returns Layer Object
 	 */
 	setLabelLayer: function() {
+		// TODO newlayer в глобальном пространстве имен :(
 		newlayer = this.template.layers.add(); // Создаем слой для размещения этикеток
 		newlayer.name = 'label'; // называем его именем label
 		newlayer.zOrder(ZOrderMethod.SENDTOBACK); // и помещаем его в самый низ в пачке слоев документа
@@ -130,6 +131,15 @@ mc.prototype = {
 	},
 	getPDFName: function() {
 	},
+
+	/*
+	 * Экспорт готовой продукции
+	 * @returns void
+	 */
+	exportPDF: function(fileName) {
+		var ResultFilePDF = new File (fileName);
+		this.template.saveAs(ResultFilePDF, this.PDFSettings);
+	},
 	/*
 	 * Закрываем активный документ
 	 * @returns void;
@@ -148,8 +158,5 @@ mc.prototype = {
 		this.imposeLabels();
 		this.closeTemplate();
 	},
-	/*
-	 * Экспорт
-	 */
 
 }
