@@ -28,8 +28,9 @@ u.run();
 /*
  * Ахтунг
  */
-/*
+#include "Achtung.jsx"
 a = new achtung(app);
 a.setup();
+a.templateFolder = new Folder ('D:\\work\\template\\short');
+a.temp = '4090354_short';
 a.run(); 
-*/
