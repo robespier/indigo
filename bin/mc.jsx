@@ -6,10 +6,10 @@ function mc(app) {
 
 mc.prototype = {
 	setup: function() {
-		this.task = '5006006'; //Определяем переменные для паспорта 
-		this.temp = 4090354; //шаблона
+		this.task = '1114872'; //Определяем переменные для паспорта 
+		this.temp = 4152601; //шаблона
 		this.roll_number = 4; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
-		this.jobFolder = new Folder ('Z:\\d' + this.task); //Папка паспорта (рабочего каталога)
+		this.jobFolder = new Folder ('Y:\\d' + this.task); //Папка паспорта (рабочего каталога)
 		this.templateFolder = new Folder ('D:\\work\\template'); //Каталог шаблонов сборки
 		this.prListFolder = new Folder ('D:\\work\\print_list'); //Папка, где находятся принт-листы
 		this.prList = new File (this.prListFolder + '\\d' + this.task + '.csv'); //Ссылка на файл принт-листа
@@ -72,17 +72,13 @@ mc.prototype = {
 	getLabels: function() {
 		this.labels = []; // Экземплярная переменная для хранения этикеток
 		this.prList.open(); // Открываем принт-лист ; TODO Слишком жесткая связь
+		
 		while (line=this.prList.readln()) {
-			//printList.push(line); // Считываем одну строку из print_list
-			var file_parts = line.split(";");
-			file_parts[0]; // Берем из строки номер этикетки
-			file_parts[1]; // Берем из строки наименование этикетки
-			file_name = this.jobFolder + '\\' + file_parts[1];
+			file_name = line;
 			var labelObjectFile= new File (file_name); // Создаем ссылку на файл этикетки
 			this.labels.push(labelObjectFile); // Сохраняем ссылку на файл в экземплярной переменной
 		}
 		this.prList.close();
-		// TODO: Array sort?
 		return this.labels;
 	},
 	/*

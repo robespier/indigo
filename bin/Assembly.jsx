@@ -32,12 +32,12 @@ assembly.prototype.imposeLabels = function() {
  */
 assembly.prototype.getPDFName = function(index) {
 	// Корень задания
-	var PDFName = this.jobFolder + '\\';
-	// Номер этикетки
-	labelNumber = index + 1;
-	PDFName += labelNumber.toString() + '_';
-	// Имя файла
-	PDFName += this.currentLabel.file.name.replace ('eps', 'pdf');
-	
-	return PDFName;
+	var child =  this.currentLabel.file.parent;
+	var mother = child.parent;
+	var father = mother.parent;
+	var PDFName = father.name + mother.name + child.name;
+
+	// Имя файла сборки
+	PDFName +='_' + this.currentLabel.file.name.replace ('eps', 'pdf');
+	return child + '\\' + PDFName;
 }
