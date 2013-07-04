@@ -2,28 +2,27 @@
 
 #include "mc.jsx"
 
-/*
- * Обычная сборка
- */
+// Обычная сборка
+
 #include "Assembly.jsx"
 make = new assembly(app);
 
 make.setup();
 make.run();
 
-/*
- * Сборка-утверждение
+
+// Сборка-утверждение
 
 #include "Matching.jsx"
-u = new matching(app);
-u.setup();
-u.roll_number = 2;
-u.templateFolder = new Folder ('D:\\work\\template\\short');
-u.temp = '4090354_short';
-u.run();
+collect = new matching(app);
+//TODO перенести переопределение templateFolder и temp в матчинг
+collect.setup();
+collect.templateFolder = new Folder ('D:\\work\\template\\short');
+collect.temp = '4090354_short';
+collect.run();
 
-
- * Ахтунг
+/*
+// Ахтунг
 
 #include "Achtung.jsx"
 a = new achtung(app);
@@ -31,4 +30,4 @@ a.setup();
 a.templateFolder = new Folder ('D:\\work\\template\\short');
 a.temp = '4090354_short';
 a.run(); 
- */
+*/
