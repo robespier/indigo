@@ -15,19 +15,19 @@ make.run();
 
 #include "Matching.jsx"
 collect = new matching(app);
-//TODO перенести переопределение templateFolder и temp в матчинг
+//TODO перенести переопределение templateFolder и temp в отдельную функцию
 collect.setup();
 collect.templateFolder = new Folder ('D:\\work\\template\\short');
 collect.temp = '4090354_short';
 collect.run();
 
-/*
+
 // Ахтунг
 
 #include "Achtung.jsx"
-a = new achtung(app);
-a.setup();
-a.templateFolder = new Folder ('D:\\work\\template\\short');
-a.temp = '4090354_short';
-a.run(); 
-*/
+attention = new achtung(app);
+//TODO перенести переопределение templateFolder и temp в отдельную функцию
+attention.setup();
+attention.templateFolder = new Folder ('D:\\work\\template\\short');
+attention.temp = '4090354_short';
+attention.run(); 
