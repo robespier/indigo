@@ -30,6 +30,7 @@ matching.prototype.imposeLabels = function() {
 		}
 		labelsCount -= cutsCount;
 		this.exportPDF(this.getPDFName(utvCount));
+		this.sendtoHotFolder(); // Кидаем сборку в горячую папку
 		utvCount++;
 	}
 }

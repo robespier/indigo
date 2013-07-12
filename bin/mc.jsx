@@ -8,7 +8,7 @@ function mc(app) {
 
 mc.prototype = {
 	setup: function() {
-		this.task = '9111001'; //Определяем переменные для паспорта 
+		this.task = '5006001'; //Определяем переменные для паспорта 
 		this.temp = 4090354; //шаблона
 		this.roll_number = 2; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
 		this.jobFolder = new Folder ('Y:\\d' + this.task); //Папка паспорта (рабочего каталога)
@@ -18,6 +18,8 @@ mc.prototype = {
 		this.printList = []; //Массив строк из принт-листа
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
+		this.hotfolderName = 'CMYK';
+		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
 	},
 	/*
 	 * Открытие шаблона
@@ -172,8 +174,17 @@ mc.prototype = {
 	 * @returns void
 	 */
 	exportPDF: function(fileName) {
-		var ResultFilePDF = new File (fileName);
-		this.template.saveAs(ResultFilePDF, this.PDFSettings);
+		this.ResultFilePDF = new File (fileName);
+		this.template.saveAs(this.ResultFilePDF, this.PDFSettings);
+	},
+
+
+	/*
+	* Кидаем сборку в горячую папку
+	*/
+	
+	sendtoHotFolder: function() {
+		this.ResultFilePDF.copy(this.hotFolder + '\\' + this.ResultFilePDF.name);	
 	},
 	/*
 	 * Закрываем активный документ
@@ -191,6 +202,7 @@ mc.prototype = {
 		this.getLowerCut();
 		this.getLabels();
 		this.imposeLabels();
+		this.sendtoHotFolder();
 		this.closeTemplate();
 	},
 }

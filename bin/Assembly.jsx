@@ -21,6 +21,7 @@ assembly.prototype.imposeLabels = function() {
 		// Крутим
 		this.applyStyle();
 		this.exportPDF(this.getPDFName(i));
+		this.sendtoHotFolder(); // Кидаем сборку в горячую папку
 		this.currentLabel.remove();
 	}
 }
@@ -41,3 +42,4 @@ assembly.prototype.getPDFName = function(index) {
 	PDFName +='_' + this.currentLabel.file.name.replace ('eps', 'pdf');
 	return child + '\\' + PDFName;
 }
+
