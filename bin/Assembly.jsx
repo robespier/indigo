@@ -39,7 +39,7 @@ assembly.prototype.getPDFName = function(index) {
 	var PDFName = father.name + mother.name + child.name;
 
 	// Имя файла сборки
-	PDFName +='_' + this.currentLabel.file.name.replace ('eps', 'pdf');
+	PDFName +='-' + this.currentLabel.file.name.replace ('eps', 'pdf');
 	return child + '\\' + PDFName;
 }
 

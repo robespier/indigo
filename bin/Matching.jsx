@@ -55,7 +55,7 @@ matching.prototype.getPDFName = function(index) {
 
 	targetName.sort();
 	
-range = targetName[0] + '_' + targetName[targetName.length-1];
+range = targetName[0] + '-' + targetName[targetName.length-1];
 
 	var PDFName = father.name + mother.name + range;	
 	

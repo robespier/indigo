@@ -8,9 +8,10 @@ achtung.prototype.constructor = achtung;
 
 	
 achtung.prototype.imposeLabels = function() {
-	
+
+			
 	var myDoc = this.template;
-	
+
 	this.achtung = new File ('Y:\\ACHTUNG.eps'); // Ссылка на объектную переменную типа файл
 	var achtungPlace = newlayer.placedItems.add();
 	achtungPlace.file = this.achtung; //Помещаем на слой layer файл ACHTUNG.eps
@@ -27,8 +28,13 @@ var height_percent = (myDoc.height*99)/achtungPlace.height;
 
 achtungPlace.resize (width_percent, height_percent);
 
-	this.exportPDF(this.getPDFName());
+var labelsCount = this.labels.length;
+var achtCount = 1; // Счетчик имен сборок-ахтунгов
+		for (achtCount; achtCount<labelsCount; achtCount++) {
 
+	this.exportPDF(this.getPDFName(achtCount));
+	this.sendtoHotFolder(); // Кидаем сборку в горячую папку
+		}
 }
 
 /*
@@ -51,13 +57,13 @@ achtung.prototype.getPDFName = function(index) {
 
 	targetName.sort();
 	
-range = targetName[0] + '_' + targetName[targetName.length-1];
+range = targetName[0] + '-' + targetName[targetName.length-1];
 
 	var PDFName = father.name + mother.name + range;	
 	
 
 // Имя файла сборки
-	PDFName +='_ACHTUNG.pdf';
+	PDFName +='_ACHTUNG_' + index.toString() + '.pdf';
 // Путь для файла сборки
 	return mother + '\\' + PDFName;
 }
