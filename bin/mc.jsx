@@ -11,6 +11,8 @@ mc.prototype = {
 		this.task = '9111001'; //Определяем переменные для паспорта 
 		this.temp = 4090354; //шаблона
 		this.roll_number = 2; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
+		this.hotfolderName = 'CMYK';
+		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
 		this.jobFolder = new Folder ('Y:\\d' + this.task); //Папка паспорта (рабочего каталога)
 		this.templateFolder = new Folder ('D:\\work\\template'); //Каталог шаблонов сборки
 		this.prListFolder = new Folder ('D:\\work\\print_list'); //Папка, где находятся принт-листы
@@ -18,15 +20,21 @@ mc.prototype = {
 		this.printList = []; //Массив строк из принт-листа
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
-		this.hotfolderName = 'CMYK';
-		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
 	},
+	/*
+	 * Имя шаблона
+	 */
+	getTemplateName: function () {
+		var template = new File (this.templateFolder + '\\short\\' + this.temp + '_short' + '.ai'); //Ссылка на файл шаблона
+		return template;	
+	},
+
 	/*
 	 * Открытие шаблона
 	 * @returns Document Object
 	 */
 	openTemplate: function() {
-		var template = new File (this.templateFolder + '\\' + this.temp + '.ai'); //Ссылка на файл шаблона
+		var template = this.getTemplateName();
 		this.illustrator.open (template); //Открываем шаблон
 		var myDoc = app.activeDocument; //Создаем ссылку на активный документ
 		myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
@@ -76,7 +84,7 @@ mc.prototype = {
 	getLabels: function() {
 		this.labels = []; // Экземплярная переменная для хранения этикеток
 		this.prList.open(); // Открываем принт-лист ; TODO Слишком жесткая связь
-		
+
 		while (line=this.prList.readln()) {
 			file_name = line;
 			var labelObjectFile= new File (file_name); // Создаем ссылку на файл этикетки
@@ -180,9 +188,9 @@ mc.prototype = {
 
 
 	/*
-	* Кидаем сборку в горячую папку
-	*/
-	
+	 * Кидаем сборку в горячую папку
+	 */
+
 	sendtoHotFolder: function() {
 		this.ResultFilePDF.copy(this.hotFolder + '\\' + this.ResultFilePDF.name);	
 	},

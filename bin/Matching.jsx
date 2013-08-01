@@ -41,27 +41,27 @@ matching.prototype.imposeLabels = function() {
  * @returns string
  */
 matching.prototype.getPDFName = function(index) {
-	
-// 
+
+	// 
 	var child =  this.currentLabel.file.parent;
 	var mother = child.parent;
 	var father = mother.parent;
-	
-// Определяем диапазон папок 
+
+	// Определяем диапазон папок 
 	var targetName = [];
-		for (i=0, l=this.labels.length; i < l; i++) {
+	for (i=0, l=this.labels.length; i < l; i++) {
 		targetName[i]= this.labels[i].parent.name;
-}
+	}
 
 	targetName.sort();
-	
-range = targetName[0] + '-' + targetName[targetName.length-1];
+
+	range = targetName[0] + '_' + targetName[targetName.length-1];
 
 	var PDFName = father.name + mother.name + range;	
-	
 
-// Имя файла сборки
+
+	// Имя файла сборки
 	PDFName +='_UTV_' + index.toString() + '.pdf';
-// Путь для файла сборки
-	return mother + '\\' + PDFName;
+	// Путь для файла сборки
+	return  this.labels[0].parent + '\\' + PDFName;
 }

@@ -8,6 +8,13 @@ assembly.prototype.constructor = assembly;
 
 assembly.prototype.currentLabel = null;
 
+assembly.prototype.getTemplateName = function () {
+	var template = new File (this.templateFolder + '\\' + this.temp + '.ai');
+
+	return template;
+}
+
+
 /*
  * Размещение этикетки на листе
  * (Применение графического стиля)
@@ -39,7 +46,7 @@ assembly.prototype.getPDFName = function(index) {
 	var PDFName = father.name + mother.name + child.name;
 
 	// Имя файла сборки
-	PDFName +='-' + this.currentLabel.file.name.replace ('eps', 'pdf');
+	PDFName +='_' + this.currentLabel.file.name.replace ('eps', 'pdf');
 	return child + '\\' + PDFName;
 }
 
