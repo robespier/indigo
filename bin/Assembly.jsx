@@ -39,8 +39,13 @@ assembly.prototype.imposeLabels = function() {
  * @returns string
  */
 assembly.prototype.getPDFName = function(index) {
-	// Корень задания
-	var child =  this.currentLabel.file.parent;
+
+	if (this.currentLabel instanceof File) {
+		var child = this.currentLabel.parent;
+	} else {
+		var child = this.currentLabel.file.parent;
+	}
+
 	var mother = child.parent;
 	var father = mother.parent;
 	var PDFName = father.name + mother.name + child.name;

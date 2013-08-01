@@ -42,8 +42,12 @@ matching.prototype.imposeLabels = function() {
  */
 matching.prototype.getPDFName = function(index) {
 
-	// 
-	var child =  this.currentLabel.file.parent;
+	if (this.currentLabel instanceof File) {
+		var child = this.currentLabel.parent;
+	} else {
+		var child = this.currentLabel.file.parent;
+	}
+
 	var mother = child.parent;
 	var father = mother.parent;
 

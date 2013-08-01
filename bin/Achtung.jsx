@@ -28,7 +28,7 @@ achtung.prototype.imposeLabels = function() {
 
 	achtungPlace.resize (width_percent, height_percent);
 
-
+	this.currentLabel = this.labels[0];
 	this.exportPDF(this.getPDFName());
 	this.sendtoHotFolder(); // Кидаем сборку в горячую папку
 }
@@ -40,8 +40,12 @@ achtung.prototype.imposeLabels = function() {
  */
 achtung.prototype.getPDFName = function(index) {
 
-	// 
-	var child =  this.labels[0].parent;
+	if (this.currentLabel instanceof File) {
+		var child = this.currentLabel.parent;
+	} else {
+		var child = this.currentLabel.file.parent;
+	}
+
 	var mother = child.parent;
 	var father = mother.parent;
 
