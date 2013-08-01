@@ -8,7 +8,7 @@ function mc(app) {
 
 mc.prototype = {
 	setup: function() {
-		this.task = '9111001'; //Определяем переменные для паспорта 
+		this.task = 'print_list'; //Определяем переменные для паспорта 
 		this.temp = 4090354; //шаблона
 		this.roll_number = 2; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
 		this.hotfolderName = 'CMYK';
@@ -177,6 +177,32 @@ mc.prototype = {
 		myStyle = this.getStyle();
 		myStyle.applyTo(this.currentLabel); // Применям графический стиль к этикетке
 	},
+
+	/*
+	 * Создать имя файла для экспорта в PDF
+	 *
+	 */
+	getPDFName: function(index) {
+		if (this.currentLabel instanceof File) {
+			this.child = this.currentLabel.parent;
+		} else {
+			this.child = this.currentLabel.file.parent;
+		}
+
+		// Определяем диапазон папок 
+		var targetName = [];
+		for (i=0, l=this.labels.length; i < l; i++) {
+			targetName[i]= this.labels[i].parent.name;
+		}
+
+		targetName.sort();
+
+		range = targetName[0] + '_' + targetName[targetName.length-1];
+
+		// Имя файла сборки
+		return this.getPDFPart(index, range);
+	},
+
 	/*
 	 * Экспорт готовой продукции
 	 * @returns void

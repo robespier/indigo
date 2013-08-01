@@ -36,36 +36,13 @@ matching.prototype.imposeLabels = function() {
 }
 
 /*
- * Сгенерировать имя PDF для экспорта
- * @index int File number
+ * Возвращает имя файла для экспорта в PDF
+ *
+ * @param int index Номер файла
+ * @param range string Диапазон папок
  * @returns string
+ *
  */
-matching.prototype.getPDFName = function(index) {
-
-	if (this.currentLabel instanceof File) {
-		var child = this.currentLabel.parent;
-	} else {
-		var child = this.currentLabel.file.parent;
-	}
-
-	var mother = child.parent;
-	var father = mother.parent;
-
-	// Определяем диапазон папок 
-	var targetName = [];
-	for (i=0, l=this.labels.length; i < l; i++) {
-		targetName[i]= this.labels[i].parent.name;
-	}
-
-	targetName.sort();
-
-	range = targetName[0] + '_' + targetName[targetName.length-1];
-
-	var PDFName = father.name + mother.name + range;	
-
-
-	// Имя файла сборки
-	PDFName +='_UTV_' + index.toString() + '.pdf';
-	// Путь для файла сборки
-	return  this.labels[0].parent + '\\' + PDFName;
+matching.prototype.getPDFPart = function(index, range) {
+	return this.labels[0].parent + '\\' + range + '_UTV_' + index.toString() + '.pdf';
 }
