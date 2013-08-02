@@ -1,5 +1,6 @@
 #target Illustrator-13
 
+$.writeln('Run Here');
 #include "/w/bin/mc.jsx"
 
 // Обычная сборка

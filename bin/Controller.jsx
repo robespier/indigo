@@ -30,7 +30,7 @@ function pullJobs() {
  * Done something with job
  */
 function doSomething(j) {
-	scriptFile = new File("/w/bin/Run.jsx");
+	scriptFile = new File("/w/bin/Dispatch.jsx");
 	scriptFile.open('r');
 	scriptBody = scriptFile.read();
 	scriptFile.close();
@@ -40,12 +40,10 @@ function doSomething(j) {
 			brt = new BridgeTalk();
 			brt.target = "illustrator";
 			brt.body = scriptBody;
+			brt.type = 'job';
+			brt.headers.job = j.toSource();
 			brt.send();
 		}
-
-	
-	parsel = j.toSource();
-	
 }
 
 /**
