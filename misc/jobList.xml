@@ -1,4 +1,4 @@
-<xml version="1.0" encoding="utf8"/>
+<?xml version="1.0" encoding="UTF-8"?>
 <joblist>
 	<job id="d00001">
 		<printlist>
@@ -13,5 +13,14 @@
 		</printlist>
 		<hotfolder>CMYK</hotfolder>
 		<rollnumber>2</rollnumber>
+		<template>4090354</template>
+	</job>
+	<job id="d00002">
+		<printlist>
+			<label>Y:\d00\001\spaklevka_08_klei.eps</label>
+		</printlist>
+		<hotfolder>CMYK</hotfolder>
+		<rollnumber>2</rollnumber>
+		<template>4090354</template>
 	</job>
 </joblist>

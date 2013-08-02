@@ -1,10 +1,10 @@
 #target Illustrator-13
 
-#include "mc.jsx"
+#include "/w/bin/mc.jsx"
 
 // Обычная сборка
 
-#include "Assembly.jsx"
+#include "/w/bin/Assembly.jsx"
 make = new assembly(app);
 make.setup();
 make.run();
@@ -12,7 +12,7 @@ make.run();
 
 // Сборка-утверждение
 
-#include "Matching.jsx"
+#include "/w/bin/Matching.jsx"
 collect = new matching(app);
 collect.setup();
 collect.run();
@@ -20,7 +20,7 @@ collect.run();
 
 // Ахтунг
 
-#include "Achtung.jsx"
+#include "/w/bin/Achtung.jsx"
 attention = new achtung(app);
 attention.setup();
 attention.run(); 

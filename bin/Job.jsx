@@ -1,5 +1,5 @@
 /**
- * Job Class
+ * Job Class with default values
  */
 
 function job() {};
@@ -7,5 +7,6 @@ function job() {};
 job.prototype.constructor = job;
 
 job.prototype.print_list = [];
-job.prototype.hotfolder = '';
+job.prototype.hot_folder = 'CMYK';
 job.prototype.roll_number = 2;
+job.prototype.template = 4090354;
