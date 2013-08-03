@@ -1,0 +1,3 @@
+#!/bin/bash
+
+mysqldump -p --user root indigo --add-drop-table --no-data
