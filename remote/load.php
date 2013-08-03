@@ -51,9 +51,45 @@ function insert($db) {
 /**
  * DELETE
  */
+
 /**
  * SELECT
+ * 1. Select all jobs where status = 'go' and deleted = 0;
+ * 2. Return XML
  */
 
-insert($db);
+function select($db) {
+	$jobsSQL = "SELECT * FROM jobs WHERE status='go' AND deleted = 0;";
+	$jobs = $db->query($jobsSQL);
+	/**
+	 * Create XML Response 
+	 */
+	$result = new DOMDocument();
+	$result->encoding = 'UTF-8';
+	$result->formatOutput = TRUE;
+	$result->appendChild(new DOMElement('joblist'));
+	foreach ($jobs as $job) {
+		$jobid = $job['id'];
+		$jobNode = $result->createElement('job');
+		$jobNode->setAttribute('job_id', $jobid);
+		$jobNode->appendChild(new DOMElement('hotfolder',$job['separations']));
+		$jobNode->appendChild(new DOMElement('rollnumber',$job['roll']));
+		$jobNode->appendChild(new DOMElement('template',$job['template']));
+		$print_list = $jobNode->appendChild(new DOMElement('print_list'));
+		/**
+		 * Fetch print-list's
+		 */
+		$labelsSQL = "SELECT * FROM labels WHERE fk_jobs = $jobid AND deleted = 0;";
+		$print_list_files = $db->query($labelsSQL);
+		foreach ($print_list_files as $plf) {
+			$print_list->appendChild(new DOMElement('label',$plf['name']));
+		}
+		$result->documentElement->appendChild($jobNode);
+	}
+	$result->save('/tmp/job.xml');
+	$db->connClose();
+}
+
+// Enaf! insert($db);
+$jobs = select($db);
 ?>

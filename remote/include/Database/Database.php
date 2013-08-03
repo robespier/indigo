@@ -70,7 +70,20 @@ class Database {
 			$e = $this->mysqli->error;
 			throw new mysqli_sql_exception();
 		}
-		return $result;
+		/*
+		 * В случае успешного выполнения запросов SELECT, SHOW, DESCRIBE 
+		 * или EXPLAIN mysqli_query() вернет объект mysqli_result.
+		 * Для остальных успешных запросов mysqli_query() вернет TRUE. 
+		 */
+		if ($result instanceof mysqli_result) {
+			$rows = array();
+			while ($row = $result->fetch_assoc()) {
+				$rows[] = $row;
+			}
+			return $rows;
+		} else {
+			return $result;
+		}
 	}
 	
 	function getLastId() {
