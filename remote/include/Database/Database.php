@@ -23,6 +23,7 @@ class Database {
 	
 	function connOpen() {
 		$this->mysqli = new mysqli($this->dbHost, $this->dbUser, $this->dbPass, $this->dbName);
+		$this->mysqli->set_charset('utf8');
 		return $this->mysqli;
 	}
 
@@ -43,7 +44,7 @@ class Database {
 		return $this->mysqli->escape_string($var);
 	}
 
-
+	
 	/**
 	 * Query Database
 	 * 

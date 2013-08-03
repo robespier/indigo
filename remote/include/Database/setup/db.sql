@@ -27,9 +27,10 @@ CREATE TABLE `jobs` (
   `date_created` datetime DEFAULT NULL,
   `date_modified` datetime DEFAULT NULL,
   `deleted` bit(1) DEFAULT b'0',
+  `name` varchar(512) DEFAULT NULL,
   `roll` int(11) DEFAULT NULL,
   `separations` varchar(5) DEFAULT NULL,
-  `template` varchar(255) DEFAULT NULL,
+  `template` varchar(50) DEFAULT NULL,
   `status` varchar(45) DEFAULT 'new',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -47,7 +48,7 @@ CREATE TABLE `labels` (
   `date_created` datetime DEFAULT NULL,
   `date_modified` datetime DEFAULT NULL,
   `deleted` bit(1) DEFAULT b'0',
-  `path` varchar(512) DEFAULT NULL,
+  `name` varchar(512) DEFAULT NULL,
   `fk_jobs` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_labels_jobs_idx` (`fk_jobs`),
@@ -64,4 +65,4 @@ CREATE TABLE `labels` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-08-03 15:24:10
+-- Dump completed on 2013-08-03 16:53:17
