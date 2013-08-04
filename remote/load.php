@@ -3,13 +3,23 @@
 require_once 'include/autoload.php';
 
 /**
- * Intercept incoming requests
+ * Intercept incoming GET's and POST's
  */
 if (isset($_GET['do']) && $_GET['do'] == 'getJobs') {
 	$db = getDb();
 	$jobs = getJobs($db);
 }
 
+if (isset($_POST['done'])) {
+	$jobid = $_POST['done'];
+	$db = getDb();
+	update($db,$jobid);
+}
+
+/**
+ * Get Db
+ * @return \Database
+ */
 function getDb() {
 	$db = new Database();
 	$db->setup();
@@ -63,6 +73,11 @@ function insert($db) {
 /**
  * UPDATE
  */
+function update($db,$id) {
+	$jobDoneSQL = "UPDATE jobs SET status = 'done' WHERE id in (" . $id . ");";
+	$db->query($jobDoneSQL);
+	$db->connClose();
+}
 /**
  * DELETE
  */

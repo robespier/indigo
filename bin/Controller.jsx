@@ -28,6 +28,18 @@ function pullJobs() {
 }
 
 /**
+ * Post Results To Remote 
+ */
+function postMessage(id) {
+	var http = new HttpConnection(remote);
+	http.mime =  "application/x-www-form-urlencoded";
+	http.requestheaders = ["User-Agent", "Indigo 1.0"];
+	http.request = "done=" + id;
+	http.method = "POST";
+	http.execute();
+}
+
+/**
  * Done something with job
  */
 function doSomething(j) {
@@ -64,6 +76,7 @@ function parseJobs(source) {
 		j.roll_number = xmlJobList.job[i].rollnumber.toString();
 		j.hot_folder = xmlJobList.job[i].hotfolder.toString();
 		j.template = xmlJobList.job[i].template.toString();
+		j.dbid = xmlJobList.job[i].@job_id.toString();
 		// Create print_list
 		print_list = [];
 		for (var pi=0, pl = xmlJobList.job[i].printlist.label.length(); pi < pl; pi++) {
@@ -72,6 +85,7 @@ function parseJobs(source) {
 		j.print_list = print_list;
 		// Push Job
 		doSomething(j);
+		postMessage(j.dbid);
 	}
 }
 
@@ -84,3 +98,4 @@ remote = "http://indigo.aicdr.pro/";
 
 pullJobs();
 parseJobs(job_list);
+//postMessage();
