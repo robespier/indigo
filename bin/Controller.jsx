@@ -19,7 +19,8 @@ if ( webaccesslib == undefined ) {
  * Get Jobs Array from remote
  */
 function pullJobs() {
-	var http = new HttpConnection(remote);
+	var params = 'index.php?do=getJobs&status=go';
+	var http = new HttpConnection(remote + params);
 	http.response = new File(job_list);
 	// Get is the default method
 	http.execute();

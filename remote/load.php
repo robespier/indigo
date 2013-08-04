@@ -2,10 +2,25 @@
 
 require_once 'include/autoload.php';
 
-$db = new Database();
-$db->setup();
-$db->connOpen();
+/**
+ * Intercept incoming requests
+ */
+if (isset($_GET['do']) && $_GET['do'] == 'getJobs') {
+	$db = getDb();
+	$jobs = getJobs($db);
+}
 
+function getDb() {
+	$db = new Database();
+	$db->setup();
+	$db->connOpen();
+	return $db;
+}
+
+/**
+ * Fixture
+ * @param type $db
+ */
 function insert($db) {
 	/**
 	 * INSERT
@@ -56,9 +71,10 @@ function insert($db) {
  * SELECT
  * 1. Select all jobs where status = 'go' and deleted = 0;
  * 2. Return XML
+ * 3. Есть более простой способ, как в Microsoft SQL Server? Похоже, нет.
+ *    http://stackoverflow.com/questions/7623308/does-mysql-have-xml-support-like-sql-server
  */
-
-function select($db) {
+function getJobs($db) {
 	$jobsSQL = "SELECT * FROM jobs WHERE status='go' AND deleted = 0;";
 	$jobs = $db->query($jobsSQL);
 	/**
@@ -75,7 +91,7 @@ function select($db) {
 		$jobNode->appendChild(new DOMElement('hotfolder',$job['separations']));
 		$jobNode->appendChild(new DOMElement('rollnumber',$job['roll']));
 		$jobNode->appendChild(new DOMElement('template',$job['template']));
-		$print_list = $jobNode->appendChild(new DOMElement('print_list'));
+		$print_list = $jobNode->appendChild(new DOMElement('printlist'));
 		/**
 		 * Fetch print-list's
 		 */
@@ -86,10 +102,12 @@ function select($db) {
 		}
 		$result->documentElement->appendChild($jobNode);
 	}
-	$result->save('/tmp/job.xml');
+	//$result->save('/tmp/job.xml');
+	header("Content-Type: text/xml; charset=UTF-8");
+	echo $result->saveXML(); 
 	$db->connClose();
 }
 
 // Enaf! insert($db);
-$jobs = select($db);
+
 ?>

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo cp ../../../load.php /var/www/html/indigo/index.php
+sudo cp ../../../include/autoload.php /var/www/html/indigo/include/ 
+sudo cp ../../../include/Database/Database.php /var/www/html/indigo/include/Database/
