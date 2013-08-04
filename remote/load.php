@@ -84,8 +84,10 @@ function getJobs($db) {
 	$result->encoding = 'UTF-8';
 	$result->formatOutput = TRUE;
 	$result->appendChild(new DOMElement('joblist'));
+	$updateStatus = array();
 	foreach ($jobs as $job) {
 		$jobid = $job['id'];
+		$updateStatus[] = $jobid;
 		$jobNode = $result->createElement('job');
 		$jobNode->setAttribute('job_id', $jobid);
 		$jobNode->appendChild(new DOMElement('hotfolder',$job['separations']));
@@ -102,6 +104,8 @@ function getJobs($db) {
 		}
 		$result->documentElement->appendChild($jobNode);
 	}
+	$updateStatusSQL = "UPDATE jobs SET status = 'processing' WHERE id in (" . implode(',', $updateStatus) . ");";
+	$db->query($updateStatusSQL);
 	//$result->save('/tmp/job.xml');
 	header("Content-Type: text/xml; charset=UTF-8");
 	echo $result->saveXML(); 
