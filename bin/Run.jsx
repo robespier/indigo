@@ -1,7 +1,14 @@
 #target Illustrator-13
 
-// Un-serialize job object from Bridge JSON-string
-var jobs = eval(job);
+try {
+	// If we are in Bridge call
+	// Un-serialize job object from Bridge JSON-string
+	var jobs = eval(job);
+} catch (e) {
+	// Run.jsx runs independently
+	// Eat mock, run.jsx!
+	var jobs = $.evalFile ('tests/jobsobj.json');
+} 
 
 #include "/w/bin/mc.jsx"
 #include "/w/bin/Assembly.jsx"

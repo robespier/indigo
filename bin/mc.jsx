@@ -15,8 +15,6 @@ mc.prototype = {
 		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
 		this.jobFolder = new Folder ('Y:\\d' + this.task); //Папка паспорта (рабочего каталога)
 		this.templateFolder = new Folder ('D:\\work\\template'); //Каталог шаблонов сборки
-		this.prListFolder = new Folder ('D:\\work\\print_list'); //Папка, где находятся принт-листы
-		this.prList = new File (this.prListFolder + '\\d' + this.task + '.csv'); //Ссылка на файл принт-листа
 		this.printList = job.print_list; //Массив строк из принт-листа
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
@@ -213,7 +211,6 @@ mc.prototype = {
 	/*
 	 * Кидаем сборку в горячую папку
 	 */
-
 	sendtoHotFolder: function() {
 		this.ResultFilePDF.copy(this.hotFolder + '\\' + this.ResultFilePDF.name);	
 	},

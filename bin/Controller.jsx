@@ -27,6 +27,17 @@ function pullJobs() {
 }
 
 /**
+ * Helper function: Dump jobs to file
+ */
+function dumpJobs() {
+	var jobs = parseJobs();
+	var jobOutput = new File('/w/tmp/jobsobj.json');
+	jobOutput.open('w');
+	jobOutput.write (jobs.toSource());
+	jobOutput.close();
+}
+
+/**
  * Post Results To Remote 
  */
 function postMessage(id) {
@@ -41,7 +52,7 @@ function postMessage(id) {
 /**
  * Done something with job
  */
-function doSomething(j) {
+function processJobs(j) {
 	scriptFile = new File("/w/bin/Dispatch.jsx");
 	scriptFile.open('r');
 	scriptBody = scriptFile.read();
@@ -55,6 +66,10 @@ function doSomething(j) {
 		brt.type = 'job';
 		brt.headers.job = j.toSource();
 		brt.send();
+		brt.onError = function( errorMsg ) {
+			var errCode = parseInt (errorMsg.headers ["Error-Code"]);
+			throw new Error (errCode, errorMsg.body);
+		}
 	}
 }
 
@@ -88,10 +103,12 @@ function parseJobs() {
 /*
  * Setup
  */
-
 remote = "http://indigo.aicdr.pro/";
-
+/*
+ * Run
+ */ 
+//dumpJobs();
 var jobs = parseJobs();
-doSomething(jobs);
+processJobs(jobs);
 //postMessage(j.dbid);
 //postMessage();

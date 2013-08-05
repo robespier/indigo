@@ -48,14 +48,14 @@ function insert($db) {
 	$link = $db->getLastId();
 
 	$labels = array();
-	$labels[] = 'Y:\d00\001\spaklevka_08_klei.eps';
-	$labels[] = 'Y:\d00\002\spaklevka_1_5_klei.eps';
-	$labels[] = 'Y:\d00\003\spaklevka_1_5_klei.eps';
-	$labels[] = 'Y:\d00\004\spaklevka_08_klei.eps';
-	$labels[] = 'Y:\d00\005\spaklevka_1_5_klei.eps';
-	$labels[] = 'Y:\d00\006\spaklevka_08_klei.eps';
-	$labels[] = 'Y:\d00\007\spaklevka_1_5_klei.eps';
-	$labels[] = 'Y:\d00\008\spaklevka_08_klei.eps';
+	$labels[] = 'Y:\d9\111\001\spaklevka_08_klei.eps';
+	$labels[] = 'Y:\d9\111\002\spaklevka_1_5_klei.eps';
+	$labels[] = 'Y:\d9\111\003\spaklevka_1_5_klei.eps';
+	$labels[] = 'Y:\d9\111\004\spaklevka_08_klei.eps';
+	$labels[] = 'Y:\d9\111\005\spaklevka_1_5_klei.eps';
+	$labels[] = 'Y:\d9\111\006\spaklevka_08_klei.eps';
+	$labels[] = 'Y:\d9\111\007\spaklevka_1_5_klei.eps';
+	$labels[] = 'Y:\d9\111\008\spaklevka_08_klei.eps';
 
 	$labelsSQL = "INSERT INTO labels (date_created,date_modified,name,fk_jobs) VALUES ";
 
