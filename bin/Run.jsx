@@ -1,27 +1,28 @@
 #target Illustrator-13
 
-//$.writeln('Run Here');
-
 // Un-serialize job object from Bridge JSON-string
-j = eval(job);
+var jobs = eval(job);
 
 #include "/w/bin/mc.jsx"
-
-// Обычная сборка
 #include "/w/bin/Assembly.jsx"
-make = new assembly(app);
-make.setup(j);
-make.run();
-
-// Сборка-утверждение
 #include "/w/bin/Matching.jsx"
-collect = new matching(app);
-collect.setup(j);
-collect.run();
-
-// Ахтунг
 #include "/w/bin/Achtung.jsx"
-attention = new achtung(app);
-attention.setup(j);
-attention.run(); 
 
+for (var ji=0, jl = jobs.length; ji < jl; ji++) {
+	var j = jobs[ji];
+
+	// Обычная сборка
+	make = new assembly(app);
+	make.setup(j);
+	make.run();
+
+	// Сборка-утверждение
+	collect = new matching(app);
+	collect.setup(j);
+	collect.run();
+
+	// Ахтунг
+	attention = new achtung(app);
+	attention.setup(j);
+	attention.run();
+}

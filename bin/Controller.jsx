@@ -21,6 +21,7 @@ if ( webaccesslib == undefined ) {
 function pullJobs() {
 	var params = 'index.php?do=getJobs&status=go';
 	var http = new HttpConnection(remote + params);
+	http.requestheaders = ["User-Agent", "Indigo 1.0"];
 	http.execute();
 	return http.response;
 }
@@ -29,7 +30,7 @@ function pullJobs() {
  * Post Results To Remote 
  */
 function postMessage(id) {
-	var http = new HttpConnection(remote);
+	var http = new HttpConnection(remote);	
 	http.mime =  "application/x-www-form-urlencoded";
 	http.requestheaders = ["User-Agent", "Indigo 1.0"];
 	http.request = "done=" + id;
@@ -47,23 +48,24 @@ function doSomething(j) {
 	scriptFile.close();
 	// Prepare to Talk
 	var targetApp = BridgeTalk.getSpecifier( "illustrator", "13");
-		if( targetApp ) {
-			brt = new BridgeTalk();
-			brt.target = "illustrator";
-			brt.body = scriptBody;
-			brt.type = 'job';
-			brt.headers.job = j.toSource();
-			brt.send();
-		}
+	if( targetApp ) {
+		brt = new BridgeTalk();
+		brt.target = "illustrator";
+		brt.body = scriptBody;
+		brt.type = 'job';
+		brt.headers.job = j.toSource();
+		brt.send();
+	}
 }
 
 /**
  * Parse XML file to JavaScript job object
- * @param source File
+ * @returns array Array of Job objects
  */
 #include "Job.jsx"
 function parseJobs() {
 	xmlJobList = new XML(pullJobs());
+	var jobs = [];
 	// Iterate thru jobs
 	for (var i=0, l = xmlJobList.job.length(); i < l; i++) {
 		j = new job();
@@ -77,10 +79,10 @@ function parseJobs() {
 			print_list.push(xmlJobList.job[i].printlist.label[pi].toString());
 		}
 		j.print_list = print_list;
-		// Push Job
-		doSomething(j);
-		postMessage(j.dbid);
+		// Store Job in result array
+		jobs.push (j);
 	}
+	return jobs;
 }
 
 /*
@@ -89,5 +91,7 @@ function parseJobs() {
 
 remote = "http://indigo.aicdr.pro/";
 
-parseJobs();
+var jobs = parseJobs();
+doSomething(jobs);
+//postMessage(j.dbid);
 //postMessage();

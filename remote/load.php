@@ -127,6 +127,6 @@ function getJobs($db) {
 	$db->connClose();
 }
 
-// Enaf! insert($db);
+// Enaf!  $db = getDb(); insert($db);
 
 ?>
