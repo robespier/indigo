@@ -15,7 +15,7 @@ class Database {
 	function setup() {
 		$this->dbHost = 'localhost';
 		$this->dbName = 'indigo';
-		$this->dbUser = 'root';
+		$this->dbUser = 'pepsicoloff';
 		$this->dbPass = 'xxx';
 		// TODO: check connection
 		return TRUE; 
