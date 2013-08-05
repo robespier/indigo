@@ -21,10 +21,8 @@ if ( webaccesslib == undefined ) {
 function pullJobs() {
 	var params = 'index.php?do=getJobs&status=go';
 	var http = new HttpConnection(remote + params);
-	http.response = new File(job_list);
-	// Get is the default method
 	http.execute();
-	http.response.close();
+	return http.response;
 }
 
 /**
@@ -64,12 +62,8 @@ function doSomething(j) {
  * @param source File
  */
 #include "Job.jsx"
-function parseJobs(source) {
-	xmlFile = new File(source);
-	xmlFile.open('r');
-	xmlContent = xmlFile.read();
-	xmlFile.close();
-	xmlJobList = new XML(xmlContent);
+function parseJobs() {
+	xmlJobList = new XML(pullJobs());
 	// Iterate thru jobs
 	for (var i=0, l = xmlJobList.job.length(); i < l; i++) {
 		j = new job();
@@ -93,9 +87,7 @@ function parseJobs(source) {
  * Setup
  */
 
-job_list = "/w/tmp/jobs.xml";
 remote = "http://indigo.aicdr.pro/";
 
-pullJobs();
-parseJobs(job_list);
+parseJobs();
 //postMessage();

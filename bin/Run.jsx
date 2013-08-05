@@ -1,6 +1,6 @@
 #target Illustrator-13
 
-$.writeln('Run Here');
+//$.writeln('Run Here');
 
 // Un-serialize job object from Bridge JSON-string
 j = eval(job);
