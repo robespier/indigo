@@ -194,8 +194,10 @@ mc.prototype = {
 
 		range = targetName[0] + '_' + targetName[targetName.length-1];
 
+		// Common Name prefix
+		var cName = this.child.parent.parent.name + this.child.parent.name;
 		// Имя файла сборки
-		return this.getPDFPart(index, range);
+		return this.getPDFPart(index, range, cName);
 	},
 
 	/*

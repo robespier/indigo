@@ -41,6 +41,6 @@ assembly.prototype.imposeLabels = function() {
  * @returns string
  *
  */
-assembly.prototype.getPDFPart = function(index, range) {
-	return this.child + '\\' + this.child.name + '_' + this.currentLabel.file.name.replace ('eps', 'pdf');
+assembly.prototype.getPDFPart = function(index, range, cName) {
+	return this.child + '\\' + cName + this.child.name + '_' + this.currentLabel.file.name.replace ('eps', 'pdf');
 }

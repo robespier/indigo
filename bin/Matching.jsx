@@ -50,6 +50,6 @@ matching.prototype.imposeLabels = function() {
  * @returns string
  *
  */
-matching.prototype.getPDFPart = function(index, range) {
-	return this.labels[0].parent + '\\' + range + '_UTV_' + index.toString() + '.pdf';
+matching.prototype.getPDFPart = function(index, range, cName) {
+	return this.labels[0].parent + '\\' + cName + range + '_UTV_' + index.toString() + '.pdf';
 }

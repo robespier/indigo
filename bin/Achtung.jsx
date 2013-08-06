@@ -46,6 +46,6 @@ achtung.prototype.imposeLabels = function() {
  * @returns string
  *
  */
-achtung.prototype.getPDFPart = function(index, range) {
-	return this.child + '\\' + range + '_ACHTUNG.pdf';
+achtung.prototype.getPDFPart = function(index, range, cName) {
+	return this.child + '\\' + cName + range + '_ACHTUNG.pdf';
 }
