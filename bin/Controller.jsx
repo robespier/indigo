@@ -27,11 +27,11 @@ function pullJobs() {
 }
 
 /**
- * Helper function: Dump jobs to file
+ * Helper function: Dump jobs from database to file
  */
 function dumpJobs() {
 	var jobs = parseJobs();
-	var jobOutput = new File('/w/tmp/jobsobj.json');
+	var jobOutput = new File('tests/jobsobj.jsn');
 	jobOutput.open('w');
 	jobOutput.write (jobs.toSource());
 	jobOutput.close();
@@ -49,8 +49,13 @@ function postMessage(id) {
 	http.execute();
 }
 
+function postResponse(message) {
+	$.writeln('onResult Here');
+	//var b = message.body;
+}	
+
 /**
- * Done something with job
+ * Do something with job
  */
 function processJobs(j) {
 	scriptFile = new File("/w/bin/Dispatch.jsx");
@@ -63,14 +68,19 @@ function processJobs(j) {
 		brt = new BridgeTalk();
 		brt.target = "illustrator";
 		brt.body = scriptBody;
-		brt.type = 'job';
+	//	brt.type = 'job';
 		brt.headers.job = j.toSource();
-		brt.send();
+		brt.onResult = postResponse;
 		brt.onError = function( errorMsg ) {
 			var errCode = parseInt (errorMsg.headers ["Error-Code"]);
 			throw new Error (errCode, errorMsg.body);
 		}
+		brt.sendResult = function() {
+			$.writeln('sendResult Controller');
+		}
+		brt.send();
 	}
+	return 'Controller 4 Done';
 }
 
 /**
@@ -94,6 +104,7 @@ function parseJobs() {
 			print_list.push(xmlJobList.job[i].printlist.label[pi].toString());
 		}
 		j.print_list = print_list;
+		j.sequence = xmlJobList.job[i].sequence.toString();
 		// Store Job in result array
 		jobs.push (j);
 	}
@@ -107,8 +118,10 @@ remote = "http://indigo.aicdr.pro/";
 /*
  * Run
  */ 
-//dumpJobs();
+dumpJobs();
+/*
 var jobs = parseJobs();
 processJobs(jobs);
 //postMessage(j.dbid);
 //postMessage();
+*/

@@ -8,16 +8,16 @@ function mc(app) {
 
 mc.prototype = {
 	setup: function(job) {
-		this.task = 'print_list'; //Определяем переменные для паспорта 
 		this.temp = job.template; 4090354; //шаблона
 		this.roll_number = job.roll_number; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
 		this.hotfolderName = job.hot_folder;
 		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
-		this.jobFolder = new Folder ('Y:\\d' + this.task); //Папка паспорта (рабочего каталога)
 		this.templateFolder = new Folder ('D:\\work\\template'); //Каталог шаблонов сборки
 		this.printList = job.print_list; //Массив строк из принт-листа
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
+		this.job = job;
+		this.job.errors = [];
 	},
 	/*
 	 * Имя шаблона
@@ -33,7 +33,12 @@ mc.prototype = {
 	 */
 	openTemplate: function() {
 		var template = this.getTemplateName();
+		try {
 		this.illustrator.open (template); //Открываем шаблон
+		} catch (e) {
+			var errmsg =  e.message + ': ' + template;
+			throw new Error(errmsg);
+			}
 		var myDoc = app.activeDocument; //Создаем ссылку на активный документ
 		myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
 		this.template = myDoc;

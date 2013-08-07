@@ -32,6 +32,7 @@ function getDb() {
  * @param type $db
  */
 function insert($db) {
+	return;
 	/**
 	 * INSERT
 	 * 1. Create Job record
@@ -99,28 +100,40 @@ function getJobs($db) {
 	$result->encoding = 'UTF-8';
 	$result->formatOutput = TRUE;
 	$result->appendChild(new DOMElement('joblist'));
-	$updateStatus = array();
-	foreach ($jobs as $job) {
-		$jobid = $job['id'];
-		$updateStatus[] = $jobid;
-		$jobNode = $result->createElement('job');
-		$jobNode->setAttribute('job_id', $jobid);
-		$jobNode->appendChild(new DOMElement('hotfolder',$job['separations']));
-		$jobNode->appendChild(new DOMElement('rollnumber',$job['roll']));
-		$jobNode->appendChild(new DOMElement('template',$job['template']));
-		$print_list = $jobNode->appendChild(new DOMElement('printlist'));
-		/**
-		 * Fetch print-list's
-		 */
-		$labelsSQL = "SELECT * FROM labels WHERE fk_jobs = $jobid AND deleted = 0;";
-		$print_list_files = $db->query($labelsSQL);
-		foreach ($print_list_files as $plf) {
-			$print_list->appendChild(new DOMElement('label',$plf['name']));
+	if (count($jobs) > 0) {
+		$updateStatus = array();
+		foreach ($jobs as $job) {
+			$jobid = $job['id'];
+			$updateStatus[] = $jobid;
+			$jobNode = $result->createElement('job');
+			$jobNode->setAttribute('job_id', $jobid);
+			$jobNode->appendChild(new DOMElement('hotfolder',$job['separations']));
+			$jobNode->appendChild(new DOMElement('rollnumber',$job['roll']));
+			$jobNode->appendChild(new DOMElement('template',$job['template']));
+			$print_list = $jobNode->appendChild(new DOMElement('printlist'));
+			/**
+			 * Fetch print-list's
+			 */
+			$labelsSQL = "SELECT * FROM labels WHERE fk_jobs = $jobid AND deleted = 0;";
+			$print_list_files = $db->query($labelsSQL);
+			foreach ($print_list_files as $plf) {
+				$print_list->appendChild(new DOMElement('label',$plf['name']));
+			}
+			/**
+			 * Get job sequence
+			 */
+			$sequenceSQL = "SELECT sequence FROM job_sequences WHERE id = " . $job['fk_sequence'] . ";";
+			$sequence = $db->query($sequenceSQL);
+			// Only one row expected:
+			$jobNode->appendChild(new DOMElement('sequence',$sequence[0]['sequence']));
+			/**
+			 * Finish jobNode
+			 */
+			$result->documentElement->appendChild($jobNode);
 		}
-		$result->documentElement->appendChild($jobNode);
+		$updateStatusSQL = "UPDATE jobs SET status = 'processing' WHERE id in (" . implode(',', $updateStatus) . ");";
+		$db->query($updateStatusSQL);
 	}
-	$updateStatusSQL = "UPDATE jobs SET status = 'processing' WHERE id in (" . implode(',', $updateStatus) . ");";
-	$db->query($updateStatusSQL);
 	//$result->save('/tmp/job.xml');
 	header("Content-Type: text/xml; charset=UTF-8");
 	echo $result->saveXML(); 
@@ -128,5 +141,5 @@ function getJobs($db) {
 }
 
 // Enaf!  $db = getDb(); insert($db);
-
+//getJobs(getDb());
 ?>

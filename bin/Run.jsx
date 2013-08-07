@@ -4,10 +4,13 @@ try {
 	// If we are in Bridge call
 	// Un-serialize job object from Bridge JSON-string
 	var jobs = eval(job);
+	$.writeln('Run from Bridge 3 Here');
+	$.writeln(job);
 } catch (e) {
 	// Run.jsx runs independently
 	// Eat mock, run.jsx!
-	var jobs = $.evalFile ('tests/jobsobj.json');
+	$.writeln('Run from ESTK 1 Here');
+	var jobs = $.evalFile ('tests/jobsobj.jsn');
 } 
 
 #include "/w/bin/mc.jsx"
@@ -21,7 +24,12 @@ for (var ji=0, jl = jobs.length; ji < jl; ji++) {
 	// Обычная сборка
 	make = new assembly(app);
 	make.setup(j);
+	try {
 	make.run();
+	} catch (e) {
+		// continue
+		j.errors.push(e.message);
+	}
 
 	// Сборка-утверждение
 	collect = new matching(app);
@@ -32,4 +40,5 @@ for (var ji=0, jl = jobs.length; ji < jl; ji++) {
 	attention = new achtung(app);
 	attention.setup(j);
 	attention.run();
+	j.toSource();
 }
