@@ -50,7 +50,8 @@ function postMessage(id) {
 }
 
 function postResponse(message) {
-	$.writeln('onResult Here');
+	$.writeln('Controller onResult() Here');
+	$.writeln(message.body);
 	//var b = message.body;
 }	
 
@@ -58,7 +59,7 @@ function postResponse(message) {
  * Do something with job
  */
 function processJobs(j) {
-	scriptFile = new File("/w/bin/Dispatch.jsx");
+	var scriptFile = new File("/w/bin/Dispatch.jsx");
 	scriptFile.open('r');
 	scriptBody = scriptFile.read();
 	scriptFile.close();
@@ -68,7 +69,6 @@ function processJobs(j) {
 		brt = new BridgeTalk();
 		brt.target = "illustrator";
 		brt.body = scriptBody;
-	//	brt.type = 'job';
 		brt.headers.job = j.toSource();
 		brt.onResult = postResponse;
 		brt.onError = function( errorMsg ) {
@@ -118,10 +118,9 @@ remote = "http://indigo.aicdr.pro/";
 /*
  * Run
  */ 
-dumpJobs();
-/*
+//dumpJobs();
+
 var jobs = parseJobs();
 processJobs(jobs);
 //postMessage(j.dbid);
 //postMessage();
-*/

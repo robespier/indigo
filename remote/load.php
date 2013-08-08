@@ -131,6 +131,7 @@ function getJobs($db) {
 			 */
 			$result->documentElement->appendChild($jobNode);
 		}
+		// Flag outgoing jobs as 'processing' while underneath job went done
 		$updateStatusSQL = "UPDATE jobs SET status = 'processing' WHERE id in (" . implode(',', $updateStatus) . ");";
 		$db->query($updateStatusSQL);
 	}
