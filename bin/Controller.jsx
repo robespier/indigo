@@ -51,7 +51,8 @@ function postMessage(id) {
 
 function postResponse(message) {
 	$.writeln('Controller onResult() Here');
-	$.writeln(message.body);
+	var respXML = encodeResponse(eval(message.body));
+	$.writeln(respXML.toString());
 	//var b = message.body;
 }	
 
@@ -109,6 +110,32 @@ function parseJobs() {
 		jobs.push (j);
 	}
 	return jobs;
+}
+
+function encodeResponse(resp) {
+	var respXML = new XML('<jobsResponse/>');
+	for (var rj = 0, rl = resp.length; rj < rl; rj++) {
+		jobRespXML = new XML('<jobResp/>');
+		jobRespXML.@dbid = resp[rj].dbid;
+		if (resp[rj].errors.length > 0) {
+			jobRespXML.status = 'issues';
+			var jobIssuesXML = new XML('<troubles/>');
+			for (var jiss = 0, jliss = resp[rj].errors.length; jiss < jliss; jiss++) {
+				var jobIssueXML = new XML('<trouble/>');
+				jobIssueXML.message = resp[rj].errors[jiss].message;
+				jobIssueXML.source = resp[rj].errors[jiss].source;				
+				jobIssueXML.file = resp[rj].errors[jiss].file;
+				jobIssueXML.severity = resp[rj].errors[jiss].severity;
+				jobIssueXML.jobid = resp[rj].errors[jiss].jobid;
+				jobIssuesXML.appendChild(jobIssueXML);
+			}
+			jobRespXML.appendChild(jobIssuesXML);
+		} else {
+			jobRespXML.status = 'done';
+		}
+		respXML.appendChild(jobRespXML);
+	}
+	return respXML;
 }
 
 /*
