@@ -29,3 +29,10 @@ function dispatch(message) {
 	// BridgeTalk want's this as result:
 	return job.toSource();
 }
+
+/**
+ * Helper Test Call
+ */
+if (typeof(AsyncTest) != undefined) {
+	testResult = dispatch(AsyncTest.message);
+}
