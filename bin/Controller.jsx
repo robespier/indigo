@@ -40,11 +40,11 @@ function dumpJobs() {
 /**
  * Post Results To Remote 
  */
-function postMessage(id) {
+function postMessage(data) {
 	var http = new HttpConnection(remote);	
 	http.mime =  "application/x-www-form-urlencoded";
 	http.requestheaders = ["User-Agent", "Indigo 1.0"];
-	http.request = "done=" + id;
+	http.request = "resp=" + data;
 	http.method = "POST";
 	http.execute();
 }
@@ -53,7 +53,7 @@ function postResponse(message) {
 	$.writeln('Controller onResult() Here');
 	var respXML = encodeResponse(eval(message.body));
 	$.writeln(respXML.toString());
-	//var b = message.body;
+	postMessage(respXML.toString());
 }	
 
 /**

@@ -10,10 +10,13 @@ if (isset($_GET['do']) && $_GET['do'] == 'getJobs') {
 	$jobs = getJobs($db);
 }
 
-if (isset($_POST['done'])) {
-	$jobid = $_POST['done'];
+if (isset($_POST['resp'])) {
+	$postcontent = $_POST['resp'];
+	file_put_contents('/tmp/post.txt',$postcontent);
+	/* 
 	$db = getDb();
 	update($db,$jobid);
+	 */
 }
 
 /**
@@ -74,10 +77,15 @@ function insert($db) {
 /**
  * UPDATE
  */
-function update($db,$id) {
-	$jobDoneSQL = "UPDATE jobs SET status = 'done' WHERE id in (" . $id . ");";
-	$db->query($jobDoneSQL);
-	$db->connClose();
+function update($postcontent) {
+	$postXML = new DOMDocument();
+	$postXML->encoding = 'UTF-8';
+	$postXML->formatOutput = TRUE;
+	$postXML->loadXML($postcontent);
+	$postXML->save('/tmp/post.xml');
+	//$jobDoneSQL = "UPDATE jobs SET status = 'done' WHERE id in (" . $id . ");";
+	//$db->query($jobDoneSQL);
+	//$db->connClose();
 }
 /**
  * DELETE
@@ -131,9 +139,8 @@ function getJobs($db) {
 			 */
 			$result->documentElement->appendChild($jobNode);
 		}
-		// Flag outgoing jobs as 'processing' while underneath job went done
 		$updateStatusSQL = "UPDATE jobs SET status = 'processing' WHERE id in (" . implode(',', $updateStatus) . ");";
-		$db->query($updateStatusSQL);
+		//$db->query($updateStatusSQL);
 	}
 	//$result->save('/tmp/job.xml');
 	header("Content-Type: text/xml; charset=UTF-8");
