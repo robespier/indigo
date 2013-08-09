@@ -34,11 +34,11 @@ mc.prototype = {
 	openTemplate: function() {
 		var template = this.getTemplateName();
 		try {
-		this.illustrator.open (template); //Открываем шаблон
+			this.illustrator.open (template); //Открываем шаблон
 		} catch (e) {
 			var errmsg =  e.message + ': ' + template;
 			throw new Error(errmsg);
-			}
+		}
 		var myDoc = app.activeDocument; //Создаем ссылку на активный документ
 		myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
 		this.template = myDoc;

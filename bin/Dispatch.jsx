@@ -17,9 +17,13 @@ BridgeTalk.onReceive = function (message) {
 		for (var act = 0, al = actions.length; act < al; act++) {
 			var worker = eval('new ' + actions[act]);
 			worker.setup(job[jb]);
-			worker.run();
+			try {
+				worker.run();
+			} catch (err) {
+				job[jb].errors.push(err.message);
 			}
+		}
 	}
 	// BridgeTalk want's this as result:
-	//return job.toSource();
+	return job.toSource();
 }
