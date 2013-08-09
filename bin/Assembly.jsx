@@ -32,9 +32,16 @@ assembly.prototype.imposeLabels = function() {
 			this.sendtoHotFolder(); // Кидаем сборку в горячую папку
 			this.currentLabel.remove();
 		} catch (err) {
-			$.writeln('Continue assembly v2');
-			var errmsg = err.message + ': ' + this.labels[i];
-			this.job.errors.push(errmsg);
+			// Continue flow
+			$.writeln('Continue assembly v3')
+			var errobj = {
+				message: err.message,
+				source: 'assembly',
+				file: this.labels[i].fullName,
+				severity: 'warning',
+				jobid: this.job.dbid,
+			}
+			this.job.errors.push(errobj);
 		}
 	}
 }

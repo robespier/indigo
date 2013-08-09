@@ -35,8 +35,14 @@ mc.prototype = {
 		try {
 			this.illustrator.open (template); //Открываем шаблон
 		} catch (e) {
-			var errmsg =  e.message + ': ' + template;
-			throw new Error(errmsg);
+			// interrupt normal flow
+			throw {
+				message: e.message,
+				source: 'openTemplate',
+				file: template.fullName,
+				severity: 'error',
+				jobid: this.job.dbid,
+			}
 		}
 		var myDoc = app.activeDocument; //Создаем ссылку на активный документ
 		myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат

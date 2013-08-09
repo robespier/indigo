@@ -22,7 +22,7 @@ function dispatch(message) {
 			try {
 				worker.run();
 			} catch (err) {
-				job[jb].errors.push(err.message);
+				job[jb].errors.push(err);
 			}
 		}
 	}

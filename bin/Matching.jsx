@@ -20,7 +20,7 @@ matching.prototype.imposeLabels = function() {
 	if (this.labels.length < 2) {
 		return;
 	}
-	
+
 	var cuts = this.template.layers['cut'].pathItems;
 	var cutsCount = cuts.length;
 	var labelsCount = this.labels.length;
@@ -30,10 +30,21 @@ matching.prototype.imposeLabels = function() {
 	while (labelsCount > 0) {
 		newlayer.placedItems.removeAll();
 		for (i,k=0; i < l && k < cutsCount; k++, i++) {
-			// Помещаем на слой layer файл этикетки
-			this.placeLabel(cuts[k], this.labels[i]);
-			// Крутим
-			this.applyStyle();
+			try {
+				// Помещаем на слой layer файл этикетки
+				this.placeLabel(cuts[k], this.labels[i]);
+				// Крутим
+				this.applyStyle();
+			} catch (e) {
+				// interrupt normal flow
+				throw {
+					message: e.message,
+					source: 'matching',
+					file: this.labels[i].fullName,
+					severity: 'error',
+					jobid: this.job.dbid,
+				}
+			}
 		}
 		labelsCount -= cutsCount;
 		this.exportPDF(this.getPDFName(utvCount));
