@@ -24,12 +24,7 @@ for (var ji=0, jl = jobs.length; ji < jl; ji++) {
 	// Обычная сборка
 	make = new assembly(app);
 	make.setup(j);
-	try {
 	make.run();
-	} catch (e) {
-		// continue
-		j.errors.push(e.message);
-	}
 
 	// Сборка-утверждение
 	collect = new matching(app);

@@ -7,7 +7,9 @@
 #include "/w/bin/Matching.jsx"
 #include "/w/bin/Achtung.jsx"
 
-BridgeTalk.onReceive = function (message) {
+BridgeTalk.onReceive = dispatch;
+
+function dispatch(message) {
 	$.writeln('Dispatch 11 Here');
 	var job = eval(message.headers.job);
 	// iterate thru jobs

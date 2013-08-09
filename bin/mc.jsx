@@ -17,7 +17,6 @@ mc.prototype = {
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
 		this.job = job;
-		this.job.errors = [];
 	},
 	/*
 	 * Имя шаблона
@@ -100,35 +99,35 @@ mc.prototype = {
 	getStyle: function() {
 		var myRolls = this.template.graphicStyles; // Считываем массив намоток (графических стилей) документа
 		switch(this.roll_number) {
-			case 0:
+			case "0":
 				if (this.transform()) {
 					myStyle=myRolls['roll_1_6']; // Крутить
 				} else {
 					myStyle=myRolls['roll_4_8']; // Не крутить
 				}
 				break;
-			case 1:
+			case "1":
 				myStyle=myRolls['roll_1_6']
 					break;
 			case "2":
 				myStyle=myRolls['roll_2_5']
 					break;
-			case 3:
+			case "3":
 				myStyle=myRolls['roll_3_7']
 					break;
-			case 4:
+			case "4":
 				myStyle=myRolls['roll_4_8']
 					break;
-			case 5:
+			case "5":
 				myStyle=myRolls['roll_2_5']
 					break;
-			case 6:
+			case "6":
 				myStyle=myRolls['roll_1_6']
 					break;
-			case 7:
+			case "7":
 				myStyle=myRolls['roll_3_7']
 					break;
-			case 8:
+			case "8":
 				myStyle=myRolls['roll_4_8']
 					break;
 			default:

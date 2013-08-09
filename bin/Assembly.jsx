@@ -23,13 +23,19 @@ assembly.prototype.getTemplateName = function () {
 assembly.prototype.imposeLabels = function() {
 	tc = this.targetCut;
 	for (var i=0, l=this.labels.length; i < l; i++) {
-		// Помещаем на слой layer файл этикетки
-		this.placeLabel(tc, this.labels[i]);
-		// Крутим
-		this.applyStyle();
-		this.exportPDF(this.getPDFName(i));
-		this.sendtoHotFolder(); // Кидаем сборку в горячую папку
-		this.currentLabel.remove();
+		try {
+			// Помещаем на слой layer файл этикетки
+			this.placeLabel(tc, this.labels[i]);
+			// Крутим
+			this.applyStyle();
+			this.exportPDF(this.getPDFName(i));
+			this.sendtoHotFolder(); // Кидаем сборку в горячую папку
+			this.currentLabel.remove();
+		} catch (err) {
+			$.writeln('Continue assembly v2');
+			var errmsg = err.message + ': ' + this.labels[i];
+			this.job.errors.push(errmsg);
+		}
 	}
 }
 
