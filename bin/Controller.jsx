@@ -116,7 +116,6 @@ function encodeResponse(resp) {
 	var respXML = new XML('<jobsResponse/>');
 	for (var rj = 0, rl = resp.length; rj < rl; rj++) {
 		jobRespXML = new XML('<jobResp/>');
-		jobRespXML.@dbid = resp[rj].dbid;
 		if (resp[rj].errors.length > 0) {
 			jobRespXML.status = 'issues';
 			var jobIssuesXML = new XML('<troubles/>');
@@ -133,6 +132,7 @@ function encodeResponse(resp) {
 		} else {
 			jobRespXML.status = 'done';
 		}
+		jobRespXML.status.@jobid = resp[rj].dbid;
 		respXML.appendChild(jobRespXML);
 	}
 	return respXML;

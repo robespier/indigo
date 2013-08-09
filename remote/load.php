@@ -13,10 +13,7 @@ if (isset($_GET['do']) && $_GET['do'] == 'getJobs') {
 if (isset($_POST['resp'])) {
 	$postcontent = $_POST['resp'];
 	file_put_contents('/tmp/post.txt',$postcontent);
-	/* 
-	$db = getDb();
-	update($db,$jobid);
-	 */
+	update($postcontent);
 }
 
 /**
@@ -81,11 +78,24 @@ function update($postcontent) {
 	$postXML = new DOMDocument();
 	$postXML->encoding = 'UTF-8';
 	$postXML->formatOutput = TRUE;
+
 	$postXML->loadXML($postcontent);
 	$postXML->save('/tmp/post.xml');
-	//$jobDoneSQL = "UPDATE jobs SET status = 'done' WHERE id in (" . $id . ");";
-	//$db->query($jobDoneSQL);
-	//$db->connClose();
+
+	// Process status messages
+	$statusesXPath = new DOMXPath($postXML);
+	$statuses = $statusesXPath->query('//status');
+	if ($statuses->length > 0) {
+		$updateStatusSQL = array(); 
+		$now = new DateTime();
+		$dates = date('Y-m-d H:i:s', $now->getTimestamp());
+		foreach ($statuses as $status) {
+			$updateStatusSQL[] = "UPDATE jobs SET status = '$status->nodeValue', date_modified = '$dates' WHERE id = " . $status->getAttribute('jobid') . ";";
+		}
+	}
+	$db = getDb();
+	$db->query($updateStatusSQL);
+	$db->connClose();
 }
 /**
  * DELETE
@@ -140,7 +150,7 @@ function getJobs($db) {
 			$result->documentElement->appendChild($jobNode);
 		}
 		$updateStatusSQL = "UPDATE jobs SET status = 'processing' WHERE id in (" . implode(',', $updateStatus) . ");";
-		//$db->query($updateStatusSQL);
+		$db->query($updateStatusSQL);
 	}
 	//$result->save('/tmp/job.xml');
 	header("Content-Type: text/xml; charset=UTF-8");
@@ -148,6 +158,7 @@ function getJobs($db) {
 	$db->connClose();
 }
 
+//update('none');
 // Enaf!  $db = getDb(); insert($db);
 //getJobs(getDb());
 ?>
