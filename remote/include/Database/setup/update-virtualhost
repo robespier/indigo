@@ -3,3 +3,9 @@
 sudo cp ../../../load.php /var/www/html/indigo/index.php
 sudo cp ../../../include/autoload.php /var/www/html/indigo/include/ 
 sudo cp ../../../include/Database/Database.php /var/www/html/indigo/include/Database/
+
+sudo cp ../../../face.html /var/www/html/indigo/
+sudo cp ../../../css/bootstrap.min.css /var/www/html/indigo/css/
+sudo cp ../../../js/bootstrap.min.js /var/www/html/indigo/js/
+sudo cp ../../../img/glyphicons-halflings-white.png /var/www/html/indigo/img/
+sudo cp ../../../img/glyphicons-halflings.png /var/www/html/indigo/img/
