@@ -82,18 +82,51 @@ function update($postcontent) {
 	$postXML->loadXML($postcontent);
 	$postXML->save('/tmp/post.xml');
 
+	// debug
+	//$postXML->load('/tmp/post.xml');
+	// end debug
+	
+	$db = getDb();
+
+	$now = new DateTime();
+	$dates = date('Y-m-d H:i:s', $now->getTimestamp());
+	
 	// Process status messages
 	$statusesXPath = new DOMXPath($postXML);
 	$statuses = $statusesXPath->query('//status');
 	if ($statuses->length > 0) {
 		$updateStatusSQL = array(); 
-		$now = new DateTime();
-		$dates = date('Y-m-d H:i:s', $now->getTimestamp());
 		foreach ($statuses as $status) {
 			$updateStatusSQL[] = "UPDATE jobs SET status = '$status->nodeValue', date_modified = '$dates' WHERE id = " . $status->getAttribute('jobid') . ";";
 		}
 	}
-	$db = getDb();
+
+	// Process issues
+	$issuesXPath = new DOMXPath($postXML);
+	$issues = $issuesXPath->query('//trouble');
+	if ($issues->length > 0) {
+		$insertIssuesSQL = "INSERT into job_issues (date_created,date_modified,message,source,file,severity,fk_jobs) VALUES ";
+		foreach ($issues as $issue) {
+			$cortage = array();
+			$cortage[] = "'" . $dates . "'";
+			$cortage[] = "'" . $dates . "'";
+			foreach ($issue->childNodes as $issueDetail) {
+				$nodeVal = trim($issueDetail->nodeValue);
+				if (!empty($nodeVal)) {
+					if (intval($nodeVal) != 0) {
+						$cortage[] = $nodeVal;
+					} else {
+						$cortage[] = "'" . $db->escape($nodeVal) . "'";
+					}
+				}
+			}
+			$insertIssuesSQL .= "(" . implode(",", $cortage) . "),"; 
+		}
+		$query = preg_replace('/,$/', ';', $insertIssuesSQL);
+		
+		// Run all query all togather;
+		$updateStatusSQL[] = $query;
+	}
 	$db->query($updateStatusSQL);
 	$db->connClose();
 }
