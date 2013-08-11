@@ -1,3 +1,0 @@
-#!/bin/bash
-
-recess --compress less/layout.less > css/indigo.min.css && sudo cp css/indigo.min.css /var/www/html/indigo/css/
