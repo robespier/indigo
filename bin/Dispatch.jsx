@@ -33,6 +33,6 @@ function dispatch(message) {
 /**
  * Helper Test Call
  */
-if (typeof(AsyncTest) != undefined) {
+if (typeof(AsyncTest) != "undefined") {
 	testResult = dispatch(AsyncTest.message);
 }

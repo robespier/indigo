@@ -147,7 +147,11 @@ remote = "http://indigo.aicdr.pro/";
  */ 
 //dumpJobs();
 
-var jobs = parseJobs();
-processJobs(jobs);
+while (true) {
+	$.writeln('Check for new jobs');
+	var jobs = parseJobs();
+	processJobs(jobs);
+	$.sleep(10000);
+}
 //postMessage(j.dbid);
 //postMessage();
