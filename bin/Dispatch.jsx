@@ -34,5 +34,6 @@ function dispatch(message) {
  * Helper Test Call
  */
 if (typeof(AsyncTest) != "undefined") {
+	$.writeln('Dispatch AsyncTest 11 Here');
 	testResult = dispatch(AsyncTest.message);
 }

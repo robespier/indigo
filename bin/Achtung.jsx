@@ -9,12 +9,6 @@ achtung.prototype.constructor = achtung;
 
 achtung.prototype.imposeLabels = function() {
 
-	// Не надо делать сборку-внимание, если
-	// этикетка всего одна
-	if (this.labels.length < 2) {
-		return;
-	}
-	
 	var myDoc = this.template;
 
 	this.achtung = new File ('Y:\\ACHTUNG.eps'); // Ссылка на объектную переменную типа файл

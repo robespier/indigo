@@ -9,8 +9,8 @@ function mc(app) {
 mc.prototype = {
 	setup: function(job) {
 		this.temp = job.template; 4090354; //шаблона
-		this.roll_number = job.roll_number; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
-		this.hotfolderName = job.hot_folder;
+		this.roll_number = job.roll; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
+		this.hotfolderName = job.separations;
 		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
 		this.templateFolder = new Folder ('D:\\work\\template'); //Каталог шаблонов сборки
 		this.printList = job.print_list; //Массив строк из принт-листа
@@ -92,12 +92,22 @@ mc.prototype = {
 	getLabels: function() {
 		this.labels = []; // Экземплярная переменная для хранения этикеток
 		for (var i=0, prl = this.printList.length; i < prl; i++) {
-			file_name = this.printList[i];
+			var file_name = this.printList[i].name;
 			var labelObjectFile= new File (file_name); // Создаем ссылку на файл этикетки
 			this.labels.push(labelObjectFile); // Сохраняем ссылку на файл в экземплярной переменной
 		}
 		return this.labels;
 	},
+	
+	/*
+	 * Не надо делать сборки утверждения и внимания, если этикетка всего одна
+	 */
+	isNeed: function() {
+		if (this.labels.length < 2) {
+			return false;
+		}
+	},
+
 	/*
 	 * Выбор намоток
 	 * @returns graphicStyle object
@@ -237,11 +247,13 @@ mc.prototype = {
 	 * Шаблонный метод -- Make Collection
 	 */
 	run: function() {
-		this.openTemplate();
-		this.setLabelLayer();
-		this.getLowerCut();
 		this.getLabels();
-		this.imposeLabels();
-		this.closeTemplate();
+		if (this.isNeed) {
+			this.openTemplate();
+			this.setLabelLayer();
+			this.getLowerCut();
+			this.imposeLabels();
+			this.closeTemplate();
+		}
 	},
 }

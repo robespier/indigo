@@ -14,6 +14,9 @@ assembly.prototype.getTemplateName = function () {
 	return template;
 }
 
+assembly.prototype.isNeed = function() {
+	return true;
+}
 
 /*
  * Размещение этикетки на листе

@@ -162,7 +162,7 @@ function run() {
 /*
  * Setup
  */
-AsyncDebug = true;
+//AsyncDebug = true;
 remote = "http://indigo.aicdr.pro/";
 #include 'jsonBroker.jsx'
 dataBroker = new jsonBroker();
@@ -187,4 +187,5 @@ while (true) {
 }
 //postMessage(j.dbid);
 //postMessage();
+
 */

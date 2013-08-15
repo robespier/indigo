@@ -15,12 +15,6 @@ matching.prototype.currentLabel = null;
  */
 matching.prototype.imposeLabels = function() {
 
-	// Не надо делать сборку-утверждение, если
-	// этикетка всего одна
-	if (this.labels.length < 2) {
-		return;
-	}
-
 	var cuts = this.template.layers['cut'].pathItems;
 	var cutsCount = cuts.length;
 	var labelsCount = this.labels.length;
