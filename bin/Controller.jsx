@@ -164,8 +164,15 @@ function run() {
  */
 //AsyncDebug = true;
 remote = "http://indigo.aicdr.pro/";
+
 #include 'jsonBroker.jsx'
 dataBroker = new jsonBroker();
+
+/*
+#include 'XMLBroker.jsx'
+dataBroker = new XMLBroker();
+*/
+
 /*
 var phpdata = dataBroker._loadJob();
 dataBroker.decode(phpdata);
