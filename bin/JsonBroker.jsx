@@ -10,8 +10,12 @@ jsonBroker.prototype.encode = function (obj) {
 	return this.toJSON(obj);
 },
 
-jsonBroker.prototype.decode = function() {
-	return this.fromJSON();
+jsonBroker.prototype.decode = function (string) {
+	return this.fromJSON(string);
+},
+
+jsonBroker.prototype.getURI = function() {
+	return "getJobs/json/";
 },
 
 /**
@@ -38,8 +42,14 @@ jsonBroker.prototype.toJSON = function (obj) {
  *
  * XML в этом смысле понадёжней будет.
  */
-jsonBroker.prototype.fromJSON = function() {
-	return obj;
+jsonBroker.prototype.fromJSON = function(string) {
+	try {
+		obj = eval(string);
+		return obj;
+	} catch (e) {
+		$.writeln('json_decode failed: ' + e.message);
+		this.saveString(string);
+	}
 },
 
 /**
@@ -84,14 +94,21 @@ jsonBroker.prototype._json_encode = function(obj, jsonString) {
 },
 
 jsonBroker.prototype._saveJob = function(job) {
-	var jobFile = new File('/w/tmp/job.txt');
+	var jobFile = new File('/w/tmp/jsonJob.txt');
 	jobFile.open('w');
 	jobFile.write (job.toSource());
 	jobFile.close();
 },
 
+jsonBroker.prototype._saveString = function(string) {
+	var jobFile = new File('/w/tmp/jsonString.txt');
+	jobFile.open('w');
+	jobFile.write (string);
+	jobFile.close();
+},
+
 jsonBroker.prototype._loadJob = function() {
-	var jobFile = new File('/w/tmp/job.txt');
+	var jobFile = new File('/w/tmp/jsonString.txt');
 	jobFile.open('r');
 	var jobSource = jobFile.read();
 	jobFile.close();

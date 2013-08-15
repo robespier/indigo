@@ -17,10 +17,11 @@ if ( webaccesslib == undefined ) {
 
 /**
  * Get Jobs Array from remote
+ * @param form string Url
  */
-function pullJobs() {
-	var params = 'index.php?do=getJobs&status=go';
-	var http = new HttpConnection(remote + params);
+function pullJobs(from) {
+	var url = encodeURI(from);
+	var http = new HttpConnection(url);
 	http.requestheaders = ["User-Agent", "Indigo 1.0"];
 	http.execute();
 	return http.response;
@@ -29,7 +30,7 @@ function pullJobs() {
 /**
  * Helper function: Dump jobs from database to file
  */
-function dumpJobs() {
+function _dumpJobs() {
 	var jobs = parseJobs();
 	var jobOutput = new File('tests/jobsobj.jsn');
 	jobOutput.open('w');
@@ -90,6 +91,16 @@ function processJobs(j) {
  */
 #include "Job.jsx"
 function parseJobs() {
+	var from = remote + dataBroker.getURI();
+	var response = pullJobs(from);
+	var data = dataBroker.decode(response);
+	if (typeof(AsyncDebug) != "undefined") {
+		dataBroker._saveString(response);
+	}
+	return data;
+}
+
+function parseJobsXML() {
 	xmlJobList = new XML(pullJobs());
 	var jobs = [];
 	// Iterate thru jobs
@@ -112,7 +123,11 @@ function parseJobs() {
 	return jobs;
 }
 
+
 function encodeResponse(resp) {
+}
+
+function _encodeResponse(resp) {
 	var respXML = new XML('<jobsResponse/>');
 	for (var rj = 0, rl = resp.length; rj < rl; rj++) {
 		jobRespXML = new XML('<jobResp/>');
@@ -138,15 +153,32 @@ function encodeResponse(resp) {
 	return respXML;
 }
 
+function run() {
+	var jobs = parseJobs();
+	if (jobs.length > 0) {
+		processJobs(jobs);
+	}
+}
 /*
  * Setup
  */
+AsyncDebug = true;
 remote = "http://indigo.aicdr.pro/";
+#include 'jsonBroker.jsx'
+dataBroker = new jsonBroker();
+/*
+var phpdata = dataBroker._loadJob();
+dataBroker.decode(phpdata);
+*/
+
 /*
  * Run
  */ 
 //dumpJobs();
 
+run();
+
+/*
 while (true) {
 	$.writeln('Check for new jobs');
 	var jobs = parseJobs();
@@ -155,3 +187,4 @@ while (true) {
 }
 //postMessage(j.dbid);
 //postMessage();
+*/
