@@ -14,6 +14,8 @@ function dispatch(message) {
 	var job = eval(message.headers.job);
 	// iterate thru jobs
 	for (var jb=0, jl = job.length; jb < jl; jb++) {
+		// assign placeholder (array) for feedback from workers
+		job[jb].errors = [];
 		var actions = job[jb].sequence.split(';');
 		// iterate on actions (assembly;matching;achtung)
 		for (var act = 0, al = actions.length; act < al; act++) {

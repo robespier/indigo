@@ -38,7 +38,7 @@ XMLBroker.prototype.parseJobsXML = function () {
 		j.roll_number = xmlJobList.job[i].rollnumber.toString();
 		j.hot_folder = xmlJobList.job[i].hotfolder.toString();
 		j.template = xmlJobList.job[i].template.toString();
-		j.dbid = xmlJobList.job[i].@job_id.toString();
+		j.id = xmlJobList.job[i].@job_id.toString();
 		// Create print_list
 		print_list = [];
 		for (var pi=0, pl = xmlJobList.job[i].printlist.label.length(); pi < pl; pi++) {
@@ -73,7 +73,7 @@ XMLBroker.prototype.encodeResponseXML = function(resp) {
 		} else {
 			jobRespXML.status = 'done';
 		}
-		jobRespXML.status.@jobid = resp[rj].dbid;
+		jobRespXML.status.@jobid = resp[rj].id;
 		respXML.appendChild(jobRespXML);
 	}
 	return respXML;

@@ -41,7 +41,7 @@ mc.prototype = {
 				source: 'openTemplate',
 				file: template.fullName,
 				severity: 'error',
-				jobid: this.job.dbid,
+				jobid: this.job.id,
 			}
 		}
 		var myDoc = app.activeDocument; //Создаем ссылку на активный документ

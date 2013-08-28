@@ -36,7 +36,7 @@ matching.prototype.imposeLabels = function() {
 					source: 'matching',
 					file: this.labels[i].fullName,
 					severity: 'error',
-					jobid: this.job.dbid,
+					jobid: this.job.id,
 				}
 			}
 		}

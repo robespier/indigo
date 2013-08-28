@@ -22,10 +22,8 @@ message = {
 AsyncTest = {
 	done: false,
 	message: message,
-	loadMessage : function() {
-		// Reconstruct BridgeTalkMessage
-		return;
-	},
 }
+
+var checkout = jb;
 
 #include Dispatch.jsx

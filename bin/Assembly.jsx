@@ -42,7 +42,7 @@ assembly.prototype.imposeLabels = function() {
 				source: 'assembly',
 				file: this.labels[i].fullName,
 				severity: 'warning',
-				jobid: this.job.dbid,
+				jobid: this.job.id,
 			}
 			this.job.errors.push(errobj);
 		}

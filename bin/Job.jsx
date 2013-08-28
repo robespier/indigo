@@ -12,4 +12,4 @@ job.prototype.roll_number = 2;
 job.prototype.template = 4090354;
 job.prototype.errors = [];
 job.prototype.sequence = 'assembly;matching;achtung';
-job.prototype.dbid = null;
+job.prototype.id = null;

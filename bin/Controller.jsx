@@ -28,17 +28,6 @@ function pullJobs(from) {
 }
 
 /**
- * Helper function: Dump jobs from database to file
- */
-function _dumpJobs() {
-	var jobs = parseJobs();
-	var jobOutput = new File('tests/jobsobj.jsn');
-	jobOutput.open('w');
-	jobOutput.write (jobs.toSource());
-	jobOutput.close();
-}
-
-/**
  * Post Results To Remote 
  */
 function postMessage(data) {
@@ -111,6 +100,8 @@ function run() {
 	var jobs = parseJobs();
 	if (jobs.length > 0) {
 		processJobs(jobs);
+	} else {
+		return 'No Jobs Pulled';
 	}
 }
 /*
@@ -146,7 +137,4 @@ while (true) {
 	processJobs(jobs);
 	$.sleep(10000);
 }
-//postMessage(j.dbid);
-//postMessage();
-
 */
