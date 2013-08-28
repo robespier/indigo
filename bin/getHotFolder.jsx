@@ -103,6 +103,7 @@ function getHotFolder() { // Определяет hotfolder исходя из к
 		case 61:
 		case 62:
 		case 63:
+		// 65 66 67 2: 1000001 1000010 1000011 C: OpVi OpOr OpViOr
 		case 69:
 		case 70:
 		case 71:
