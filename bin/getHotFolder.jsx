@@ -8,7 +8,13 @@ this.ink[4] = 1; // Black
 this.ink[5] = 0; // Orange
 this.ink[6] = 1; // Violet
 
-function toDEC(dec) { // Переводит число из двоичной системы в десятичную
+/**
+ * Переводит массив "0"/"1" из двоичной системы в десятичную
+ *
+ * @param dec Array
+ * @return int
+ */
+function toDEC(dec) {
 	var out = 0, len = dec.length, bit = 1;
 	while(len--) {
 		out += dec[len] == "1" ? bit : 0;
@@ -17,7 +23,12 @@ function toDEC(dec) { // Переводит число из двоичной с�
 	return out;
 }
 
-function getHotFolder() { // Определяет hotfolder исходя из красочности задания
+/**
+ * Определяет hotfolder исходя из красочности задания
+ *
+ * @return string HotFolder Name
+ */
+function getHotFolder() { 
 	var inkDec = toDEC(this.ink);
 	var hotfolderName = '';
 	if (inkDec % 4 === 0) {
