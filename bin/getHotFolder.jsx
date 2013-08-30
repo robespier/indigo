@@ -31,14 +31,18 @@ function toDEC(dec) {
 
 /**
  * Пример использования булевой арифметики
- * Определяет, установлен ли бит "Black" в десятичном числе
+ * Определяет, установлены ли определенные биты сепараций
+ * в десятичном числе ("Цветности задания")
+ *
+ * @param int num Цветность задания
+ * @param int colors Сепарации
  *
  * @return boolean
  */
-function isBlack(num) {
+function isColorsPresent(num, colors) {
 	var result = false;
-	// Конструкция "num & IND_BLACK" - это операция "побитовое И"
-	if ((num & IND_BLACK) !== 0) {
+	// Конструкция "num & colors" - это операция "побитовое И"
+	if ((num & colors) !== 0) {
 		result = true;
 	}
 	return result;
@@ -64,5 +68,5 @@ function getHotFolder(num) {
 }
 
 var inkDec = toDEC(this.ink);
-alert(isBlack(inkDec));
+alert(isColorsPresent(inkDec,IND_BLACK));
 alert(getHotFolder(inkDec));
