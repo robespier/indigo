@@ -2,11 +2,11 @@ this.ink = new Array(7);
 
 this.ink[0] = 0; // Opaque
 this.ink[1] = 1; // Cyan
-this.ink[2] = 1; // Magenta
+this.ink[2] = 0; // Magenta
 this.ink[3] = 1; // Yellow
-this.ink[4] = 1; // Black
+this.ink[4] = 0; // Black
 this.ink[5] = 0; // Orange
-this.ink[6] = 1; // Violet
+this.ink[6] = 0; // Violet
 
 /**
  * Переводит массив "0"/"1" из двоичной системы в десятичную
@@ -24,15 +24,31 @@ function toDEC(dec) {
 }
 
 /**
+ * Пример использования булевой арифметики
+ * Определяет, установлен ли бит "Black" в десятичном числе
+ *
+ * @return boolean
+ */
+function isBlack(num) {
+	var result = false;
+	// По соглашению, Black - третий бит, так что имя ему 4 в
+	// десятичной системе счисления.
+	// Конструкция "num & 4" это операция "побитовое И"
+	if ((num & 4) != 0) {
+		result = true;
+	}
+	return result;
+}
+
+/**
  * Определяет hotfolder исходя из красочности задания
  *
  * @return string HotFolder Name
  */
-function getHotFolder() { 
-	var inkDec = toDEC(this.ink);
+function getHotFolder(num) { 
 	var hotfolderName = '';
-	if (inkDec % 4 === 0) {
-		if (inkDec <= 60) {
+	if (num % 4 === 0) {
+		if (num <= 60) {
 			hotfolderName = "CMYK";
 		} else {
 			hotfolderName = "CMYKW";
@@ -43,4 +59,6 @@ function getHotFolder() {
 	return hotfolderName;
 }
 
-alert(getHotFolder());
+var inkDec = toDEC(this.ink);
+alert(isBlack(inkDec));
+alert(getHotFolder(inkDec));
