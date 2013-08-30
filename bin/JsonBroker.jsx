@@ -105,4 +105,17 @@ jsonBroker.prototype._json_encode = function(obj, jsonString) {
 jsonBroker.prototype.test = function() {
 	var job = this._createStub();
 	var parcel = this.toJSON(job);
+	$.writeln();
+	$.writeln(parcel);
+	
+	//this.saveJob(job);
+	//var jobStr = this.loadJob();
+	//var newJob = eval(jobStr);
+
+	// Bridge Function
+	//var newJob2 = $.evalFile('/w/tmp/job.txt');
+	//var newJob2 = $.evalFile('/w/bin/tests/phpJSON.txt');
+
+	//var test = newJob.roll;
+	//var test2 = newJob2.roll;
 };

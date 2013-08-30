@@ -4,7 +4,7 @@
  * Enable Web Access Library
  * Copy/paste form "JavaScript Tools Guide CS3.pdf", page 160
  */
-if ( webaccesslib == undefined ) {
+if ( webaccesslib === undefined ) {
 	if( Folder.fs == "Windows" ) {
 		var pathToLib = Folder.startup.fsName + "/webaccesslib.dll";
 	} else {
@@ -65,12 +65,12 @@ function processJobs(j) {
 		brt.headers.job = j.toSource();
 		brt.onResult = postResponse;
 		brt.onError = function( errorMsg ) {
-			var errCode = parseInt (errorMsg.headers ["Error-Code"]);
+			var errCode = parseInt (errorMsg.headers ["Error-Code"],10);
 			throw new Error (errCode, errorMsg.body);
-		}
+		};
 		brt.sendResult = function() {
 			$.writeln('sendResult Controller');
-		}
+		};
 		brt.send();
 	}
 	return 'Controller 4 Done';
