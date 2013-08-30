@@ -4,9 +4,15 @@ this.ink[0] = 0; // Opaque
 this.ink[1] = 1; // Cyan
 this.ink[2] = 0; // Magenta
 this.ink[3] = 1; // Yellow
-this.ink[4] = 0; // Black
+this.ink[4] = 1; // Black
 this.ink[5] = 0; // Orange
 this.ink[6] = 0; // Violet
+
+/*
+ * Избавимся от "магических чисел"
+ */
+
+IND_BLACK = 4;
 
 /**
  * Переводит массив "0"/"1" из двоичной системы в десятичную
@@ -31,10 +37,8 @@ function toDEC(dec) {
  */
 function isBlack(num) {
 	var result = false;
-	// По соглашению, Black - третий бит, так что имя ему 4 в
-	// десятичной системе счисления.
-	// Конструкция "num & 4" это операция "побитовое И"
-	if ((num & 4) != 0) {
+	// Конструкция "num & IND_BLACK" - это операция "побитовое И"
+	if ((num & IND_BLACK) !== 0) {
 		result = true;
 	}
 	return result;
