@@ -4,7 +4,9 @@ var resultsHandler = net.createServer();
 
 resultsHandler.on('connection', function(client) {
 	client.write('Fuck Off\n');
-	client.end();
+	client.on('data', function(data) {
+		console.log(data.toString());
+	});
 });
 
 resultsHandler.listen(8080);
