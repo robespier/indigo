@@ -5,6 +5,8 @@ var resultsHandler = net.createServer();
 resultsHandler.on('connection', function(client) {
 	client.write('Fuck Off\n');
 	client.on('data', function(data) {
+		parcel = JSON.parse(data);
+		console.dir(parcel);
 		console.log(data.toString());
 	});
 });
