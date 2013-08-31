@@ -1,3 +1,16 @@
+var net = require('net');
+
+var resultsHandler = net.createServer();
+
+resultsHandler.on('connection', function(client) {
+	client.write('Fuck Off\n');
+	client.end();
+});
+
+resultsHandler.listen(8080);
+
+
+/**
 var WebSocketServer = require('ws').Server,
 	wss = new WebSocketServer({port:8080});
 
@@ -6,3 +19,4 @@ wss.on('connection', function(ws) {
 		console.log('received: %s', message);
 	});
 });
+*/
