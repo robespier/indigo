@@ -3,11 +3,17 @@ var net = require('net');
 var resultsHandler = net.createServer();
 
 resultsHandler.on('connection', function(client) {
-	client.write('Fuck Off\n');
 	client.on('data', function(data) {
-		parcel = JSON.parse(data);
+		var parcel = JSON.parse(data);
 		console.dir(parcel);
 		console.log(data.toString());
+		if (client.writable) {
+			var response = {
+				"id" : 55,
+				"result" : "error"
+			};
+			client.write(JSON.stringify(response));
+		}
 	});
 });
 
