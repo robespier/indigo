@@ -1,6 +1,7 @@
 docs/tutorial/
 docs/soft/
 docs/indigo*
+include/*.jsxinc
 *.swp
 *.rar
 tmp/

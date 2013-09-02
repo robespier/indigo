@@ -17,10 +17,14 @@ module.exports = function(grunt) {
 			estk: {
 				// Очередность файлов важна, поэтому они перечисляются явно
 				src: [
+					'include/BaseImposer.jsx',
+					'include/AssemblyImposer.jsx',
+					'include/AchtungImposer.jsx',
+					'include/MatchingImposer.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx'
 				],
-				dest: 'include/<%= pkg.name %>.jsxincl'
+				dest: 'include/<%= pkg.name %>.jsxinc'
 			},
 			exp: {
 				src: ['tmp/jsExp-*.js'],

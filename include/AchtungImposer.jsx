@@ -1,7 +1,3 @@
-#target Illustrator-13
-
-#include "mc.jsx"
-
 function achtung() {};
 achtung.prototype = new mc(app);
 achtung.prototype.constructor = achtung;

@@ -1,7 +1,3 @@
-#target Illustrator-13
-
-#include "mc.jsx"
-
 function matching() {};
 matching.prototype = new mc(app);
 matching.prototype.constructor = matching;
