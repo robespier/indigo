@@ -1,0 +1,17 @@
+{
+	"tags": {
+		"allowUnknownTags": false 
+	},
+	"source": {
+		"includePattern": ".+\\.js(x)?$",
+		"excludePattern": "(^|\\/|\\\\)_"
+	},
+	"plugins": [],
+	"templates": {
+		"cleverLinks": false,
+		"monospaceLinks": false,
+		"default": {
+			"outputSourceFiles": true
+		}
+	}
+}

@@ -12,7 +12,6 @@ module.exports = function(grunt) {
 		concat: {
 			options: {
 				banner: '<%= banner %>',
-				stripBanners: true,
 				separator: '\n'
 			},
 			estk: {
@@ -22,7 +21,11 @@ module.exports = function(grunt) {
 					'include/JsonBroker.jsx'
 				],
 				dest: 'include/<%= pkg.name %>.jsxincl'
-			}
+			},
+			exp: {
+				src: ['tmp/jsExp-*.js'],
+				dest: 'tmp/jsExp.js',
+			},
 		},
 		jshint: {
 			options: {
@@ -43,12 +46,49 @@ module.exports = function(grunt) {
 			estk: {
 				src: ['<%= concat.estk.src %>']
 			},
+			exp: {
+				src: ['<%= concat.exp.dest %>'],
+				options : {
+					unused: false,
+				},
+			},
+		},
+		env: {
+			// Ради jsdoc
+			docs: {
+				// Фи! Зато быстро :)
+				// @todo: Определять самостоятельно, если есть возможность
+				JAVA_HOME : '/usr/lib/jvm/java-7-openjdk-i386/',
+			},
+		},
+		jsdoc: {
+			dist: {
+				src: ['include/*.jsx', 'bin/*.{js,jsx}'],
+				options: {
+					destination: 'docs/<%= pkg.name %>',
+					configure: 'jsdoc.conf.json',
+				},
+			},
+			exp: {
+				src: '<%= jshint.exp.src %>',
+				options: {
+					destination: 'docs/<%= pkg.name %>',
+				},
+			},
 		},
 		watch: {
 			estk: {
 				files: '<%= concat.estk.src %>',
 				tasks: ['concat', 'jshint']
-			}
+			},
+			jsdoc: {
+				files: '<%= jsdoc.dist.src %>',
+				tasks: 'docs',
+			},
+			exp: {
+				files: '<%= concat.exp.src %>',
+				tasks: 'getexp',
+			},
 		},
 		qunit: {
 			files: ['test/**/*.html']
@@ -70,9 +110,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-jsdoc');
+	grunt.loadNpmTasks('grunt-env');
 
 	// Default task.
 	//grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);
+	grunt.registerTask('docs', ['env', 'jsdoc:dist']);
+	grunt.registerTask('getexp', ['env', 'concat:exp', 'jsdoc:exp', 'jshint:exp']);
 	grunt.registerTask('default', ['concat', 'jshint']);
 
 };

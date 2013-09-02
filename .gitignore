@@ -1,5 +1,6 @@
 docs/tutorial/
 docs/soft/
+docs/indigo*
 *.swp
 *.rar
 docs/jobcontainer/*/*.eps
