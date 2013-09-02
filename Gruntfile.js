@@ -38,6 +38,8 @@ module.exports = function(grunt) {
 				latedef: true,
 				newcap: true,
 				noarg: true,
+				// Illustrator stuff, not known by JSHint:
+				predef: ['app','UserInteractionLevel'],
 				sub: true,
 				undef: true,
 				unused: true,
