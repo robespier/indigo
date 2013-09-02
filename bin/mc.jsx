@@ -7,27 +7,43 @@ function mc(app) {
 }
 
 mc.prototype = {
-	setup: function() {
-		this.task = '9111001'; //Определяем переменные для паспорта 
-		this.temp = 4090354; //шаблона
-		this.roll_number = 2; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
-		this.jobFolder = new Folder ('Y:\\d' + this.task); //Папка паспорта (рабочего каталога)
+	setup: function(job) {
+		this.temp = job.template; 4090354; //шаблона
+		this.roll_number = job.roll; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
+		this.hotfolderName = job.separations;
+		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
 		this.templateFolder = new Folder ('D:\\work\\template'); //Каталог шаблонов сборки
-		this.prListFolder = new Folder ('D:\\work\\print_list'); //Папка, где находятся принт-листы
-		this.prList = new File (this.prListFolder + '\\d' + this.task + '.csv'); //Ссылка на файл принт-листа
-		this.printList = []; //Массив строк из принт-листа
+		this.printList = job.print_list; //Массив строк из принт-листа
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
-		this.hotfolderName = 'CMYK';
-		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
+		this.job = job;
 	},
+	/*
+	 * Имя шаблона
+	 */
+	getTemplateName: function () {
+		var template = new File (this.templateFolder + '\\short\\' + this.temp + '_short' + '.ai'); //Ссылка на файл шаблона
+		return template;	
+	},
+
 	/*
 	 * Открытие шаблона
 	 * @returns Document Object
 	 */
 	openTemplate: function() {
-		var template = new File (this.templateFolder + '\\' + this.temp + '.ai'); //Ссылка на файл шаблона
-		this.illustrator.open (template); //Открываем шаблон
+		var template = this.getTemplateName();
+		try {
+			this.illustrator.open (template); //Открываем шаблон
+		} catch (e) {
+			// interrupt normal flow
+			throw {
+				message: e.message,
+				source: 'openTemplate',
+				file: template.fullName,
+				severity: 'error',
+				jobid: this.job.id,
+			}
+		}
 		var myDoc = app.activeDocument; //Создаем ссылку на активный документ
 		myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
 		this.template = myDoc;
@@ -75,16 +91,23 @@ mc.prototype = {
 	 */
 	getLabels: function() {
 		this.labels = []; // Экземплярная переменная для хранения этикеток
-		this.prList.open(); // Открываем принт-лист ; TODO Слишком жесткая связь
-		
-		while (line=this.prList.readln()) {
-			file_name = line;
+		for (var i=0, prl = this.printList.length; i < prl; i++) {
+			var file_name = this.printList[i].name;
 			var labelObjectFile= new File (file_name); // Создаем ссылку на файл этикетки
 			this.labels.push(labelObjectFile); // Сохраняем ссылку на файл в экземплярной переменной
 		}
-		this.prList.close();
 		return this.labels;
 	},
+	
+	/*
+	 * Не надо делать сборки утверждения и внимания, если этикетка всего одна
+	 */
+	isNeed: function() {
+		if (this.labels.length < 2) {
+			return false;
+		}
+	},
+
 	/*
 	 * Выбор намоток
 	 * @returns graphicStyle object
@@ -92,39 +115,39 @@ mc.prototype = {
 	getStyle: function() {
 		var myRolls = this.template.graphicStyles; // Считываем массив намоток (графических стилей) документа
 		switch(this.roll_number) {
-			case 0:
+			case "0":
 				if (this.transform()) {
 					myStyle=myRolls['roll_1_6']; // Крутить
 				} else {
 					myStyle=myRolls['roll_4_8']; // Не крутить
 				}
 				break;
-			case 1:
+			case "1":
 				myStyle=myRolls['roll_1_6']
 					break;
-			case 2:
+			case "2":
 				myStyle=myRolls['roll_2_5']
 					break;
-			case 3:
+			case "3":
 				myStyle=myRolls['roll_3_7']
 					break;
-			case 4:
+			case "4":
 				myStyle=myRolls['roll_4_8']
 					break;
-			case 5:
+			case "5":
 				myStyle=myRolls['roll_2_5']
 					break;
-			case 6:
+			case "6":
 				myStyle=myRolls['roll_1_6']
 					break;
-			case 7:
+			case "7":
 				myStyle=myRolls['roll_3_7']
 					break;
-			case 8:
+			case "8":
 				myStyle=myRolls['roll_4_8']
 					break;
 			default:
-				alert ('No such roll');
+				alert ('No such roll: ' + this.roll_number);
 				break;
 		}
 		return myStyle;
@@ -169,6 +192,34 @@ mc.prototype = {
 		myStyle = this.getStyle();
 		myStyle.applyTo(this.currentLabel); // Применям графический стиль к этикетке
 	},
+
+	/*
+	 * Создать имя файла для экспорта в PDF
+	 *
+	 */
+	getPDFName: function(index) {
+		if (this.currentLabel instanceof File) {
+			this.child = this.currentLabel.parent;
+		} else {
+			this.child = this.currentLabel.file.parent;
+		}
+
+		// Определяем диапазон папок 
+		var targetName = [];
+		for (i=0, l=this.labels.length; i < l; i++) {
+			targetName[i]= this.labels[i].parent.name;
+		}
+
+		targetName.sort();
+
+		range = targetName[0] + '_' + targetName[targetName.length-1];
+
+		// Common Name prefix
+		var cName = this.child.parent.parent.name + this.child.parent.name;
+		// Имя файла сборки
+		return this.getPDFPart(index, range, cName);
+	},
+
 	/*
 	 * Экспорт готовой продукции
 	 * @returns void
@@ -180,9 +231,8 @@ mc.prototype = {
 
 
 	/*
-	* Кидаем сборку в горячую папку
-	*/
-	
+	 * Кидаем сборку в горячую папку
+	 */
 	sendtoHotFolder: function() {
 		this.ResultFilePDF.copy(this.hotFolder + '\\' + this.ResultFilePDF.name);	
 	},
@@ -197,11 +247,13 @@ mc.prototype = {
 	 * Шаблонный метод -- Make Collection
 	 */
 	run: function() {
-		this.openTemplate();
-		this.setLabelLayer();
-		this.getLowerCut();
 		this.getLabels();
-		this.imposeLabels();
-		this.closeTemplate();
+		if (this.isNeed) {
+			this.openTemplate();
+			this.setLabelLayer();
+			this.getLowerCut();
+			this.imposeLabels();
+			this.closeTemplate();
+		}
 	},
 }

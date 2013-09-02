@@ -3,7 +3,7 @@ docs/soft/
 docs/indigo*
 *.swp
 *.rar
-docs/jobcontainer/*/*.eps
-docs/jobcontainer/*/*.pdf
 tmp/
 node_modules/
+bin/contours/
+/nbproject/private/

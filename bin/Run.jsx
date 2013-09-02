@@ -1,34 +1,39 @@
 #target Illustrator-13
 
-#include "mc.jsx"
+try {
+	// If we are in Bridge call
+	// Un-serialize job object from Bridge JSON-string
+	var jobs = eval(job);
+	$.writeln('Run from Bridge 3 Here');
+	$.writeln(job);
+} catch (e) {
+	// Run.jsx runs independently
+	// Eat mock, run.jsx!
+	$.writeln('Run from ESTK 1 Here');
+	var jobs = $.evalFile ('tests/jobsobj.jsn');
+} 
 
-// Обычная сборка
+#include "/w/bin/mc.jsx"
+#include "/w/bin/Assembly.jsx"
+#include "/w/bin/Matching.jsx"
+#include "/w/bin/Achtung.jsx"
 
-#include "Assembly.jsx"
-make = new assembly(app);
+for (var ji=0, jl = jobs.length; ji < jl; ji++) {
+	var j = jobs[ji];
 
-make.setup();
-make.run();
+	// Обычная сборка
+	make = new assembly(app);
+	make.setup(j);
+	make.run();
 
+	// Сборка-утверждение
+	collect = new matching(app);
+	collect.setup(j);
+	collect.run();
 
-// Сборка-утверждение
-
-#include "Matching.jsx"
-collect = new matching(app);
-//TODO перенести переопределение templateFolder и temp в отдельную функцию
-collect.setup();
-collect.templateFolder = new Folder ('D:\\work\\template\\short');
-collect.temp = '4090354_short';
-collect.run();
-
-
-// Ахтунг
-
-#include "Achtung.jsx"
-attention = new achtung(app);
-//TODO перенести переопределение templateFolder и temp в отдельную функцию
-attention.setup();
-attention.templateFolder = new Folder ('D:\\work\\template\\short');
-attention.temp = '4090354_short';
-attention.run(); 
-
+	// Ахтунг
+	attention = new achtung(app);
+	attention.setup(j);
+	attention.run();
+	j.toSource();
+}

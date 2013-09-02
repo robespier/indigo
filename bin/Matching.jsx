@@ -14,6 +14,7 @@ matching.prototype.currentLabel = null;
  * @returns void
  */
 matching.prototype.imposeLabels = function() {
+
 	var cuts = this.template.layers['cut'].pathItems;
 	var cutsCount = cuts.length;
 	var labelsCount = this.labels.length;
@@ -23,10 +24,21 @@ matching.prototype.imposeLabels = function() {
 	while (labelsCount > 0) {
 		newlayer.placedItems.removeAll();
 		for (i,k=0; i < l && k < cutsCount; k++, i++) {
-			// Помещаем на слой layer файл этикетки
-			this.placeLabel(cuts[k], this.labels[i]);
-			// Крутим
-			this.applyStyle();
+			try {
+				// Помещаем на слой layer файл этикетки
+				this.placeLabel(cuts[k], this.labels[i]);
+				// Крутим
+				this.applyStyle();
+			} catch (e) {
+				// interrupt normal flow
+				throw {
+					message: e.message,
+					source: 'matching',
+					file: this.labels[i].fullName,
+					severity: 'error',
+					jobid: this.job.id,
+				}
+			}
 		}
 		labelsCount -= cutsCount;
 		this.exportPDF(this.getPDFName(utvCount));
@@ -36,32 +48,13 @@ matching.prototype.imposeLabels = function() {
 }
 
 /*
- * Сгенерировать имя PDF для экспорта
- * @index int File number
+ * Возвращает имя файла для экспорта в PDF
+ *
+ * @param int index Номер файла
+ * @param range string Диапазон папок
  * @returns string
+ *
  */
-matching.prototype.getPDFName = function(index) {
-	
-// 
-	var child =  this.currentLabel.file.parent;
-	var mother = child.parent;
-	var father = mother.parent;
-	
-// Определяем диапазон папок 
-	var targetName = [];
-		for (i=0, l=this.labels.length; i < l; i++) {
-		targetName[i]= this.labels[i].parent.name;
-}
-
-	targetName.sort();
-	
-range = targetName[0] + '-' + targetName[targetName.length-1];
-
-	var PDFName = father.name + mother.name + range;	
-	
-
-// Имя файла сборки
-	PDFName +='_UTV_' + index.toString() + '.pdf';
-// Путь для файла сборки
-	return mother + '\\' + PDFName;
+matching.prototype.getPDFPart = function(index, range, cName) {
+	return this.labels[0].parent + '\\' + cName + range + '_UTV_' + index.toString() + '.pdf';
 }
