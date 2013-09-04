@@ -1,21 +1,28 @@
-#target Illustrator-13
-
-/*
- * Commons
+/**
+ * Setup
  */
-function testOpenTemplate() {};
-testOpenTemplate.prototype = new testSuite(app);
-testOpenTemplate.prototype.name = "testOpenTemplate";
-testOpenTemplate.prototype.constructor = testOpenTemplate;
+Indigo.Tests.testOpenTemplate = function() {};
+Indigo.Tests.testOpenTemplate.prototype = new Indigo.Tests.testSuite(app);
+Indigo.Tests.testOpenTemplate.prototype.constructor = Indigo.Tests.testOpenTemplate;
+Indigo.Tests.testOpenTemplate.prototype.name = "testOpenTemplate";
 
-/*
+Indigo.Tests.testOpenTemplate.prototype.setUp = function () {
+	this.pocient = new Indigo.AssemblyImposer(this.app);
+	var job = {
+		"template" : 'testOpenTemplate',
+		"separations" : 'noMatter',
+		"roll" : 'noMatter',
+		"print_list" : ['noMatter'],
+	};
+	this.pocient.setup(job);
+	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
+};
+
+/**
  * Test
  */
-testOpenTemplate.prototype.setUp = function () {
-	this.assembler.setup(this.app);
-};
-testOpenTemplate.prototype.run = function() {
-	template = mc.openTemplate();
-	result = this.assertInstanceOf(template,Document);
+Indigo.Tests.testOpenTemplate.prototype.run = function() {
+	var template = this.pocient.openTemplate();
+	var result = this.assertInstanceOf(template, Document);
 	$.writeln(result + this.name);
 };

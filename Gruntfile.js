@@ -27,9 +27,9 @@ module.exports = function(grunt) {
 				],
 				dest: 'include/<%= pkg.name %>.jsxinc'
 			},
-			exp: {
-				src: ['tmp/jsExp-*.js'],
-				dest: 'tmp/jsExp.js',
+			tests: {
+				src: ['tests/testSuite.jsx', 'tests/*.jsxinc'],
+				dest: 'tests/tests.js',
 			},
 		},
 		jshint: {
@@ -49,8 +49,11 @@ module.exports = function(grunt) {
 				// Illustrator stuff, not known by JSHint:
 				predef: [
 					'app',
+					'Document',
 					'File',
 					'Folder',
+					'Layer',
+					'PathItem',
 					'PDFSaveOptions',
 					'SaveOptions',
 					'UserInteractionLevel',
@@ -67,11 +70,8 @@ module.exports = function(grunt) {
 					unused: false,
 				},
 			},
-			exp: {
-				src: ['<%= concat.exp.dest %>'],
-				options : {
-					unused: false,
-				},
+			tests: {
+				src: ['<%= concat.tests.dest %>'],
 			},
 		},
 		env: {
@@ -106,6 +106,11 @@ module.exports = function(grunt) {
 			// убирать эти слеши нахрен. Топорно, но волки сыты.
 			dist: {
 				path: '<%= concat.estk.dest %>',
+				pattern: '///#',
+				replacement: '#',
+			},
+			tests: {
+				path: '<%= concat.tests.dest %>',
 				pattern: '///#',
 				replacement: '#',
 			},
@@ -151,5 +156,6 @@ module.exports = function(grunt) {
 	// Default task.
 	grunt.registerTask('docs', ['env', 'jsdoc:dist']);
 	grunt.registerTask('getexp', ['env', 'concat:exp', 'jsdoc:exp', 'jshint:exp']);
+	grunt.registerTask('tests', ['concat:tests', 'jshint:tests', 'sed:tests']);
 	grunt.registerTask('default', ['env', 'concat:estk', 'jsdoc:dist', 'jshint:estk', 'sed:dist']);
 };

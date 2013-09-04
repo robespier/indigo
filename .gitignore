@@ -5,6 +5,7 @@ include/*.jsxinc
 *.swp
 *.rar
 tmp/
+tests/tests.js
 node_modules/
 bin/contours/
 /nbproject/private/

@@ -1,28 +1,33 @@
-#target Illustrator-13
-
-/*
- * Commons
+/**
+ * Setup
  */
-function testSetLabelLayer() {};
-testSetLabelLayer.prototype = new testSuite(app);
-testSetLabelLayer.prototype.name = 'testSetLabelLayer';
-testSetLabelLayer.prototype.constructor = testSetLabelLayer;
+Indigo.Tests.testSetLabelLayer = function() {};
+Indigo.Tests.testSetLabelLayer.prototype = new Indigo.Tests.testSuite(app);
+Indigo.Tests.testSetLabelLayer.prototype.constructor = Indigo.Tests.testSetLabelLayer;
+Indigo.Tests.testSetLabelLayer.prototype.name = 'testSetLabelLayer';
 
-/*
- * Test
- */
-testSetLabelLayer.prototype.setUp = function () {
-	mc = this.assembler;
-	mc.setup(this.app);
-	mc.openTemplate();
+Indigo.Tests.testSetLabelLayer.prototype.setUp = function () {
+	this.pocient = new Indigo.BaseImposer(this.app);
+	var job = {
+		"template" : 'testSetLabelLayer',
+		"separations" : 'noMatter',
+		"roll" : 'noMatter',
+		"print_list" : ['noMatter'],
+	};
+	this.pocient.setup(job);
+	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
+	this.pocient.openTemplate();
 };
 
-testSetLabelLayer.prototype.run = function() {
-	layer = this.assembler.setLabelLayer();
-	result = this.assertInstanceOf(layer,Layer);
-	$.writeln(result + this.name + '.Type');
-	result = this.assertEq(layer.name,'label');
-	$.writeln(result + this.name + '.Name');
-	result = this.assertEq(layer.zOrderPosition,1);
-	$.writeln(result + this.name + '.Position');
+/**
+ * Test
+ */
+Indigo.Tests.testSetLabelLayer.prototype.run = function() {
+	var layer = this.pocient.setLabelLayer();
+	var resultIns = this.assertInstanceOf(layer, Layer);
+	$.writeln(resultIns + this.name + '.Type');
+	var resultStr = this.assertEq(layer.name, 'label');
+	$.writeln(resultStr + this.name + '.Name');
+	var resultInt = this.assertEq(layer.zOrderPosition,1);
+	$.writeln(resultInt + this.name + '.Position');
 };
