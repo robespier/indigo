@@ -17,6 +17,7 @@ module.exports = function(grunt) {
 			estk: {
 				// Очередность файлов важна, поэтому они перечисляются явно
 				src: [
+					'include/Base.jsx',
 					'include/BaseImposer.jsx',
 					'include/AssemblyImposer.jsx',
 					'include/AchtungImposer.jsx',
@@ -69,7 +70,7 @@ module.exports = function(grunt) {
 		},
 		jsdoc: {
 			dist: {
-				src: ['include/*.jsx', 'bin/*.{js,jsx}'],
+				src: ['<%= concat.estk.dest %>'],
 				options: {
 					destination: 'docs/<%= pkg.name %>',
 					configure: 'jsdoc.conf.json',

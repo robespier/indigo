@@ -1,14 +1,27 @@
-#target Illustrator-13
+//#target Illustrator-13
 
-
-function mc(app) {
+/**
+ * @class
+ * @classdesc Суперкласс для сборщиков спусков
+ * @prop {string} temp Имя шаблона, без расширения .ai
+ * @prop {string} roll_number Числовой индекс намотки
+ * @prop {string} hotFolderName Название "хотфолдера" RIP 
+ * @prop {array} printList Массив объектов File с этикетками
+ * @constructor 
+ * @param {object} app Ссылка на объект Adobe Illustrator
+ */
+Indigo.BaseImposer = function(app) {
 	this.illustrator = app;
 	this.illustrator.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS;
-}
+};
 
-mc.prototype = {
+Indigo.BaseImposer.prototype = {
+	/**
+	 * Инициализация сборки
+	 * @param {object} job Параметризующий объект с деталями задания
+	 */
 	setup: function(job) {
-		this.temp = job.template; 4090354; //шаблона
+		this.temp = job.template;
 		this.roll_number = job.roll; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
 		this.hotfolderName = job.separations;
 		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
@@ -18,17 +31,22 @@ mc.prototype = {
 		this.PDFSettings.acrobatLayers = false;
 		this.job = job;
 	},
-	/*
-	 * Имя шаблона
+
+	/**
+	 * Возврат ссылки на файл шаблона
+	 *
+	 * @return {File} template
 	 */
 	getTemplateName: function () {
-		var template = new File (this.templateFolder + '\\short\\' + this.temp + '_short' + '.ai'); //Ссылка на файл шаблона
+		var template = new File (this.templateFolder + '\\short\\' + this.temp + '_short' + '.ai');
 		return template;	
 	},
 
-	/*
-	 * Открытие шаблона
-	 * @returns Document Object
+	/**
+	 * Открытие шаблона и сохранение ссылки на него в экземплярной переменной this.template
+	 *
+	 * @throws Нет файла шаблона
+	 * @return {Document} Активный документ
 	 */
 	openTemplate: function() {
 		var template = this.getTemplateName();
@@ -42,37 +60,47 @@ mc.prototype = {
 				file: template.fullName,
 				severity: 'error',
 				jobid: this.job.id,
-			}
+			};
 		}
 		var myDoc = app.activeDocument; //Создаем ссылку на активный документ
 		myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
 		this.template = myDoc;
 		return this.template;
 	},
-	/*
-	 * Установка слоя 'Label'
-	 * @returns Layer Object
+
+	/**
+	 * Создание слоя 'Label' под размещение этикеткок
+	 *
+	 * @todo Переменная newlayer в глобальном пространстве имен
+	 * @return {Layer} Слой этикеток
 	 */
 	setLabelLayer: function() {
-		// TODO newlayer в глобальном пространстве имен :(
-		newlayer = this.template.layers.add(); // Создаем слой для размещения этикеток
-		newlayer.name = 'label'; // называем его именем label
-		newlayer.zOrder(ZOrderMethod.SENDTOBACK); // и помещаем его в самый низ в пачке слоев документа
+		// Создаем слой для размещения этикеток
+		newlayer = this.template.layers.add();
+		// называем его именем label
+		newlayer.name = 'label';
+		// и помещаем его в самый низ в пачке слоев документа
+		newlayer.zOrder(ZOrderMethod.SENDTOBACK);
 		return this.template.layers['label'];
 	},
-	/*
-	 * Находим левый нижний контур высечки
-	 * @returns PathItem
+
+	/**
+	 * Нахождение левого нижнего контура высечки. Относительно него будет размещаться этикетки
+	 *
+	 * @return {PathItem} Левый нижний элемент со слоя 'cut'
 	 */
 	getLowerCut: function() {
-		var cuts = this.template.layers['cut'].pathItems; // Создаем ссылку на массив высечек
-		sumXY = new Array (cuts.length); // Cоздаем массив, в котором сохраняем сумму X и Y-позиций всех элементов массива высечек.
+		// Создаем ссылку на массив высечек
+		var cuts = this.template.layers['cut'].pathItems; 
+		// Cоздаем массив, в котором сохраняем сумму X и Y-позиций всех элементов массива высечек.
+		sumXY = new Array (cuts.length);
 		for (i=0, l=cuts.length; i < l; i++) {
 			var xPos = cuts[i].position[0];
 			var yPos = cuts[i].position[1];
 			sumXY[i] = xPos+yPos;
 		}
-		var target_index = 0; // Находим индекс мин. значения массива
+		// Находим индекс мин. значения массива
+		var target_index = 0; 
 		target_sum = sumXY[0];
 
 		for (i=0, l=sumXY.length; i < l; i++) {
@@ -81,26 +109,37 @@ mc.prototype = {
 				target_sum = sumXY[i];
 			}
 		}
-		var targetCut = cuts[target_index]; // Определяем целевой контур
+		// Определяем целевой контур
+		var targetCut = cuts[target_index];
 		this.targetCut = targetCut;
 		return this.targetCut;
 	},
-	/*
-	 * Получить массив этикеток для печати
-	 * @returns Array of File Objects
+
+	/**
+	 * Получение массива этикеток в задании
+	 *
+	 * @return {array} Массив объектов File
 	 */
 	getLabels: function() {
-		this.labels = []; // Экземплярная переменная для хранения этикеток
+		// Инициализация экземплярной переменной для хранения этикеток
+		this.labels = []; 
 		for (var i=0, prl = this.printList.length; i < prl; i++) {
 			var file_name = this.printList[i].name;
-			var labelObjectFile= new File (file_name); // Создаем ссылку на файл этикетки
-			this.labels.push(labelObjectFile); // Сохраняем ссылку на файл в экземплярной переменной
+			// Создаем ссылку на файл этикетки
+			var labelObjectFile= new File (file_name);
+			// Сохраняем ссылку на файл в экземплярной переменной
+			this.labels.push(labelObjectFile);
 		}
 		return this.labels;
 	},
 	
-	/*
-	 * Не надо делать сборки утверждения и внимания, если этикетка всего одна
+	/**
+	 * В некоторых ситуациях сборку делать не нужно. К примеру, если 
+	 * этикетка всего одна, то сборки "Утверждение" и "Внимание" должны
+	 * игнорироваться.
+	 * В этом методе может быть переопределена логика такой ситуации.
+	 *
+	 * @return {boolean}
 	 */
 	isNeed: function() {
 		if (this.labels.length < 2) {
@@ -108,12 +147,14 @@ mc.prototype = {
 		}
 	},
 
-	/*
-	 * Выбор намоток
-	 * @returns graphicStyle object
+	/**
+	 * Выбор намотки. 
+	 *
+	 * @return {GraphicStyle} 
 	 */
 	getStyle: function() {
-		var myRolls = this.template.graphicStyles; // Считываем массив намоток (графических стилей) документа
+		// Считываем массив намоток (графических стилей) документа
+		var myRolls = this.template.graphicStyles;
 		switch(this.roll_number) {
 			case "0":
 				if (this.transform()) {
@@ -123,28 +164,28 @@ mc.prototype = {
 				}
 				break;
 			case "1":
-				myStyle=myRolls['roll_1_6']
+				myStyle=myRolls['roll_1_6'];
 					break;
 			case "2":
-				myStyle=myRolls['roll_2_5']
+				myStyle=myRolls['roll_2_5'];
 					break;
 			case "3":
-				myStyle=myRolls['roll_3_7']
+				myStyle=myRolls['roll_3_7'];
 					break;
 			case "4":
-				myStyle=myRolls['roll_4_8']
+				myStyle=myRolls['roll_4_8'];
 					break;
 			case "5":
-				myStyle=myRolls['roll_2_5']
+				myStyle=myRolls['roll_2_5'];
 					break;
 			case "6":
-				myStyle=myRolls['roll_1_6']
+				myStyle=myRolls['roll_1_6'];
 					break;
 			case "7":
-				myStyle=myRolls['roll_3_7']
+				myStyle=myRolls['roll_3_7'];
 					break;
 			case "8":
-				myStyle=myRolls['roll_4_8']
+				myStyle=myRolls['roll_4_8'];
 					break;
 			default:
 				alert ('No such roll: ' + this.roll_number);
@@ -152,10 +193,12 @@ mc.prototype = {
 		}
 		return myStyle;
 	},
-	/*
-	 * Логика определения намотки
+
+	/**
+	 * Логика определения намотки;
 	 * Вызывается из getStyle.switch...
-	 * @returns boolean
+	 * 
+	 * @return {boolean}
 	 */
 	transform: function() {
 		// Ручная намотка
@@ -167,35 +210,46 @@ mc.prototype = {
 		labelRate = this.currentLabel.width/this.currentLabel.height;
 		return (((targetCutRate < 1) && (labelRate > 1)) || ((targetCutRate > 1) && (labelRate < 1)));
 	},
-	/*
+
+	/**
 	 * Поместить и позиционировать этикетку на слой labels
-	 * @param origin - pathItem, arrange target;
-	 * @param file - File object to place on;
-	 * @returns void;
+	 * 
+	 * @param {PathItem} origin Элемент спуска, относительно которого помещать этикетку;
+	 * @param {File} file Объект File, который необходимо поместить;
+	 * @return {void}
 	 */ 
 	placeLabel: function(origin, file) {
-		var LsizeX = this.targetCut.width; //Определяем ширину единичного контура высечки
-		var LsizeY = this.targetCut.height; //Определяем высоту единичного контура высечки
+		// Определяем ширину единичного контура высечки
+		var LsizeX = this.targetCut.width; 
+		// Определяем высоту единичного контура высечки
+		var LsizeY = this.targetCut.height; 
+		// Помещаем File на спуск и сохраняем ссылку на него в экземплярной переменной this.currentLabel
 		this.currentLabel = newlayer.placedItems.add();
-		cl = this.currentLabel;
+		var cl = this.currentLabel;
 		cl.file = file;
-		clX = origin.position[0]+(LsizeX/2) - (cl.width/2);
-		clY = origin.position[1]-(LsizeY/2) + (cl.height/2);
-		cl.position = new Array (clX, clY); //Выравниваем этикетку по целевому контуру
+		var clX = origin.position[0]+(LsizeX/2) - (cl.width/2);
+		var clY = origin.position[1]-(LsizeY/2) + (cl.height/2);
+		// Выравниваем этикетку по целевому контуру (параметр origin)
+		cl.position = new Array (clX, clY); 
 	},
-	/*
-	 * Применить шаблон к ТЕКУЩЕЙ этикетке
-	 * @param label PlacedItem object
-	 * @returns void
+
+	/**
+	 * Применение графического стиля к ТЕКУЩЕЙ этикетке. 
+	 * "Текущая эткетка" - это this.currentLabel
+	 *
+	 * @return {void}
 	 */
 	applyStyle: function() {
 		myStyle = this.getStyle();
-		myStyle.applyTo(this.currentLabel); // Применям графический стиль к этикетке
+		// Применям графический стиль к этикетке
+		myStyle.applyTo(this.currentLabel); 
 	},
 
-	/*
-	 * Создать имя файла для экспорта в PDF
+	/**
+	 * Генерация имени файла для экспорта в PDF
 	 *
+	 * @param {number} index Иногда нужен, когда этикеток в задании много и необходима нумерация файлов
+	 * @return {string} Имя PDF сборки
 	 */
 	getPDFName: function(index) {
 		if (this.currentLabel instanceof File) {
@@ -204,7 +258,7 @@ mc.prototype = {
 			this.child = this.currentLabel.file.parent;
 		}
 
-		// Определяем диапазон папок 
+		// Определение диапазон папок 
 		var targetName = [];
 		for (i=0, l=this.labels.length; i < l; i++) {
 			targetName[i]= this.labels[i].parent.name;
@@ -220,31 +274,35 @@ mc.prototype = {
 		return this.getPDFPart(index, range, cName);
 	},
 
-	/*
-	 * Экспорт готовой продукции
-	 * @returns void
+	/**
+	 * Экспорт сборки в формате PDF 
+	 * @param {string} fileName Имя файла для экспорта
+	 * @return {void}
 	 */
 	exportPDF: function(fileName) {
 		this.ResultFilePDF = new File (fileName);
 		this.template.saveAs(this.ResultFilePDF, this.PDFSettings);
 	},
 
-
-	/*
-	 * Кидаем сборку в горячую папку
+	/**
+	 * Копирование готового файла сборки в "горячую" папку растрового процессора
+	 * @return {void}
 	 */
 	sendtoHotFolder: function() {
 		this.ResultFilePDF.copy(this.hotFolder + '\\' + this.ResultFilePDF.name);	
 	},
-	/*
-	 * Закрываем активный документ
-	 * @returns void;
+
+	/**
+	 * Закрытие активного документа без сохранения
+	 * @return {void}
 	 */
 	closeTemplate: function() {
-		this.template.close (SaveOptions.DONOTSAVECHANGES);
+		this.template.close(SaveOptions.DONOTSAVECHANGES);
 	},
-	/*
-	 * Шаблонный метод -- Make Collection
+	
+	/**
+	 * Логика выполнения сборок. 
+	 * Паттерн "Шаблонный метод"
 	 */
 	run: function() {
 		this.getLabels();
@@ -256,4 +314,4 @@ mc.prototype = {
 			this.closeTemplate();
 		}
 	},
-}
+};
