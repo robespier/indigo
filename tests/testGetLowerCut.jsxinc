@@ -26,8 +26,7 @@ Indigo.Tests.testGetLowerCut.prototype.setUp = function () {
 Indigo.Tests.testGetLowerCut.prototype.run = function() {
 	var lowerCut = this.pocient.getLowerCut();
 	var resultIns = this.assertInstanceOf(lowerCut,PathItem);
-	$.writeln(resultIns + this.name + '.Type');
 	var resultStr = this.assertEq(lowerCut.name,'testTargetPass');
-	$.writeln(resultStr + this.name + '.Name');
-
+	this.log(resultIns, '.Type');
+	this.log(resultStr, '.Name');
 };

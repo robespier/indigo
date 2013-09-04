@@ -24,5 +24,5 @@ Indigo.Tests.testOpenTemplate.prototype.setUp = function () {
 Indigo.Tests.testOpenTemplate.prototype.run = function() {
 	var template = this.pocient.openTemplate();
 	var result = this.assertInstanceOf(template, Document);
-	$.writeln(result + this.name);
+	this.log(result, '.Open');
 };

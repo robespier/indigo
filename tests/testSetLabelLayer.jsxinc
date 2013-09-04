@@ -25,9 +25,9 @@ Indigo.Tests.testSetLabelLayer.prototype.setUp = function () {
 Indigo.Tests.testSetLabelLayer.prototype.run = function() {
 	var layer = this.pocient.setLabelLayer();
 	var resultIns = this.assertInstanceOf(layer, Layer);
-	$.writeln(resultIns + this.name + '.Type');
 	var resultStr = this.assertEq(layer.name, 'label');
-	$.writeln(resultStr + this.name + '.Name');
 	var resultInt = this.assertEq(layer.zOrderPosition,1);
-	$.writeln(resultInt + this.name + '.Position');
+	this.log(resultIns, '.Type');
+	this.log(resultStr, '.Name');
+	this.log(resultInt, '.Position');
 };

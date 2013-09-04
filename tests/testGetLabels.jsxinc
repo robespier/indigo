@@ -26,9 +26,9 @@ Indigo.Tests.testGetLabels.prototype.setUp = function () {
 Indigo.Tests.testGetLabels.prototype.run = function() {
 	var labels = this.pocient.getLabels();
 	var resultAr = this.assertInstanceOf(labels, Array);
-	$.writeln(resultAr + this.name + '.Type');
 	var resultCn = this.assertEq(labels.length, 2);
-	$.writeln(resultCn + this.name + '.Length');
+	this.log(resultAr, '.Type');
+	this.log(resultCn, '.Length');
 };
 
 /**

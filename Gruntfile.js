@@ -28,7 +28,11 @@ module.exports = function(grunt) {
 				dest: 'include/<%= pkg.name %>.jsxinc'
 			},
 			tests: {
-				src: ['tests/testSuite.jsx', 'tests/*.jsxinc'],
+				src: [
+					'tests/testSuite.jsx',
+					'tests/*.jsxinc',
+					'tests/testRun.jsx'
+				],
 				dest: 'tests/tests.js',
 			},
 		},
@@ -153,9 +157,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-env');
 	grunt.loadNpmTasks('grunt-sed');
 
-	// Default task.
 	grunt.registerTask('docs', ['env', 'jsdoc:dist']);
 	grunt.registerTask('getexp', ['env', 'concat:exp', 'jsdoc:exp', 'jshint:exp']);
 	grunt.registerTask('tests', ['concat:tests', 'jshint:tests', 'sed:tests']);
+	// Default task.
 	grunt.registerTask('default', ['env', 'concat:estk', 'jsdoc:dist', 'jshint:estk', 'sed:dist']);
 };

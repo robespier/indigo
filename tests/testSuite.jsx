@@ -92,34 +92,49 @@ Indigo.Tests.testSuite.prototype = {
 	},
 
 	/**
+	 * Логгирование результатов теста
+	 *
+	 * @param {string} result Результат теста (pass|fail)
+	 * @param {string} message Дополнительная информация
+	 */
+	log: function(result, message) {
+		$.writeln(result + this.name + message);
+	},
+
+	/**
 	 * Assertions
+	 */
+	
+	/**
+	 * Проверка, является ли объект assertOn экземпляром класса assertTo
+	 *
+	 * @param {object} assertOn
+	 * @param {object} assertTo
+	 * @return {string} (pass|fail)
 	 */
 	assertInstanceOf: function (assertOn, assertTo) {
 		return (assertOn instanceof assertTo) ? 'pass: ' : 'fail: ';
 	},
+
+	/**
+	 * Сравнение двух величин
+	 *
+	 * @param {object} assertOn
+	 * @param {object} assertTo
+	 * @return {string} (pass|fail)
+	 */
 	assertEq: function (assertOn, assertTo) {
 		return (assertOn === assertTo ) ? 'pass: ' : 'fail: ';
 	},
+
+	/**
+	 * Проверка существования файла в файловой системе
+	 *
+	 * @param {string} fileFullPath Полный путь к файлу
+	 * @return {string} (pass|fail)
+	 */
+	assertFileExists : function (fileFullPath) {
+		var assertFile = new File(fileFullPath);
+		return (assertFile.exists) ? 'pass: ' : 'fail: ';
+	},
 };
-
-/*
- * Start here
- *
- * Подключение тестов
- * Важно подключать ПОСЛЕ инициализации главного тестирующего класса
- * Соглашение:
- *   все тесты лежат в подпапке tests 
- *   имя файла с тестом начинается с test
- *   и имеет расширение .jsxinc
- * Пример:
- *   testOpenTemplate.jsxinc
- */
-
-Indigo.Tests.ts = new Indigo.Tests.testSuite(app);
-Indigo.Tests.ts.init();
-// Запустить все тесты...
-Indigo.Tests.ts.runAllTests();
-
-// ...или запустить один тест:
-//Indigo.Tests.test = new testAchtung();
-//ts.execute(test);

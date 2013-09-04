@@ -1,11 +1,11 @@
-//#target Illustrator-13
+///#target Illustrator-13
 
 /**
  * @class
  * @classdesc Суперкласс для сборщиков спусков
  * @prop {string} temp Имя шаблона, без расширения .ai
  * @prop {string} roll_number Числовой индекс намотки
- * @prop {string} hotFolderName Название "хотфолдера" RIP 
+ * @prop {string} hotFolderName Имя "хотфолдера" на RIP 
  * @prop {array} printList Массив объектов File с этикетками
  * @constructor 
  * @param {object} app Ссылка на объект Adobe Illustrator
@@ -71,16 +71,15 @@ Indigo.BaseImposer.prototype = {
 	/**
 	 * Создание слоя 'Label' под размещение этикеткок
 	 *
-	 * @todo Переменная newlayer в глобальном пространстве имен
 	 * @return {Layer} Слой этикеток
 	 */
 	setLabelLayer: function() {
 		// Создаем слой для размещения этикеток
-		newlayer = this.template.layers.add();
+		this.labelLayer = this.template.layers.add();
 		// называем его именем label
-		newlayer.name = 'label';
+		this.labelLayer.name = 'label';
 		// и помещаем его в самый низ в пачке слоев документа
-		newlayer.zOrder(ZOrderMethod.SENDTOBACK);
+		this.labelLayer.zOrder(ZOrderMethod.SENDTOBACK);
 		return this.template.layers['label'];
 	},
 
@@ -93,25 +92,24 @@ Indigo.BaseImposer.prototype = {
 		// Создаем ссылку на массив высечек
 		var cuts = this.template.layers['cut'].pathItems; 
 		// Cоздаем массив, в котором сохраняем сумму X и Y-позиций всех элементов массива высечек.
-		sumXY = new Array (cuts.length);
-		for (i=0, l=cuts.length; i < l; i++) {
+		var sumXY = new Array (cuts.length);
+		for (var i=0, l=cuts.length; i < l; i++) {
 			var xPos = cuts[i].position[0];
 			var yPos = cuts[i].position[1];
 			sumXY[i] = xPos+yPos;
 		}
 		// Находим индекс мин. значения массива
 		var target_index = 0; 
-		target_sum = sumXY[0];
+		var target_sum = sumXY[0];
 
-		for (i=0, l=sumXY.length; i < l; i++) {
-			if (sumXY[i] <= target_sum) {
-				target_index = i;
-				target_sum = sumXY[i];
+		for (var it=0, lt=sumXY.length; it < lt; it++) {
+			if (sumXY[it] <= target_sum) {
+				target_index = it;
+				target_sum = sumXY[it];
 			}
 		}
 		// Определяем целевой контур
-		var targetCut = cuts[target_index];
-		this.targetCut = targetCut;
+		this.targetCut = cuts[target_index];
 		return this.targetCut;
 	},
 
@@ -124,9 +122,8 @@ Indigo.BaseImposer.prototype = {
 		// Инициализация экземплярной переменной для хранения этикеток
 		this.labels = []; 
 		for (var i=0, prl = this.printList.length; i < prl; i++) {
-			var file_name = this.printList[i].name;
 			// Создаем ссылку на файл этикетки
-			var labelObjectFile= new File (file_name);
+			var labelObjectFile= new File (this.printList[i]);
 			// Сохраняем ссылку на файл в экземплярной переменной
 			this.labels.push(labelObjectFile);
 		}
@@ -155,6 +152,8 @@ Indigo.BaseImposer.prototype = {
 	getStyle: function() {
 		// Считываем массив намоток (графических стилей) документа
 		var myRolls = this.template.graphicStyles;
+		// Намотка по умолчанию - 2
+		var myStyle = 'roll_2_5';
 		switch(this.roll_number) {
 			case "0":
 				if (this.transform()) {
@@ -188,7 +187,8 @@ Indigo.BaseImposer.prototype = {
 				myStyle=myRolls['roll_4_8'];
 					break;
 			default:
-				alert ('No such roll: ' + this.roll_number);
+				//todo Throw exception here
+				//alert ('No such roll: ' + this.roll_number);
 				break;
 		}
 		return myStyle;
@@ -206,8 +206,8 @@ Indigo.BaseImposer.prototype = {
 		// 1 - квадрат, крутить не надо;
 		// 0.999 ширина меньше высоты, крутим на -90 градусов
 		// 1.999 ширина больше высоты, крутить не надо
-		targetCutRate = this.targetCut.width/this.targetCut.height;
-		labelRate = this.currentLabel.width/this.currentLabel.height;
+		var targetCutRate = this.targetCut.width / this.targetCut.height;
+		var labelRate = this.currentLabel.width / this.currentLabel.height;
 		return (((targetCutRate < 1) && (labelRate > 1)) || ((targetCutRate > 1) && (labelRate < 1)));
 	},
 
@@ -224,7 +224,7 @@ Indigo.BaseImposer.prototype = {
 		// Определяем высоту единичного контура высечки
 		var LsizeY = this.targetCut.height; 
 		// Помещаем File на спуск и сохраняем ссылку на него в экземплярной переменной this.currentLabel
-		this.currentLabel = newlayer.placedItems.add();
+		this.currentLabel = this.labelLayer.placedItems.add();
 		var cl = this.currentLabel;
 		cl.file = file;
 		var clX = origin.position[0]+(LsizeX/2) - (cl.width/2);
@@ -240,7 +240,7 @@ Indigo.BaseImposer.prototype = {
 	 * @return {void}
 	 */
 	applyStyle: function() {
-		myStyle = this.getStyle();
+		var myStyle = this.getStyle();
 		// Применям графический стиль к этикетке
 		myStyle.applyTo(this.currentLabel); 
 	},
@@ -260,13 +260,13 @@ Indigo.BaseImposer.prototype = {
 
 		// Определение диапазон папок 
 		var targetName = [];
-		for (i=0, l=this.labels.length; i < l; i++) {
+		for (var i=0, l=this.labels.length; i < l; i++) {
 			targetName[i]= this.labels[i].parent.name;
 		}
 
 		targetName.sort();
 
-		range = targetName[0] + '_' + targetName[targetName.length-1];
+		var range = targetName[0] + '_' + targetName[targetName.length-1];
 
 		// Common Name prefix
 		var cName = this.child.parent.parent.name + this.child.parent.name;
