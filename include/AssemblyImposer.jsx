@@ -1,26 +1,38 @@
-function assembly() {};
-assembly.prototype = new mc(app);
-assembly.prototype.constructor = assembly;
+/**
+ * @classdesc Размещение этикеток на спуске
+ * @constructor
+ */
+Indigo.AssemblyImposer = function() {};
+Indigo.AssemblyImposer.prototype = new Indigo.BaseImposer(app);
+Indigo.AssemblyImposer.prototype.constructor = Indigo.AssemblyImposer;
 
-assembly.prototype.currentLabel = null;
+Indigo.AssemblyImposer.prototype.currentLabel = null;
 
-assembly.prototype.getTemplateName = function () {
+/**
+ * Получение ссылки на файл шаблона
+ * @return {File} Файл шаблона
+ */
+Indigo.AssemblyImposer.prototype.getTemplateName = function () {
 	var template = new File (this.templateFolder + '\\' + this.temp + '.ai');
-
 	return template;
-}
+};
 
-assembly.prototype.isNeed = function() {
+/**
+ * Этот класс сборки делается в любом случае
+ * @return {boolean}
+ */
+Indigo.AssemblyImposer.prototype.isNeed = function() {
 	return true;
-}
+};
 
-/*
+/**
  * Размещение этикетки на листе
  * (Применение графического стиля)
- * @returns void
+ * 
+ * @return {void}
  */
-assembly.prototype.imposeLabels = function() {
-	tc = this.targetCut;
+Indigo.AssemblyImposer.prototype.imposeLabels = function() {
+	var tc = this.targetCut;
 	for (var i=0, l=this.labels.length; i < l; i++) {
 		try {
 			// Помещаем на слой layer файл этикетки
@@ -32,27 +44,27 @@ assembly.prototype.imposeLabels = function() {
 			this.currentLabel.remove();
 		} catch (err) {
 			// Continue flow
-			$.writeln('Continue assembly v3')
+			$.writeln('Continue.AssemblyImposer.v3');
 			var errobj = {
 				message: err.message,
-				source: 'assembly',
+				source: 'AssemblyImposer',
 				file: this.labels[i].fullName,
 				severity: 'warning',
 				jobid: this.job.id,
-			}
+			};
 			this.job.errors.push(errobj);
 		}
 	}
-}
+};
 
-/*
+/**
  * Возвращает имя файла для экспорта в PDF
  *
- * @param int index Номер файла
- * @param range string Диапазон папок
- * @returns string
- *
+ * @param {number} index Номер файла
+ * @param {string} range Диапазон папок
+ * @param {string} cName Чё за хрень не помню
+ * @return {string} Имя файла
  */
-assembly.prototype.getPDFPart = function(index, range, cName) {
+Indigo.AssemblyImposer.prototype.getPDFPart = function(index, range, cName) {
 	return this.child + '\\' + cName + this.child.name + '_' + this.currentLabel.file.name.replace ('eps', 'pdf');
-}
+};

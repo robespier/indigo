@@ -1,0 +1,59 @@
+/**
+ * 
+ * @classdesc testAssemblyImposer
+ * 
+ * @constructor
+ */
+Indigo.Tests.testAssemblyImposer = function() {};
+Indigo.Tests.testAssemblyImposer.prototype = new Indigo.Tests.testSuite(app);
+Indigo.Tests.testAssemblyImposer.prototype.constructor = Indigo.Tests.testAssemblyImposer;
+Indigo.Tests.testAssemblyImposer.prototype.name = 'testAssemblyImposer';
+
+Indigo.Tests.testAssemblyImposer.prototype.setUp = function () {
+	this.pocient = new Indigo.AssemblyImposer(this.app);
+	this.testCommonPath = '/testCommons/d9/111/';
+	var job = {
+		"template" : 'testAssemblyImposer',
+		"separations" : 'CMYK',
+		"roll" : '2',
+		"print_list" : [
+			this.testsFolder + this.testCommonPath + '001/spaklevka_08_klei.eps',
+			this.testsFolder + this.testCommonPath + '002/spaklevka_1_5_klei.eps',
+		],
+	};
+	this.pocient.setup(job);
+	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
+};
+
+/**
+ * Test
+ * 
+ * В 001 должен упасть d9111001_spaklevka_08_klei.pdf
+ * В 002 должен упасть d9111002_spaklevka_1_5_klei.pdf
+ * В хотфолдер рипа должны упасть оба двое
+ */
+Indigo.Tests.testAssemblyImposer.prototype.run = function() {
+	this.pocient.run();
+	this.assemblies = [
+		this.testsFolder + this.testCommonPath + '001/d9111001_spaklevka_08_klei.pdf',
+		this.testsFolder + this.testCommonPath + '002/d9111002_spaklevka_1_5_klei.pdf',
+		this.pocient.hotFolder + '/' + 'd9111001_spaklevka_08_klei.pdf',
+		this.pocient.hotFolder + '/' + 'd9111002_spaklevka_1_5_klei.pdf',
+	];
+	for (var i=0, l=this.assemblies.length; i < l; i++) {
+		var result = this.assertFileExists(this.assemblies[i]);
+		this.log(result, '.Created');
+	}
+};
+
+/**
+ * TearDown
+ */
+Indigo.Tests.testAssemblyImposer.prototype.tearDown = function() {
+	for (var i=0, l=this.assemblies.length; i < l; i++) {
+		var testResult = new File(this.assemblies[i]);
+		if (testResult.exists) {
+			testResult.remove();
+		}
+	}
+};
