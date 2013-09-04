@@ -44,14 +44,22 @@ module.exports = function(grunt) {
 				newcap: true,
 				noarg: true,
 				// Illustrator stuff, not known by JSHint:
-				predef: ['app','UserInteractionLevel'],
+				predef: [
+					'app',
+					'File',
+					'Folder',
+					'UserInteractionLevel'
+				],
 				sub: true,
 				undef: true,
 				unused: true,
 				globals: {}
 			},
 			estk: {
-				src: ['<%= concat.estk.src %>']
+				src: ['<%= concat.estk.dest %>'],
+				options : {
+					unused: false,
+				},
 			},
 			exp: {
 				src: ['<%= concat.exp.dest %>'],
@@ -81,6 +89,19 @@ module.exports = function(grunt) {
 				options: {
 					destination: 'docs/<%= pkg.name %>',
 				},
+			},
+		},
+		sed: {
+			// Как обмануть JSHint и JSDoc по теме расширенного JavaScript
+			// от Adobe? Конкретнее: как игнорировать конструкции типа
+			// "#target Illustrator" или "#include filename.jscinx"?
+			// Пока не придумал ничего лучшего, чем закомментировать их в
+			// исходниках тремя слэшами, а последним проходом Гранта
+			// убирать эти слеши нахрен. Топорно, но волки сыты.
+			dist: {
+				path: '<%= concat.estk.dest %>',
+				pattern: '///#',
+				replacement: '#',
 			},
 		},
 		watch: {
@@ -119,11 +140,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-jsdoc');
 	grunt.loadNpmTasks('grunt-env');
+	grunt.loadNpmTasks('grunt-sed');
 
 	// Default task.
-	//grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);
 	grunt.registerTask('docs', ['env', 'jsdoc:dist']);
 	grunt.registerTask('getexp', ['env', 'concat:exp', 'jsdoc:exp', 'jshint:exp']);
-	grunt.registerTask('default', ['concat', 'jshint']);
-
+	grunt.registerTask('default', ['env', 'concat:estk', 'jsdoc:dist', 'jshint:estk', 'sed:dist']);
 };
