@@ -1,47 +1,90 @@
-function dataBroker() {}
+/**
+ * @classdesc Суперкласс для обмена данными между 
+ * Adobe Bridge/ESTK и внешним контроллером
+ * @constructor
+ */
+Indigo.DataBroker = function() {};
 
-//dataBroker.prototype.constructor = dataBroker;
+/**
+ * @prop {string} tempPath 
+ * @protected
+ */
+Indigo.DataBroker.prototype.tempPath = '/w/tmp/';
 
-dataBroker.prototype.getURI = function() {
-	return "getJobs/" + this.type + "/";
+/**
+ * @prop {string} httpPart Адрес роутера в http запросе
+ */
+Indigo.DataBroker.prototype.httpPart = 'getJobs/';
+
+/**
+ * Сериализация объекта в согласованный формат
+ *
+ * @abstract
+ * @param {object}
+ * @return {string}
+ */
+Indigo.DataBroker.prototype.encode = function(obj) {
+	return 'This method must be overloaded in subclass';
 },
 
-dataBroker.prototype._saveJob = function(job) {
-	var jobFile = new File('/w/tmp/' + this.type + 'Job.txt');
+/**
+ * Реконструкция объекта из строки
+ *
+ * @abstract
+ * @param {string}
+ * @return {object}
+ */
+Indigo.DataBroker.prototype.decode = function(string) {
+	return 'This method must be overloaded in subclass';
+},
+
+/**
+ * Относительный адрес, куда брокер отправляет запросы
+ *
+ * @return {string} URI
+ */
+Indigo.DataBroker.prototype.getURI = function() {
+	return this.httpPart + this.type + "/";
+},
+
+/**
+ * Сохранение объекта в файл
+ *
+ * @param {object} obj Объект для сохранения
+ * @protected
+ * @return {void}
+ */
+Indigo.DataBroker.prototype.saveObj = function(obj) {
+	var jobFile = new File(this.tempPath + this.type + 'Obj.txt');
 	jobFile.open('w');
-	jobFile.write (job.toSource());
+	jobFile.write (obj.toSource());
 	jobFile.close();
 },
 
-dataBroker.prototype._saveString = function(string) {
-	var jobFile = new File('/w/tmp/' + this.type + 'String.txt');
+/**
+ * Сохранение строки в файл
+ *
+ * @param {string} string 
+ * @protected
+ * @return {void}
+ */
+Indigo.DataBroker.prototype.saveString = function(string) {
+	var jobFile = new File(this.tempPath + this.type + 'String.txt');
 	jobFile.open('w');
 	jobFile.write (string);
 	jobFile.close();
 },
 
-dataBroker.prototype._loadJob = function() {
-	var jobFile = new File('/w/tmp/' + this.type + 'String.txt');
+/**
+ * Загрузка строки из файла
+ *
+ * @protected
+ * @return {string}
+ */
+Indigo.DataBroker.prototype.loadJob = function() {
+	var jobFile = new File(this.tempPath + this.type + 'String.txt');
 	jobFile.open('r');
 	var jobSource = jobFile.read();
 	jobFile.close();
 	return jobSource;
-},
-
-dataBroker.prototype._createStub = function() {
-	var job1 = {
-		template: '4({5)0005',
-		print_list : ['111','222','333'],
-		roll: 2,
-		hot_folder: 'CMYK',
-	};
-	var job2 = {
-		template: '450006',
-		print_list : ['555','444 ziht','5 55 йщ'],
-		roll: 2,
-		hot_folder: 'CMYKW',
-	};
-
-	var job = [ job1, job2 ];
-	return job;
 };
