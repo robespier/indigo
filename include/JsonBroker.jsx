@@ -1,75 +1,91 @@
-#include "DataBroker.jsx"
+/**
+ * @classdesc Реализация обмена данными в формате json 
+ * для Adobe CS3
+ * @constructor
+ */
+Indigo.JsonBroker = function() {};
 
-function jsonBroker() {}
-
-jsonBroker.prototype = new dataBroker();
-jsonBroker.prototype.constructor = jsonBroker;
-jsonBroker.prototype.type = 'json';
+Indigo.JsonBroker.prototype = new Indigo.DataBroker();
+Indigo.JsonBroker.prototype.constructor = Indigo.JsonBroker;
+Indigo.JsonBroker.prototype.type = 'json';
 
 /**
- * Interface realization
+ * Реализация интерфейса Indigo.DataBroker 
  */
-
-jsonBroker.prototype.encode = function (obj) {
+Indigo.JsonBroker.prototype.encode = function (obj) {
 	return this.toJSON(obj);
 },
 
-jsonBroker.prototype.decode = function (string) {
+/**
+ * Реализация интерфейса Indigo.DataBroker 
+ */
+Indigo.JsonBroker.prototype.decode = function (string) {
 	return this.fromJSON(string);
 },
 
 /**
- * Сериализация объекта Adobe JavaScript CS3 в формат JSON, понятный PHP 5.3
+ * Сериализация объекта Adobe JavaScript CS3 в формат JSON, понятный остальным 
+ *
+ * @param {object} obj Объект под сериализацию
+ * @return {string} parcel Валидный json
  */
-jsonBroker.prototype.toJSON = function (obj) {
-	this._saveJob(obj);
+Indigo.JsonBroker.prototype.toJSON = function (obj) {
+	this.saveObj(obj);
 	var jsonString = '';
-	var parcel = '[' + this._json_encode(obj, jsonString) + ']';
+	var parcel = '{' + this.json_encode(obj, jsonString) + '}';
 	return parcel;
 },
 
 /**
- * Восстановление объекта JavaScipt из json-строки;
+ * @desc Восстановление объекта JavaScipt из json-строки. 
  *
- * Вот тут у нас НЕХИЛАЯ БРЕШЬ В БЕЗОПАСНОСТИ. Фактически, с удалённого сервера
- * присылается некий код, который выполняется на локальной машине с правами
+ * <p>Вот тут у нас <strong>НЕХИЛАЯ БРЕШЬ В БЕЗОПАСНОСТИ</strong>.</p>
+ *
+ * Фактически, с удалённого сервера 
+ * присылается некий код, который выполняется на локальной машине с правами 
  * пользователя.
  *
- * То есть, какой-нибудь поц может подменить адрес сервера с помощью, например,
- * DNS-спуффинга и в ответ на запрос заданий прислать зловредный javascript.
- * Например var f = new Folder(myDocuments); f.remove();
- * Учитывая то, что реализация JavaScript от Adobe имеет полный доступ к
+ * То есть, какой-нибудь поц может подменить адрес сервера с помощью, например, 
+ * DNS-спуффинга и в ответ на запрос заданий прислать зловредный javascript. 
+ * Например var f = new Folder(myDocuments); f.remove(); 
+ * Учитывая то, что реализация JavaScript от Adobe имеет полный доступ к 
  * файловой системе -- последствия могут быть очень и очень печальными.
  *
- * XML в этом смысле понадёжней будет.
+ * XML в этом смысле понадёжней был.
+ *
+ * @param {string} string Сериализованный объект
+ * @return {object} obj Объект JavaScript
  */
-jsonBroker.prototype.fromJSON = function(string) {
+Indigo.JsonBroker.prototype.fromJSON = function(string) {
 	try {
-		obj = eval(string);
+		var obj = eval( '(' + string + ')' );
 		return obj;
 	} catch (e) {
 		$.writeln('json_decode failed: ' + e.message);
-		this._saveString(string);
+		this.saveString(string);
 	}
 },
 
 /**
- * Protected functins
+ * Protected functions
  */
 
 /**
- * Преобразование объекта в json формат
+ * Преобразование объекта в json формат. 
+ * Рекурсивно обходит свойства объекта и хлопает их в строку.
  *
  * Херовая реализация, первый кандидат на рефакторинг
+ *
+ * @param {object} obj Объект сериализации
+ * @param {string} jsonString Накопительная переменная для хранения промежуточных результатов 
+ * @return {string} js Строка json
  */
-jsonBroker.prototype._json_encode = function(obj, jsonString) {
+Indigo.JsonBroker.prototype.json_encode = function(obj, jsonString) {
 	for(var i in obj) {
 		if (obj.hasOwnProperty(i)) {
 			var Pocient = obj[i];
 			if (Pocient instanceof Array) {
-				var selfSource = '';
-				jsonString += '"' + i + '":' + this._json_encode(Pocient, selfSource) + ',';
-				//$.write('"' + i + '":' + Pocient.toSource());
+				jsonString += '"' + i + '":' + '[' + this.json_encode(Pocient, '') + '],';
 				continue;
 			}
 			if (typeof(Pocient) === "number") {
@@ -77,8 +93,7 @@ jsonBroker.prototype._json_encode = function(obj, jsonString) {
 				continue;
 			}
 			if (Pocient instanceof Object) {
-				var selfSource = '';
-				jsonString += '{' + this._json_encode(Pocient, selfSource) + '},';
+				jsonString += '"' + i + '":' + '{' + this.json_encode(Pocient, '') + '},';
 				
 			} else {
 				// Напрааа-во!
@@ -89,33 +104,20 @@ jsonBroker.prototype._json_encode = function(obj, jsonString) {
 				}
 				//
 				var cleanString = slashString.toSource().replace('(new String(','').replace('))','');
-				jsonString += '"' + i + '":' + cleanString + ',';
-				//$.write('"' + i + '":' + cleanString + ',');
+				if (obj instanceof Array) {
+					// Числовые индексы массива нам тут нахрен не нужны
+					jsonString += cleanString + ',';
+				} else {
+					// А вот имена свойств объектов или переменных -- всегда пожалуйста
+					jsonString += '"' + i + '":' + cleanString + ',';
+				}
 				continue;
 			}
 		}
 	}
 	// remove last comma
 	var b = jsonString.lastIndexOf(',');
-	var c = jsonString.substr(0,b);
+	var js = jsonString.substr(0,b);
 	
-	return c;
-},
-
-jsonBroker.prototype.test = function() {
-	var job = this._createStub();
-	var parcel = this.toJSON(job);
-	$.writeln();
-	$.writeln(parcel);
-	
-	//this.saveJob(job);
-	//var jobStr = this.loadJob();
-	//var newJob = eval(jobStr);
-
-	// Bridge Function
-	//var newJob2 = $.evalFile('/w/tmp/job.txt');
-	//var newJob2 = $.evalFile('/w/bin/tests/phpJSON.txt');
-
-	//var test = newJob.roll;
-	//var test2 = newJob2.roll;
+	return js;
 };
