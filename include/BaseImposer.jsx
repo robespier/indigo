@@ -45,7 +45,7 @@ Indigo.BaseImposer.prototype = {
 	/**
 	 * Открытие шаблона и сохранение ссылки на него в экземплярной переменной this.template
 	 *
-	 * @throws Нет файла шаблона
+	 * @throws {customException} Нет файла шаблона
 	 * @return {Document} Активный документ
 	 */
 	openTemplate: function() {
@@ -123,7 +123,7 @@ Indigo.BaseImposer.prototype = {
 		this.labels = []; 
 		for (var i=0, prl = this.printList.length; i < prl; i++) {
 			// Создаем ссылку на файл этикетки
-			var labelObjectFile= new File (this.printList[i]);
+			var labelObjectFile = new File (this.printList[i]);
 			// Сохраняем ссылку на файл в экземплярной переменной
 			this.labels.push(labelObjectFile);
 		}
@@ -227,9 +227,9 @@ Indigo.BaseImposer.prototype = {
 		this.currentLabel = this.labelLayer.placedItems.add();
 		var cl = this.currentLabel;
 		cl.file = file;
+		// Выравниваем этикетку по целевому контуру (параметр origin)
 		var clX = origin.position[0]+(LsizeX/2) - (cl.width/2);
 		var clY = origin.position[1]-(LsizeY/2) + (cl.height/2);
-		// Выравниваем этикетку по целевому контуру (параметр origin)
 		cl.position = new Array (clX, clY); 
 	},
 
