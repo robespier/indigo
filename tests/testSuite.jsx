@@ -3,7 +3,20 @@ var Indigo = Indigo || {};
  * Тесты будут жить в своём углу
  * @namespace
  */
-Indigo.Tests = Indigo.Tests || {};
+Indigo.Tests = Indigo.Tests || {
+
+	/**
+	 * @constant {string} PASS
+	 * @memberof Indigo.Tests
+	 */
+	PASS: 'pass: ',
+
+	/**
+	 * @constant {string} FAIL 
+	 * @memberof Indigo.Tests
+	 */
+	FAIL: 'fail: ',
+};
 
 ///#target Illustrator-13
 
@@ -107,7 +120,7 @@ Indigo.Tests.testSuite.prototype = {
 	 */
 	
 	assertUndefined: function (obj) {
-		return (obj === undefined) ? 'pass: ' : 'fail: ';
+		return (obj === undefined) ? Indigo.Tests.PASS : Indigo.Tests.FAIL;
 	},
 
 	/**
@@ -118,7 +131,7 @@ Indigo.Tests.testSuite.prototype = {
 	 * @return {string} (pass|fail)
 	 */
 	assertInstanceOf: function (assertOn, assertTo) {
-		return (assertOn instanceof assertTo) ? 'pass: ' : 'fail: ';
+		return (assertOn instanceof assertTo) ? Indigo.Tests.PASS : Indigo.Tests.FAIL;
 	},
 
 	/**
@@ -129,7 +142,7 @@ Indigo.Tests.testSuite.prototype = {
 	 * @return {string} (pass|fail)
 	 */
 	assertEq: function (assertOn, assertTo) {
-		return (assertOn === assertTo ) ? 'pass: ' : 'fail: ';
+		return (assertOn === assertTo ) ? Indigo.Tests.PASS : Indigo.Tests.FAIL;
 	},
 
 	/**
@@ -140,7 +153,7 @@ Indigo.Tests.testSuite.prototype = {
 	 */
 	assertFileExists : function (fileFullPath) {
 		var assertFile = new File(fileFullPath);
-		return (assertFile.exists) ? 'pass: ' : 'fail: ';
+		return (assertFile.exists) ? Indigo.Tests.PASS : Indigo.Tests.FAIL;
 	},
 
 	/**
@@ -153,7 +166,7 @@ Indigo.Tests.testSuite.prototype = {
 	 * @return {string} (pass|fail)
 	 */
 	assertObjectsSame : function (assertOn, assertTo) {
-		return (this.deepCompare(assertOn, assertTo)) ? 'pass: ' : 'fail: '; 
+		return (this.deepCompare(assertOn, assertTo)) ? Indigo.Tests.PASS : Indigo.Tests.FAIL; 
 	},
 
 	/**
