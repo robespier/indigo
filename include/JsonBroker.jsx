@@ -53,6 +53,8 @@ Indigo.JsonBroker.prototype.toJSON = function (obj) {
  *
  * XML в этом смысле понадёжней был.
  *
+ * <p><strong>Экранирование скобками ВРОДЕ БЫ помогает</strong></p>
+ *
  * @param {string} string Сериализованный объект
  * @return {object} obj Объект JavaScript
  */
@@ -61,7 +63,6 @@ Indigo.JsonBroker.prototype.fromJSON = function(string) {
 		var obj = eval( '(' + string + ')' );
 		return obj;
 	} catch (e) {
-		$.writeln('json_decode failed: ' + e.message);
 		this.saveString(string);
 	}
 },

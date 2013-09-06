@@ -106,6 +106,10 @@ Indigo.Tests.testSuite.prototype = {
 	 * Assertions
 	 */
 	
+	assertUndefined: function (obj) {
+		return (obj === undefined) ? 'pass: ' : 'fail: ';
+	},
+
 	/**
 	 * Проверка, является ли объект assertOn экземпляром класса assertTo
 	 *

@@ -40,6 +40,14 @@ Indigo.Tests.testJsonBroker.prototype.run = function() {
 	var decodedObj = this.pocient.decode(encodedString);
 	var resultDec = this.assertObjectsSame(decodedObj,expectedObj);
 	this.log(resultDec, '.Decode');
+
+	// Evil code dumb test
+	// Этот алерт НИКОГДА НЕ ДОЛЖЕН ПОЯВИТЬСЯ, иначе это означает
+	// возможность исполнения произвольного кода на локальной машине!
+	var evil = "alert('Im here to eat you brain!');";
+	var evilBehavior = this.pocient.decode(evil);
+	var resultEvil = this.assertUndefined(evilBehavior);
+	this.log(resultEvil, '.EvilCode');
 };
 
 Indigo.Tests.testJsonBroker.prototype.tearDown = function() {
