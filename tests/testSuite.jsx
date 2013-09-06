@@ -8,7 +8,8 @@ Indigo.Tests = Indigo.Tests || {};
 ///#target Illustrator-13
 
 /** Подключение тестируемого кода */
-///#include "../include/indigo-nodejs.jsxinc"
+///#include "../include/indigo-ill.jsxinc"
+///#include "../include/indigo-utils.jsxinc"
 
 /**
  * Главный класс для выполнения тестов

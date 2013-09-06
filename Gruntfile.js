@@ -21,11 +21,17 @@ module.exports = function(grunt) {
 					'include/BaseImposer.jsx',
 					'include/AssemblyImposer.jsx',
 					'include/AchtungImposer.jsx',
-					'include/MatchingImposer.jsx',
+					'include/MatchingImposer.jsx'
+				],
+				dest: 'include/<%= pkg.name %>-ill.jsxinc'
+			},
+			utils: {
+				src: [
+					'include/Utils.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx'
-				],
-				dest: 'include/<%= pkg.name %>.jsxinc'
+					],
+				dest: 'include/<%= pkg.name %>-utils.jsxinc'
 			},
 			tests: {
 				src: [
@@ -69,7 +75,10 @@ module.exports = function(grunt) {
 				globals: {}
 			},
 			estk: {
-				src: ['<%= concat.estk.dest %>'],
+				src: [
+					'<%= concat.estk.dest %>',
+					'<%= concat.utils.dest %>'
+				],
 				options : {
 					unused: false,
 				},
@@ -88,7 +97,7 @@ module.exports = function(grunt) {
 		},
 		jsdoc: {
 			dist: {
-				src: ['<%= concat.estk.dest %>'],
+				src: ['<%= jshint.estk.src %>'],
 				options: {
 					destination: 'docs/<%= pkg.name %>',
 					configure: 'jsdoc.conf.json',
@@ -161,5 +170,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('getexp', ['env', 'concat:exp', 'jsdoc:exp', 'jshint:exp']);
 	grunt.registerTask('tests', ['concat:tests', 'jshint:tests', 'sed:tests']);
 	// Default task.
-	grunt.registerTask('default', ['env', 'concat:estk', 'jsdoc:dist', 'jshint:estk', 'sed:dist']);
+	grunt.registerTask('default', ['env', 'concat', 'jsdoc:dist', 'jshint:estk', 'sed:dist']);
 };
