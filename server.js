@@ -10,9 +10,10 @@ resultsHandler.on('connection', function(client) {
 		if (client.writable) {
 			var response = {
 				"id" : 55,
-				"result" : "error"
+				"result" : "Хо-хо!"
 			};
 			client.write(JSON.stringify(response));
+			console.log(JSON.stringify(response));
 		}
 	});
 });

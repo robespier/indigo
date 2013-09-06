@@ -17,6 +17,7 @@ Indigo.Tests.testJsonBroker.prototype.setUp = function() {
  * Test
  */
 Indigo.Tests.testJsonBroker.prototype.run = function() {
+	// Encode test
 	var encodeObj = {
 		integer: 55,
 		string: "Arrr",
@@ -29,6 +30,16 @@ Indigo.Tests.testJsonBroker.prototype.run = function() {
 	var encodedObj = this.pocient.encode(encodeObj);
 	var resultEnc = this.assertEq(encodedObj, expectedString);
 	this.log(resultEnc, '.Encode');
+
+	// Decode test
+	var encodedString = '{"id":55,"result":"Хо-хо!"}';
+	var expectedObj = {
+		id: 55,
+		result: "Хо-хо!",
+	};
+	var decodedObj = this.pocient.decode(encodedString);
+	var resultDec = this.assertObjectsSame(decodedObj,expectedObj);
+	this.log(resultDec, '.Decode');
 };
 
 Indigo.Tests.testJsonBroker.prototype.tearDown = function() {
