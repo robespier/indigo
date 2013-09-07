@@ -28,6 +28,7 @@ module.exports = function(grunt) {
 			utils: {
 				src: [
 					'include/Utils.jsx',
+					'include/IndigoMessenger.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx'
 					],

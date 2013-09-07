@@ -8,12 +8,11 @@ resultsHandler.on('connection', function(client) {
 		console.dir(parcel);
 		console.log(data.toString());
 		if (client.writable) {
-			var response = {
-				"id" : 55,
-				"result" : "Хо-хо!"
+			var testResponse = {
+				"answer" : 42,
 			};
-			client.write(JSON.stringify(response));
-			console.log(JSON.stringify(response));
+			client.write(JSON.stringify(testResponse));
+			console.log(JSON.stringify(testResponse));
 		}
 	});
 });
