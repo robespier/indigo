@@ -18,12 +18,6 @@ Indigo.Tests = Indigo.Tests || {
 	FAIL: 'fail: ',
 };
 
-///#target Illustrator-13
-
-/** Подключение тестируемого кода */
-///#include "../include/indigo-ill.jsxinc"
-///#include "../include/indigo-utils.jsxinc"
-
 /**
  * Главный класс для выполнения тестов
  *
@@ -36,7 +30,7 @@ Indigo.Tests = Indigo.Tests || {
  */
 Indigo.Tests.testSuite = function(app) {
 	this.app = app;
-	this.testsFolder = new Folder('/w/tests/');
+	this.testsFolder = '/w/tests/';
 	this.testsNames = [];
 };
 
@@ -49,7 +43,8 @@ Indigo.Tests.testSuite.prototype = {
 	 */
 	init: function() {
 		this.testsNames = [];
-		var testsFiles = this.testsFolder.getFiles('test*.jsxinc');
+		var testsSources = new Folder(this.testsFolder + this.getTestsFolderName());
+		var testsFiles = testsSources.getFiles('test*.jsxinc');
 		for (var i=0, l = testsFiles.length; i < l; i++) {
 			var testFileName = testsFiles[i].name;
 			// Теперь этим занимается Grunt:

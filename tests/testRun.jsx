@@ -14,7 +14,7 @@
 Indigo.Tests.ts = new Indigo.Tests.testSuite(app);
 Indigo.Tests.ts.init();
 // Запустить все тесты...
-//Indigo.Tests.ts.runAllTests();
+Indigo.Tests.ts.runAllTests();
 
 // ...или запустить один тест:
-Indigo.Tests.ts.execute(new Indigo.Tests.testJsonBroker());
+//Indigo.Tests.ts.execute(new Indigo.Tests.testJsonBroker());

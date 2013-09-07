@@ -33,10 +33,20 @@ module.exports = function(grunt) {
 					],
 				dest: 'include/<%= pkg.name %>-utils.jsxinc'
 			},
+			tests_ill: {
+				src: [
+					'tests/testSuite.jsx',
+					'tests/testsIllInclude.jsx',
+					'tests/*.jsxinc',
+					'tests/testRun.jsx'
+				],
+				dest: 'tests/tests-ill.js',
+			},
 			tests: {
 				src: [
 					'tests/testSuite.jsx',
-					'tests/*.jsxinc',
+					'tests/testsUtilsInclude.jsx',
+					'tests/utilsTests/*.jsxinc',
 					'tests/testRun.jsx'
 				],
 				dest: 'tests/tests.js',
@@ -66,6 +76,7 @@ module.exports = function(grunt) {
 					'PathItem',
 					'PDFSaveOptions',
 					'SaveOptions',
+					'Socket',
 					'UserInteractionLevel',
 					'ZOrderMethod',
 				],
@@ -118,12 +129,12 @@ module.exports = function(grunt) {
 			// исходниках тремя слэшами, а последним проходом Гранта
 			// убирать эти слеши нахрен. Топорно, но волки сыты.
 			dist: {
-				path: '<%= concat.estk.dest %>',
-				pattern: '///#',
-				replacement: '#',
-			},
-			tests: {
-				path: '<%= concat.tests.dest %>',
+				path: [
+					'<%= concat.utils.dest %>',
+					'<%= concat.estk.dest %>',
+					'<%= concat.tests_ill.dest %>',
+					'<%= concat.tests.dest %>',
+				],
 				pattern: '///#',
 				replacement: '#',
 			},
@@ -168,7 +179,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('docs', ['env', 'jsdoc:dist']);
 	grunt.registerTask('getexp', ['env', 'concat:exp', 'jsdoc:exp', 'jshint:exp']);
-	grunt.registerTask('tests', ['concat:tests', 'jshint:tests', 'sed:tests']);
+	grunt.registerTask('tests', ['concat', 'jshint', 'sed']);
 	// Default task.
-	grunt.registerTask('default', ['env', 'concat', 'jsdoc:dist', 'jshint:estk', 'sed:dist']);
+	grunt.registerTask('default', ['env', 'concat', 'jsdoc:dist', 'jshint:estk', 'sed']);
 };
