@@ -100,11 +100,14 @@ module.exports = function(grunt) {
 			},
 		},
 		env: {
-			// Ради jsdoc
-			docs: {
-				// Фи! Зато быстро :)
-				// @todo: Определять самостоятельно, если есть возможность
+			// jsdoc вяло тербует пеменную среды JAVA_HOME
+			// Фи! Зато быстро :)
+			// @todo: Определять путь самостоятельно, если есть возможность
+			linux: {
 				JAVA_HOME : '/usr/lib/jvm/java-7-openjdk-i386/',
+			},
+			windows: {
+				JAVA_HOME : 'D:/bin/Java/jre7/',
 			},
 		},
 		jsdoc: {
@@ -178,9 +181,17 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-env');
 	grunt.loadNpmTasks('grunt-sed');
 
-	grunt.registerTask('docs', ['env', 'jsdoc:dist']);
-	grunt.registerTask('getexp', ['env', 'concat:exp', 'jsdoc:exp', 'jshint:exp']);
+	// OS specific tasks
+	var envTasks = [];
+	if (process.env.OS === 'Windows_NT') {
+		envTasks.push('env:windows');
+	} else {
+		envTasks.push('env:linux');
+	}
+	grunt.registerTask('os_spec', envTasks);
+
+	grunt.registerTask('docs', ['os_spec', 'jsdoc:dist']);
 	grunt.registerTask('tests', ['concat', 'jshint', 'sed']);
 	// Default task.
-	grunt.registerTask('default', ['env', 'concat', 'jsdoc:dist', 'jshint:estk', 'sed']);
+	grunt.registerTask('default', ['os_spec', 'concat', 'jsdoc:dist', 'jshint:estk', 'sed']);
 };
