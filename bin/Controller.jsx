@@ -43,9 +43,15 @@ function postMessage(data) {
 
 function postResponse(message) {
 	$.writeln('Controller onResult() Here');
-	var resp = encodeResponse(eval(message.body));
+	var errm = {
+			type: "message",
+			severity: "info",
+			message: "sendResult callback",
+		};
+	var m = Indigo.Messenger.emit(errm);
+	/*var resp = encodeResponse(eval(message.body));
 	$.writeln(resp.toString());
-	postMessage(resp.toString());
+	postMessage(resp.toString());*/
 }	
 
 /**
@@ -68,19 +74,22 @@ function processJobs(j) {
 			var errCode = parseInt (errorMsg.headers ["Error-Code"],10);
 			throw new Error (errCode, errorMsg.body);
 		};
-		brt.sendResult = function() {
-			$.writeln('sendResult Controller');
+		var errm = {
+			type: "message",
+			severity: "info",
+			message: "Send",
 		};
+		var m = Indigo.Messenger.emit(errm);
 		brt.send();
 	}
 	return 'Controller 4 Done';
 }
 
 /**
- * Parse XML file to JavaScript job object
- * @returns array Array of Job objects
+ * Parse jobs source to JavaScript job object
+ *
+ * @return {array} data Array of Job objects
  */
-#include "Job.jsx"
 function parseJobs() {
 	var from = remote + dataBroker.getURI();
 	var response = pullJobs(from);
@@ -107,28 +116,15 @@ function run() {
 /*
  * Setup
  */
+#include "../include/indigo-utils.jsxinc"
+
 //AsyncDebug = true;
 remote = "http://indigo.aicdr.pro/";
 
-#include 'jsonBroker.jsx'
-dataBroker = new jsonBroker();
-
-/*
-#include 'XMLBroker.jsx'
-dataBroker = new XMLBroker();
-*/
-
-/*
-var phpdata = dataBroker._loadJob();
-dataBroker.decode(phpdata);
-*/
-
-/*
- * Run
- */ 
-//dumpJobs();
+var dataBroker = new Indigo.JsonBroker();
 
 run();
+
 
 /*
 while (true) {

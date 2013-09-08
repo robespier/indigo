@@ -1,16 +1,15 @@
-/*
+/**
  * Dispatch relations between Illustrator And Bridge
  */
 
-#include "/w/bin/mc.jsx"
-#include "/w/bin/Assembly.jsx"
-#include "/w/bin/Matching.jsx"
-#include "/w/bin/Achtung.jsx"
+#include "/w/include/indigo-ill.jsxinc"
 
 BridgeTalk.onReceive = dispatch;
 
 function dispatch(message) {
-	$.writeln('Dispatch 11 Here');
+	$.writeln('Dispatch 16 Here');
+	var sr1 = message.sendResult('well');
+	$.writeln('sendResult 1 returns:' + sr1);
 	var job = eval(message.headers.job);
 	// iterate thru jobs
 	for (var jb=0, jl = job.length; jb < jl; jb++) {
@@ -19,12 +18,19 @@ function dispatch(message) {
 		var actions = job[jb].sequence.split(';');
 		// iterate on actions (assembly;matching;achtung)
 		for (var act = 0, al = actions.length; act < al; act++) {
-			var worker = eval('new ' + actions[act]);
+			var sr2 = message.sendResult('done');
+			$.writeln('sendResult ' + act + ' returns:' + sr2);
+			var worker = eval('new Indigo.' + actions[act]);
 			worker.setup(job[jb]);
 			try {
 				worker.run();
 			} catch (err) {
 				job[jb].errors.push(err);
+				var errm = {
+					type: "error",
+					severity: "fatal",
+				};
+				message.sendResult(errm);
 			}
 		}
 	}
