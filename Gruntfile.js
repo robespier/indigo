@@ -8,6 +8,8 @@ module.exports = function(grunt) {
 			'<%= grunt.template.today("yyyy-mm-dd") %>\n' +
 			' * Copyright (c) <%= grunt.template.today("yyyy") %> ' +
 			'<%= pkg.author %>; Licensed MIT\n */\n\n',
+		// Custom properties
+		adobe_startup: "/Adobe/Startup Scripts CS3/Adobe Bridge",
 		// Task configuration.
 		concat: {
 			options: {
@@ -70,6 +72,7 @@ module.exports = function(grunt) {
 				// Illustrator stuff, not known by JSHint:
 				predef: [
 					'app',
+					'BridgeTalk',
 					'Document',
 					'File',
 					'Folder',
@@ -125,6 +128,20 @@ module.exports = function(grunt) {
 				},
 			},
 		},
+		copy: {
+			bridgeTalk: {
+				files: [
+					{
+						expand: true,
+						cwd: 'include/',
+						src: 'indigo-utils.jsxinc',
+						dest: process.env.CommonProgramFiles + '<%= adobe_startup %>',
+						// Стартап Бриджа игнорирует .jsxinc, так что расширение меняем
+						ext: '.jsx'
+					},
+				]
+			},
+		},
 		sed: {
 			// Как обмануть JSHint и JSDoc по теме расширенного JavaScript
 			// от Adobe? Конкретнее: как игнорировать конструкции типа
@@ -173,6 +190,7 @@ module.exports = function(grunt) {
 
 	// These plugins provide necessary tasks.
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -185,6 +203,7 @@ module.exports = function(grunt) {
 	var envTasks = [];
 	if (process.env.OS === 'Windows_NT') {
 		envTasks.push('env:windows');
+		envTasks.push('copy:bridgeTalk');
 	} else {
 		envTasks.push('env:linux');
 	}
@@ -193,5 +212,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('docs', ['os_spec', 'jsdoc:dist']);
 	grunt.registerTask('tests', ['concat', 'jshint', 'sed']);
 	// Default task.
-	grunt.registerTask('default', ['os_spec', 'concat', 'jsdoc:dist', 'jshint:estk', 'sed']);
+	grunt.registerTask('default', ['concat', 'os_spec', 'jsdoc:dist', 'jshint:estk', 'sed']);
 };

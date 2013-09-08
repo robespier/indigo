@@ -1,0 +1,3 @@
+/**
+ * Test grunt-contrib-copy
+ */
