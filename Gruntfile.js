@@ -12,12 +12,12 @@ module.exports = function(grunt) {
 		adobe_startup: "/Adobe/Startup Scripts CS3/Adobe Bridge",
 		// Task configuration.
 		concat: {
+			// Очередность файлов важна, поэтому они перечисляются явно
 			options: {
 				banner: '<%= banner %>',
 				separator: '\n'
 			},
 			estk: {
-				// Очередность файлов важна, поэтому они перечисляются явно
 				src: [
 					'include/Base.jsx',
 					'include/BaseImposer.jsx',
@@ -28,8 +28,10 @@ module.exports = function(grunt) {
 				dest: 'include/<%= pkg.name %>-ill.jsxinc'
 			},
 			utils: {
+				// Это дело будет грузиться в Бридж при запуске оного
 				src: [
 					'include/Utils.jsx',
+					'include/IndigoBridgeBridgeTalk.jsx',	
 					'include/IndigoMessenger.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx'
@@ -74,6 +76,7 @@ module.exports = function(grunt) {
 					'app',
 					'BridgeTalk',
 					'Document',
+					'ExternalObject',
 					'File',
 					'Folder',
 					'Layer',
