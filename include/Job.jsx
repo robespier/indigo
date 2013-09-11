@@ -2,14 +2,14 @@
  * Job Class with default values
  */
 
-function job() {};
+Indigo.Job = function() {};
 
-job.prototype.constructor = job;
+Indigo.Job.prototype.constructor = Indigo.Job;
 
-job.prototype.print_list = [];
-job.prototype.hot_folder = 'CMYK';
-job.prototype.roll_number = 2;
-job.prototype.template = 4090354;
-job.prototype.errors = [];
-job.prototype.sequence = 'assembly;matching;achtung';
-job.prototype.id = null;
+Indigo.Job.prototype.print_list = [];
+Indigo.Job.prototype.hot_folder = 'CMYK';
+Indigo.Job.prototype.roll_number = 2;
+Indigo.Job.prototype.template = 4090354;
+Indigo.Job.prototype.errors = [];
+Indigo.Job.prototype.sequence = 'assembly;matching;achtung';
+Indigo.Job.prototype.id = null;

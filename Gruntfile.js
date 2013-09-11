@@ -33,6 +33,7 @@ module.exports = function(grunt) {
 					'include/Utils.jsx',
 					'include/IndigoBridgeBridgeTalk.jsx',	
 					'include/IndigoMessenger.jsx',
+					'include/Job.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx'
 					],
