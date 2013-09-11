@@ -172,10 +172,15 @@ module.exports = function(grunt) {
 				files: '<%= jsdoc.dist.src %>',
 				tasks: 'docs',
 			},
-			exp: {
-				files: '<%= concat.exp.src %>',
-				tasks: 'getexp',
+			/**
+			 * С сетевого диска не работает;
+			 * С локального работает, но тогда теряет смысл;
+			 * Пока запускать из-под windows вручную: grunt 
+			windows: {
+				files: ['W:/gruntwatch/*.js'],
+				tasks: ['default'],
 			},
+			*/
 		},
 		qunit: {
 			files: ['test/**/*.html']
