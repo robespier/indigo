@@ -1,47 +1,61 @@
 /**
  * Dispatch relations between Illustrator And Bridge
+ * @constructor
  */
+Indigo.Dispatcher = function() {};
 
-#include "/w/include/indigo-ill.jsxinc"
+Indigo.Dispatcher.prototype.send = function(message,responseCallback) {
+	var targetApp = BridgeTalk.getSpecifier( "bridge", "2");
+	if (targetApp) {
+		var brt = new BridgeTalk();
+		brt.target = "bridge";
+		brt.body = message;
+		brt.onResult = responseCallback;
+		brt.onError = function( errorMsg ) {
+			var errCode = parseInt (errorMsg.headers ["Error-Code"],10);
+			throw new Error (errCode, errorMsg.body);
+		};
+		brt.send();
+	}
+	return 'Dispatcher.send 5 done';
+};
 
-BridgeTalk.onReceive = dispatch;
-
-function dispatch(message) {
-	$.writeln('Dispatch 16 Here');
-	var sr1 = message.sendResult('well');
-	$.writeln('sendResult 1 returns:' + sr1);
-	var job = eval(message.headers.job);
-	// iterate thru jobs
-	for (var jb=0, jl = job.length; jb < jl; jb++) {
+Indigo.Dispatcher.processJobs = function(jobs) {
+	$.writeln('Dispatcher.processJobs 8 Here');
+	for (var jb=0, jl = jobs.length; jb < jl; jb++) {
 		// assign placeholder (array) for feedback from workers
-		job[jb].errors = [];
-		var actions = job[jb].sequence.split(';');
+		jobs[jb].errors = [];
+		var actions = jobs[jb].sequence.split(';');
 		// iterate on actions (assembly;matching;achtung)
 		for (var act = 0, al = actions.length; act < al; act++) {
-			var sr2 = message.sendResult('done');
-			$.writeln('sendResult ' + act + ' returns:' + sr2);
 			var worker = eval('new Indigo.' + actions[act]);
-			worker.setup(job[jb]);
+			worker.setup(jobs[jb]);
 			try {
 				worker.run();
 			} catch (err) {
-				job[jb].errors.push(err);
-				var errm = {
-					type: "error",
-					severity: "fatal",
-				};
-				message.sendResult(errm);
+				jobs[jb].errors.push(err);
 			}
 		}
 	}
 	// BridgeTalk want's this as result:
-	return job.toSource();
-}
+	return jobs.toSource();
+};
+
+Indigo.Dispatcher.prototype.getJobs = function(message) {
+	$.writeln('Dispatcher.getJobs Callback 18 Here');
+	var jobs = eval(message.body);
+	Indigo.Dispatcher.processJobs(jobs);
+};
+
+Indigo.Dispatcher.prototype.run = function() {
+	// iterate thru jobs
+	var job = this.send("c.parseJobs();",this.getJobs);
+};
 
 /**
  * Helper Test Call
  */
-if (typeof(AsyncTest) != "undefined") {
-	$.writeln('Dispatch AsyncTest 11 Here');
-	testResult = dispatch(AsyncTest.message);
+if (typeof(Indigo_UnitTests) === "undefined") {
+	var d = new Indigo.Dispatcher();
+	d.run();
 }

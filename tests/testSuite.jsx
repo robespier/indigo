@@ -18,6 +18,8 @@ Indigo.Tests = Indigo.Tests || {
 	FAIL: 'fail: ',
 };
 
+Indigo_UnitTests = true;
+
 /**
  * Главный класс для выполнения тестов
  *
@@ -168,6 +170,7 @@ Indigo.Tests.testSuite.prototype = {
 	 * Совершенно бессовестно (и бездумно) украдено отсюда:
 	 * @see http://stackoverflow.com/questions/1068834/object-comparison-in-javascript
 	 * @todo Что всё таки этот метод делает?
+	 * @todo Lo-Dash
 	 *
 	 * @protected
 	 * @return {boolean}

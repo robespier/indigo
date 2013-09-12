@@ -3,4 +3,4 @@
  * Adobe Bridge или Adobe Extended Script Tool Kit
  * @namespace 
  */
-var Indigo = Indigo || { };
+var Indigo = Indigo || { }; 

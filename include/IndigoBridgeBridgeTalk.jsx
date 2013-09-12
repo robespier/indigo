@@ -1,4 +1,4 @@
-#target bridge-2.0
+///#target bridge-2.0
 /**
  * Bridge static BridgeTalk.onReceive method 
  * Предполагается, что будет загружаеться из 
@@ -6,9 +6,13 @@
  */
 
 BridgeTalk.onReceive = function (message) {
-	$.writeln('BridgeTalk.onReceive 17 Here');
+	var c = new Indigo.Controller();
+	if (c.isMethodAllowed(message.body)) {
+		$.writeln('BridgeTalk.onReceive 17 Here: ' + message.body);
+		var result = eval(message.body);
+		message.sendResult(result.toSource());
+	}
 };
-
 
 /**
  * Enable Web Access Library

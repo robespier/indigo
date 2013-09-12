@@ -23,7 +23,9 @@ module.exports = function(grunt) {
 					'include/BaseImposer.jsx',
 					'include/AssemblyImposer.jsx',
 					'include/AchtungImposer.jsx',
-					'include/MatchingImposer.jsx'
+					'include/MatchingImposer.jsx',
+					'include/Job.jsx',
+					'bin/Dispatch.jsx',
 				],
 				dest: 'include/<%= pkg.name %>-ill.jsxinc'
 			},
@@ -31,11 +33,11 @@ module.exports = function(grunt) {
 				// Это дело будет грузиться в Бридж при запуске оного
 				src: [
 					'include/Utils.jsx',
-					'include/IndigoBridgeBridgeTalk.jsx',	
-					'include/IndigoMessenger.jsx',
 					'include/Job.jsx',
 					'include/DataBroker.jsx',
-					'include/JsonBroker.jsx'
+					'include/JsonBroker.jsx',
+					'include/Controller.jsx',
+					'include/IndigoBridgeBridgeTalk.jsx',	
 					],
 				dest: 'include/<%= pkg.name %>-utils.jsxinc'
 			},
@@ -72,7 +74,7 @@ module.exports = function(grunt) {
 				latedef: true,
 				newcap: true,
 				noarg: true,
-				// Illustrator stuff, not known by JSHint:
+				// Illustrator and Bridge stuff, not known by JSHint:
 				predef: [
 					'app',
 					'BridgeTalk',
@@ -80,6 +82,7 @@ module.exports = function(grunt) {
 					'ExternalObject',
 					'File',
 					'Folder',
+					'HttpConnection',
 					'Layer',
 					'PathItem',
 					'PDFSaveOptions',
