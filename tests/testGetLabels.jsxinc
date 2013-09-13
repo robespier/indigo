@@ -8,16 +8,7 @@ Indigo.Tests.testGetLabels.prototype.name = "testGetLabels";
 
 Indigo.Tests.testGetLabels.prototype.setUp = function () {
 	this.pocient = new Indigo.BaseImposer(this.app);
-	var job = {
-		"template" : 'noMatter',
-		"separations" : 'noMatter',
-		"roll" : 'noMatter',
-		"print_list" : [
-			this.testsFolder + '/testCommons/spaklevka_08_klei.eps',
-			this.testsFolder + '/testCommons/spaklevka_1_5_klei.eps',
-		],
-	};
-	this.pocient.setup(job);
+	this.pocient.setup(this.getMockJob());
 };
 
 /**

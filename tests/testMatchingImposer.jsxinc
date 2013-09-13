@@ -11,17 +11,7 @@ Indigo.Tests.testMatchingImposer.prototype.name = 'testMatchingImposer';
 
 Indigo.Tests.testMatchingImposer.prototype.setUp = function () {
 	this.pocient = new Indigo.MatchingImposer(this.app);
-	this.testCommonPath = '/testCommons/d9/111/';
-	var job = {
-		"template" : 'testMatchingImposer',
-		"separations" : 'CMYK',
-		"roll" : '2',
-		"print_list" : [
-			this.testsFolder + this.testCommonPath + '001/spaklevka_08_klei.eps',
-			this.testsFolder + this.testCommonPath + '002/spaklevka_1_5_klei.eps',
-		],
-	};
-	this.pocient.setup(job);
+	this.pocient.setup(this.getMockJob());
 	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
 };
 

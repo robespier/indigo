@@ -8,13 +8,7 @@ Indigo.Tests.testGetLowerCut.prototype.name = "testGetLowerCut";
 
 Indigo.Tests.testGetLowerCut.prototype.setUp = function () {
 	this.pocient = new Indigo.AssemblyImposer(this.app);
-	var job = {
-		"template" : 'testGetLowerCut',
-		"separations" : 'noMatter',
-		"roll" : 'noMatter',
-		"print_list" : ['noMatter'],
-	};
-	this.pocient.setup(job);
+	this.pocient.setup(this.getMockJob());
 	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
 	this.pocient.openTemplate();
 	this.pocient.setLabelLayer();

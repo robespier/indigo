@@ -56,23 +56,22 @@ Indigo.BaseImposer.prototype = {
 	 * @return {Document} Активный документ
 	 */
 	openTemplate: function() {
-		var template = this.getTemplateName();
+		var templateFile = this.getTemplateName();
 		try {
-			this.illustrator.open (template); //Открываем шаблон
+			var templateDoc = this.illustrator.open (templateFile); //Открываем шаблон
+			templateDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
+			this.template = templateDoc;
+			return this.template;
 		} catch (e) {
 			// interrupt normal flow
 			throw {
 				message: e.message,
 				source: 'openTemplate',
-				file: template.fullName,
+				file: templateFile.fullName,
 				severity: 'error',
 				jobid: this.job.id,
 			};
 		}
-		var myDoc = app.activeDocument; //Создаем ссылку на активный документ
-		myDoc.rulerOrigin = [0,0]; //Обнуляем центр координат
-		this.template = myDoc;
-		return this.template;
 	},
 
 	/**
@@ -130,7 +129,7 @@ Indigo.BaseImposer.prototype = {
 		this.labels = []; 
 		for (var i=0, prl = this.printList.length; i < prl; i++) {
 			// Создаем ссылку на файл этикетки
-			var labelObjectFile = new File (this.printList[i]);
+			var labelObjectFile = new File (this.printList[i].name);
 			// Сохраняем ссылку на файл в экземплярной переменной
 			this.labels.push(labelObjectFile);
 		}

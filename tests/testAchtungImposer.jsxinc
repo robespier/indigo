@@ -8,17 +8,7 @@ Indigo.Tests.testAchtungImposer.prototype.name = 'testAchtungImposer';
 
 Indigo.Tests.testAchtungImposer.prototype.setUp = function () {
 	this.pocient = new Indigo.AchtungImposer(this.app);
-	this.testCommonPath = '/testCommons/d9/111/';
-	var job = {
-		"template" : 'testAchtungImposer',
-		"separations" : 'noMatter',
-		"roll" : 'noMatter',
-		"print_list" : [
-			this.testsFolder + this.testCommonPath + '001/spaklevka_08_klei.eps',
-			this.testsFolder + this.testCommonPath + '002/spaklevka_1_5_klei.eps',
-		],
-	};
-	this.pocient.setup(job);
+	this.pocient.setup(this.getMockJob());
 	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
 };
 
