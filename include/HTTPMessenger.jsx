@@ -23,6 +23,20 @@ Indigo.HTTPMessenger.prototype.getConnection = function() {
 };
 
 /**
+ * @param {string} type 
+ * @param {objects} data JavaScript object
+ */
+Indigo.HTTPMessenger.prototype.receive = function(type, data) {
+	var result = null;
+	switch(type) {
+		case "fetchJobs":
+			result = this.fetchJobs();
+		break;
+	}
+	return result;
+};
+
+/**
  * POST на сервер
  */
 Indigo.HTTPMessenger.prototype.send = function(message) {
@@ -38,8 +52,9 @@ Indigo.HTTPMessenger.prototype.send = function(message) {
 
 /**
  * GET на сервер
+ * @protected
  */
-Indigo.HTTPMessenger.prototype.receive = function(from) {
+Indigo.HTTPMessenger.prototype.get = function(from) {
 	var url = encodeURI(from);
 	var http = new HttpConnection(url);
 	http.requestheaders = ["User-Agent", "Indigo 1.0"];
@@ -50,14 +65,12 @@ Indigo.HTTPMessenger.prototype.receive = function(from) {
 /**
  * Parse jobs from remote source to JavaScript job object
  *
+ * @protected
  * @return {array} data Array of Job objects
  */
 Indigo.HTTPMessenger.prototype.fetchJobs = function() {
 	var from = this.remote + this.dataBroker.getURI();
-	var response = this.receive(from);
+	var response = this.get(from);
 	var data = this.dataBroker.decode(response);
-	if (typeof(Indigo_UnitTests) !== "undefined") {
-		this.dataBroker.saveString(response);
-	}
 	return data;
 };

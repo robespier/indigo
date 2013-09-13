@@ -40,7 +40,7 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
  * main()
  */
 Indigo.Controller.prototype.run = function() {
-	var jobs = this.messenger.fetchJobs();
+	var jobs = this.messenger.receive('fetchJobs');
 	if (jobs.length < 1) {
 		return 'No Jobs Present';
 	} else {
