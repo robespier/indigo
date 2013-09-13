@@ -69,6 +69,27 @@ Indigo.Controller.prototype.parseJobs = function() {
 	return data;
 };
 
+Indigo.Controller.prototype.processJobs = function(jobs) {
+	$.writeln('Dispatcher.processJobs 8 Here');
+	for (var jb=0, jl = jobs.length; jb < jl; jb++) {
+		// assign placeholder (array) for feedback from workers
+		jobs[jb].errors = [];
+		var actions = jobs[jb].sequence.split(';');
+		// iterate on actions (assembly;matching;achtung)
+		for (var act = 0, al = actions.length; act < al; act++) {
+			var worker = eval('new Indigo.' + actions[act]);
+			worker.setup(jobs[jb]);
+			try {
+				worker.run();
+			} catch (err) {
+				jobs[jb].errors.push(err);
+			}
+		}
+	}
+	// BridgeTalk want's this as result:
+	return jobs.toSource();
+};
+
 Indigo.Controller.prototype.encodeResponse = function(resp) {
 	var data = this.dataBroker.encode(resp);
 	return data;

@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 					'tests/*.jsxinc',
 					'tests/testRun.jsx'
 				],
-				dest: 'tests/tests.js',
+				dest: 'bin/tests.js',
 			},
 		},
 		jshint: {

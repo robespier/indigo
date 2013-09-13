@@ -18,8 +18,6 @@ Indigo.Tests = Indigo.Tests || {
 	FAIL: 'fail: ',
 };
 
-Indigo_UnitTests = true;
-
 /**
  * Главный класс для выполнения тестов
  *
