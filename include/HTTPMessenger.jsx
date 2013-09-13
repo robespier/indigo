@@ -36,10 +36,24 @@ Indigo.HTTPMessenger.prototype.receive = function(type, data) {
 	return result;
 };
 
+Indigo.HTTPMessenger.prototype.send = function(type, data) {
+	var parcel = this.dataBroker.encode(data);
+	switch(type) {
+		case "error":
+			this.post(parcel);
+		break;
+		case "info":
+			this.post(parcel);
+		break;
+	}
+};
+
 /**
  * POST на сервер
+ * @todo соединение не закрывать, кипалайв возможен
+ * @protected
  */
-Indigo.HTTPMessenger.prototype.send = function(message) {
+Indigo.HTTPMessenger.prototype.post = function(message) {
 	var http = new HttpConnection(this.remote);	
 	//var parcel = "resp=" + data;
 	var parcel = "XDEBUG_SESSION_START=netbeans-xdebug" + "&" + "resp=" + message;
@@ -48,10 +62,12 @@ Indigo.HTTPMessenger.prototype.send = function(message) {
 	http.request = parcel;
 	http.method = "POST";
 	http.execute();
+	http.close();
 };
 
 /**
  * GET на сервер
+ * @todo соединение не закрывать, кипалайв возможен
  * @protected
  */
 Indigo.HTTPMessenger.prototype.get = function(from) {
@@ -59,7 +75,9 @@ Indigo.HTTPMessenger.prototype.get = function(from) {
 	var http = new HttpConnection(url);
 	http.requestheaders = ["User-Agent", "Indigo 1.0"];
 	http.execute();
-	return http.response;
+	var response = http.response;
+	http.close();
+	return response;
 };
 
 /**

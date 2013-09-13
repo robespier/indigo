@@ -21,7 +21,8 @@ Indigo.Controller.prototype.setup = function() {
 Indigo.Controller.prototype.processJobs = function(jobs) {
 	for (var jb=0, jl = jobs.length; jb < jl; jb++) {
 		// assign placeholder (array) for feedback from workers
-		jobs[jb].errors = [];
+		//jobs[jb].errors = [];
+		// sequence приходит из базы данных
 		var actions = jobs[jb].sequence.split(';');
 		// iterate on actions (assembly;matching;achtung)
 		for (var act = 0, al = actions.length; act < al; act++) {
@@ -30,7 +31,8 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
 			try {
 				worker.run();
 			} catch (err) {
-				jobs[jb].errors.push(err);
+				//jobs[jb].errors.push(err);
+				this.messenger.send('error', err);
 			}
 		}
 	}
