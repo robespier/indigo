@@ -11,6 +11,9 @@
  *   testOpenTemplate.jsxinc
  */
 
+/** Подключение тестируемого кода */
+///#include "../include/indigo.jsxinc"
+
 Indigo.Tests.ts = new Indigo.Tests.testSuite(app);
 Indigo.Tests.ts.init();
 // Запустить все тесты...

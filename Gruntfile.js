@@ -25,36 +25,16 @@ module.exports = function(grunt) {
 					'include/AchtungImposer.jsx',
 					'include/MatchingImposer.jsx',
 					'include/Job.jsx',
-					'bin/Dispatch.jsx',
-				],
-				dest: 'include/<%= pkg.name %>-ill.jsxinc'
-			},
-			utils: {
-				// Это дело будет грузиться в Бридж при запуске оного
-				src: [
-					'include/Utils.jsx',
-					'include/Job.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx',
 					'include/Controller.jsx',
-					'include/IndigoBridgeBridgeTalk.jsx',	
-					],
-				dest: 'include/<%= pkg.name %>-utils.jsxinc'
-			},
-			tests_ill: {
-				src: [
-					'tests/testSuite.jsx',
-					'tests/testsIllInclude.jsx',
-					'tests/*.jsxinc',
-					'tests/testRun.jsx'
 				],
-				dest: 'tests/tests-ill.js',
+				dest: 'include/<%= pkg.name %>.jsxinc'
 			},
 			tests: {
 				src: [
 					'tests/testSuite.jsx',
-					'tests/testsUtilsInclude.jsx',
-					'tests/utilsTests/*.jsxinc',
+					'tests/*.jsxinc',
 					'tests/testRun.jsx'
 				],
 				dest: 'tests/tests.js',
@@ -74,7 +54,7 @@ module.exports = function(grunt) {
 				latedef: true,
 				newcap: true,
 				noarg: true,
-				// Illustrator and Bridge stuff, not known by JSHint:
+				// Illustrator stuff, not known by JSHint:
 				predef: [
 					'app',
 					'BridgeTalk',
@@ -99,7 +79,6 @@ module.exports = function(grunt) {
 			estk: {
 				src: [
 					'<%= concat.estk.dest %>',
-					'<%= concat.utils.dest %>'
 				],
 				options : {
 					unused: false,
@@ -128,26 +107,6 @@ module.exports = function(grunt) {
 					configure: 'jsdoc.conf.json',
 				},
 			},
-			exp: {
-				src: '<%= jshint.exp.src %>',
-				options: {
-					destination: 'docs/<%= pkg.name %>',
-				},
-			},
-		},
-		copy: {
-			bridgeTalk: {
-				files: [
-					{
-						expand: true,
-						cwd: 'include/',
-						src: 'indigo-utils.jsxinc',
-						dest: process.env.CommonProgramFiles + '<%= adobe_startup %>',
-						// Стартап Бриджа игнорирует .jsxinc, так что расширение меняем
-						ext: '.jsx'
-					},
-				]
-			},
 		},
 		sed: {
 			// Как обмануть JSHint и JSDoc по теме расширенного JavaScript
@@ -158,9 +117,7 @@ module.exports = function(grunt) {
 			// убирать эти слеши нахрен. Топорно, но волки сыты.
 			dist: {
 				path: [
-					'<%= concat.utils.dest %>',
 					'<%= concat.estk.dest %>',
-					'<%= concat.tests_ill.dest %>',
 					'<%= concat.tests.dest %>',
 				],
 				pattern: '///#',
@@ -185,18 +142,6 @@ module.exports = function(grunt) {
 				tasks: ['default'],
 			},
 			*/
-		},
-		qunit: {
-			files: ['test/**/*.html']
-		},
-		uglify: {
-			options: {
-				banner: '<%= banner %>'
-			},
-			dist: {
-				src: '<%= concat.dist.dest %>',
-				dest: 'dist/FILE_NAME.min.js'
-			}
 		}
 	});
 
@@ -215,7 +160,6 @@ module.exports = function(grunt) {
 	var envTasks = [];
 	if (process.env.OS === 'Windows_NT') {
 		envTasks.push('env:windows');
-		envTasks.push('copy:bridgeTalk');
 	} else {
 		envTasks.push('env:linux');
 	}

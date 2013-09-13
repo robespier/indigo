@@ -45,7 +45,7 @@ Indigo.Tests.testSuite.prototype = {
 	 */
 	init: function() {
 		this.testsNames = [];
-		var testsSources = new Folder(this.testsFolder + this.getTestsFolderName());
+		var testsSources = new Folder(this.testsFolder);
 		var testsFiles = testsSources.getFiles('test*.jsxinc');
 		for (var i=0, l = testsFiles.length; i < l; i++) {
 			var testFileName = testsFiles[i].name;
