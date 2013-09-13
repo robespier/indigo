@@ -27,6 +27,8 @@ module.exports = function(grunt) {
 					'include/Job.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx',
+					'include/Messenger.jsx',
+					'include/HTTPMessenger.jsx',
 					'include/Controller.jsx',
 				],
 				dest: 'include/<%= pkg.name %>.jsxinc'
