@@ -14,7 +14,7 @@ Indigo.HTTPMessenger.prototype.constructor = Indigo.HTTPMessenger;
 /**
  * @prop {string} remote Адрес Web-сервера
  */
-Indigo.HTTPMessenger.prototype.remote = "http://indigo.aicdr.pro/";
+Indigo.HTTPMessenger.prototype.remote = "http://indigo.aicdr.pro:8080/";
 
 /**
  * @protected
