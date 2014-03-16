@@ -19,7 +19,7 @@ matching.prototype.imposeLabels = function() {
 	var labelsCount = this.labels.length;
 	var i = 0;
 	var l = labelsCount;
-	var utvCount = 1; // Счетчик имен сборок-утверждений
+	utvCount = 1; // Счетчик имен сборок-утверждений
 	while (labelsCount > 0) {
 		newlayer.placedItems.removeAll();
 		for (i,k=0; i < l && k < cutsCount; k++, i++) {
@@ -29,39 +29,13 @@ matching.prototype.imposeLabels = function() {
 			this.applyStyle();
 		}
 		labelsCount -= cutsCount;
-		this.exportPDF(this.getPDFName(utvCount));
+		this.exportPDF(this.currentLabel.file.parent + '\\' + this.getPDFName(utvCount));
 		this.sendtoHotFolder(); // Кидаем сборку в горячую папку
 		utvCount++;
 	}
 }
 
-/*
- * Сгенерировать имя PDF для экспорта
- * @index int File number
- * @returns string
- */
-matching.prototype.getPDFName = function(index) {
-	
-// 
-	var child =  this.currentLabel.file.parent;
-	var mother = child.parent;
-	var father = mother.parent;
-	
-// Определяем диапазон папок 
-	var targetName = [];
-		for (i=0, l=this.labels.length; i < l; i++) {
-		targetName[i]= this.labels[i].parent.name;
-}
-
-	targetName.sort();
-	
-range = targetName[0] + '-' + targetName[targetName.length-1];
-
-	var PDFName = father.name + mother.name + range;	
-	
-
-// Имя файла сборки
-	PDFName +='_UTV_' + index.toString() + '.pdf';
-// Путь для файла сборки
-	return mother + '\\' + PDFName;
+matching.prototype.getNamePart = function(index) {
+	NamePart = this.range + '_UTV_' + index.toString() + '.pdf';
+	return NamePart;
 }
