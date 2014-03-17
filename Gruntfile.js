@@ -24,6 +24,7 @@ module.exports = function(grunt) {
 					'include/AssemblyImposer.jsx',
 					'include/AchtungImposer.jsx',
 					'include/MatchingImposer.jsx',
+					'include/BlankComposer.jsx',
 					'include/Job.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx',
@@ -61,6 +62,9 @@ module.exports = function(grunt) {
 					'app',
 					'BridgeTalk',
 					'Document',
+					'ElementPlacement',
+					'ExportOptionsJPEG',
+					'ExportType',
 					'ExternalObject',
 					'File',
 					'Folder',
@@ -170,5 +174,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('docs', ['os_spec', 'jsdoc:dist']);
 	grunt.registerTask('tests', ['concat', 'jshint', 'sed']);
 	// Default task.
-	grunt.registerTask('default', ['concat', 'os_spec', 'jsdoc:dist', 'jshint:estk', 'sed']);
+	//grunt.registerTask('default', ['concat', 'os_spec', 'jsdoc:dist', 'jshint:estk', 'sed']);
+	grunt.registerTask('default', ['concat', 'os_spec', 'jshint:estk', 'sed']);
 };
