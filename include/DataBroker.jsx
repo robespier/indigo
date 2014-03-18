@@ -12,9 +12,9 @@ Indigo.DataBroker = function() {};
 Indigo.DataBroker.prototype.tempPath = '/w/tmp/';
 
 /**
- * @prop {string} httpPart Адрес роутера в http запросе
+ * @prop {string} httpPart Выделим отедльный маршрут для передачи данных 
  */
-Indigo.DataBroker.prototype.httpPart = 'getJobs/';
+Indigo.DataBroker.prototype.httpPart = 'data/';
 
 /**
  * Сериализация объекта в согласованный формат
