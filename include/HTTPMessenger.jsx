@@ -87,7 +87,7 @@ Indigo.HTTPMessenger.prototype.get = function(from) {
  * @return {array} data Array of Job objects
  */
 Indigo.HTTPMessenger.prototype.fetchJobs = function() {
-	var from = this.remote + this.dataBroker.getURI();
+	var from = this.remote + this.dataBroker.getURI() + 'fetchJobs';
 	var response = this.get(from);
 	var data = this.dataBroker.decode(response);
 	return data;

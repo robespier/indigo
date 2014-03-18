@@ -6,19 +6,17 @@ Indigo.BlankComposer = function() {};
 
 Indigo.BlankComposer.prototype = new Indigo.BlankComposer();
 Indigo.BlankComposer.prototype.constructor = Indigo.BlankComposer;
+
+Indigo.BlankComposer.prototype.setup = function(data) {
+	this.dataInput = data;
+};
+
 Indigo.BlankComposer.prototype.run = function() {
 	var workFolder = new Folder ('D:\\work'); //Ссылка на рабочий каталог
 	var blank = new File ('D:\\tmp\\blank.ai'); //Ссылка на файл blank.ai
 	var etc = new File ('D:\\tmp\\spaklevka_08_klei.eps'); //Ссылка на файл этикетки
 
-	// Считываем данные из файла
-	var db_name = 'db_emulation';
-	var tempFolder = new Folder('D:\\work\\temp');
-	var tempFile = new File(tempFolder + '\\' + db_name + '.txt');
-	tempFile.open('r');
-	var data = tempFile.read();
-	var dataInput = eval(data);
-	tempFile.close;
+	var dataInput = this.dataInput;
 
 	// Подмешиваем специфических данных
 	// Текущая дата
