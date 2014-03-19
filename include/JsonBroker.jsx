@@ -95,8 +95,13 @@ Indigo.JsonBroker.prototype.json_encode = function(obj, jsonString) {
 			}
 			if (Pocient instanceof Object) {
 				jsonString += '"' + i + '":' + '{' + this.json_encode(Pocient, '') + '},';
-				
+				continue;
+			}
+			if (typeof(Pocient) === 'boolean') {
+				var jsonBool = Pocient ? "true" : "false";
+				jsonString += '"' + i + '":' + jsonBool + ',';
 			} else {
+				// Будем считать, что это string
 				// Напрааа-во!
 				// (Повернуть все слэши в "нужную" сторону, чтоб не париться на стороне сервера)
 				var slashString = Pocient;
