@@ -11,41 +11,82 @@ Indigo.BlankComposer.prototype.setup = function(data) {
 	this.dataInput = data;
 };
 
-Indigo.BlankComposer.prototype.run = function() {
-	var workFolder = new Folder ('D:\\work'); //Ссылка на рабочий каталог
-	var blank = new File ('D:\\tmp\\blank.ai'); //Ссылка на файл blank.ai
-	var etc = new File ('D:\\tmp\\spaklevka_08_klei.eps'); //Ссылка на файл этикетки
-
-	var dataInput = this.dataInput;
-
-	// Подмешиваем специфических данных
-	// Текущая дата
+/**
+ * Изменение/дополнения данных, пришедших их внешнего источника
+ */
+Indigo.BlankComposer.prototype.dataMixin = function() {
+	// Добавить текущую дату в формате 12.03.2014
+	// todo: реализовать нормальный паддинг дат нулями
 	var d = new Date();
-	dataInput.date = d.getDate() + '.0' + (d.getMonth()+1) + '.' + d.getFullYear();
+	this.dataInput.date = d.getDate() + '.0' + (d.getMonth()+1) + '.' + d.getFullYear();
+};
 
-	// Если внедрять пустой бланк заказа на страницу с этикеткой, имена TextFrame-ов
-	// в бланке похерятся, и пройтись в цикле по ним будет уже невозможно.
-	// Поэтому сохраняем заполненный бланк заказа во временной директории,
-	// импортируем заполненный бланк и по концовке работы скрипта удалим его.
+/**
+ * Заполняем бланк заказа
+ *
+ * Замысел:
+ *   сопоставить ключи объекта dataInput (который приехал из внешнего источника данных) 
+ *   с именами полей в бланке заказа (аттрибуты 'name' объектов TextFrame, к ним можно обращаться по имени), 
+ *   затем заполнить значения текстфреймов значениями из dataInput;
+ *
+ * Однако:
+ *   если внедрять пустой бланк заказа на страницу с этикеткой, имена текстфреймов 
+ *   в бланке похерятся, и сопоставить их с ключами dataInput будет, увы, невозможно.
+ *
+ * Поэтому:
+ *   заполним бланк "в оригинале", пока имена текстфреймов доступны; 
+ *   сохраним его во временной директории (Folder.temp -- это свойство _класса_ File), 
+ *     обычно это системная временная директория текущего пользователя Windows; 
+ *   импортируем заполненный бланк в файл этикетки;
+ *   а по концовке работы скрипта удалим этот файл;
+ */
+Indigo.BlankComposer.prototype.fillBlank = function() {
+	var blank = new File (Indigo.config.blankFile);
+	var dataInput = this.dataInput;
 	// Открываем бланк заказа
 	app.open(blank);
 	var blankDoc = app.activeDocument;
 	var blankLayer = blankDoc.layers['blank'];
-	// Заполняем бланк заказа
+	// Заполняем бланк закака
 	for (var key in dataInput) {
 		if (dataInput.hasOwnProperty(key)) {
 			if (typeof(dataInput[key]) === 'boolean') {
 				dataInput[key] = dataInput[key] ? 'X' : ' ';
 			}
-			blankLayer.pageItems[key].contents = dataInput[key];
+			// Заполняем только те поля, которые есть в бланке
+			try {
+				blankLayer.pageItems[key].contents = dataInput[key];
+			}
+			// Остальные свойства dataInput могут служить другим целям
+			catch(e) {
+				continue;
+			}
 		}
 	}
-	var tempBlank = new File(Folder.temp + '\\blank_' + new Date().getTime() + '.ai');
-	blankDoc.saveAs(tempBlank);
+	this.tempBlank = new File(Folder.temp + '\\blank_' + new Date().getTime() + '.ai');
+	blankDoc.saveAs(this.tempBlank);
 	blankDoc.close();
-	
+};
+
+Indigo.BlankComposer.prototype.run = function() {
+
+	this.dataMixin();
+	this.fillBlank();
+
+	var etc = new File (this.dataInput.label);
+
 	// Открываем макет (файл этикетки)
-	app.open (etc);	
+	try {
+		app.open (etc);
+	}
+	catch(e) {
+		throw {
+			message: e.message,
+			source: 'BlankComposer',
+			severity: 'error',
+			jobid: this.dataInput._id
+		};
+	}
 	var myDoc = app.activeDocument; 
 	// Создаем слой для бланка, называем его именем blank и помещаем его в самый верх в пачке слоев документа
 	var bLayer = myDoc.layers.add();
@@ -62,7 +103,7 @@ Indigo.BlankComposer.prototype.run = function() {
 
 	// Загружаем предварительно заполненный бланк из временной директории
 	var blank_template = myDoc.placedItems.add();
-	blank_template.file = tempBlank;
+	blank_template.file = this.tempBlank;
 
 	// Определяем центр шаблона бланка
 	var blank_xPos = cut_xPos - (blank_template.width/2);
@@ -85,5 +126,5 @@ Indigo.BlankComposer.prototype.run = function() {
 	myDoc.close(SaveOptions.DONOTSAVECHANGES);
 
 	// Удаляем заполненный бланк из временной директории
-	tempBlank.remove();
+	this.tempBlank.remove();
 };

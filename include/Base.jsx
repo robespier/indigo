@@ -30,4 +30,12 @@ var Indigo = Indigo || {
 	 * @memberof Indigo
 	 */
 	BLACK : 4,
+
+	/**
+	 * Объект для хранения конфигурации приложения
+	 * @memberof Indigo
+	 */
+	config : {
+		blankFile : 'D:\\tmp\\blank.ai'
+	}
 };
