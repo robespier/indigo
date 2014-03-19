@@ -14,7 +14,7 @@ Indigo.HTTPMessenger.prototype.constructor = Indigo.HTTPMessenger;
 /**
  * @prop {string} remote Адрес Web-сервера
  */
-Indigo.HTTPMessenger.prototype.remote = "http://indigo.aicdr.pro:8080/";
+Indigo.HTTPMessenger.prototype.remote = Indigo.config.webserver;
 
 /**
  * @protected
@@ -37,15 +37,8 @@ Indigo.HTTPMessenger.prototype.receive = function(type, data) {
 };
 
 Indigo.HTTPMessenger.prototype.send = function(type, data) {
-	var parcel = this.dataBroker.encode(data);
-	switch(type) {
-		case "error":
-			this.post(parcel);
-		break;
-		case "info":
-			this.post(parcel);
-		break;
-	}
+	data.path = type;
+	this.post(data);
 };
 
 /**
@@ -54,12 +47,13 @@ Indigo.HTTPMessenger.prototype.send = function(type, data) {
  * @protected
  */
 Indigo.HTTPMessenger.prototype.post = function(message) {
-	var http = new HttpConnection(this.remote);	
-	//var parcel = "resp=" + data;
-	var parcel = "XDEBUG_SESSION_START=netbeans-xdebug" + "&" + "resp=" + message;
+	var httpPath = this.remote + this.dataBroker.getURI() + message.path;
+	var http = new HttpConnection(httpPath);
+	delete message.path;
+	var parcel = this.dataBroker.encode(message);
 	http.mime = "application/x-www-form-urlencoded";
 	http.requestheaders = ["User-Agent", "Indigo 1.0"];
-	http.request = parcel;
+	http.request = 'parcel=' + parcel;
 	http.method = "POST";
 	http.execute();
 	http.close();

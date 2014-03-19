@@ -36,6 +36,7 @@ var Indigo = Indigo || {
 	 * @memberof Indigo
 	 */
 	config : {
-		blankFile : 'D:\\tmp\\blank.ai'
+		blankFile : 'D:\\tmp\\blank.ai',
+		webserver : 'http://indigo.aicdr.pro:8080/'
 	}
 };
