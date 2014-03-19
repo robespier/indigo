@@ -141,7 +141,7 @@ module.exports = function(grunt) {
 			},
 			nodejs: {
 				files: '<%= jshint.nodejs.src %>',
-				tasks: ['jshint']
+				tasks: ['jshint:nodejs']
 			},
 			/**
 			 * С сетевого диска не работает;
