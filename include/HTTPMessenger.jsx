@@ -38,6 +38,10 @@ Indigo.HTTPMessenger.prototype.receive = function(type, data) {
 
 Indigo.HTTPMessenger.prototype.send = function(type, data) {
 	data.path = type;
+	// При возникновении ошибки исходный код пересылать не обязательно
+	if (type === 'error' && data.source) {
+		delete data.source;
+	}
 	this.post(data);
 };
 
