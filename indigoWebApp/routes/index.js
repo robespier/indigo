@@ -5,6 +5,30 @@
 
 var MongoClient = require('mongodb').MongoClient;
 
+/**
+ * Закодировать не-ASCII символы в текстовых полях передаваемого объекта
+ *
+ * Похоже, что объект http из Adobe webaccesslib.dll кладёт с пробором на кодировку ответа. 
+ * Ответ уходит в utf8 (проверено в Wireshark), однако в http.response оказывается хрень.
+ * Установка http.responseencoding='utf8', как показано в документации Adobe, не помогает.
+ *
+ * Поэтому: здесь закодируем кириллицу в encodeURIComponent, а в Иллюстраторе вытащим ее 
+ * обратно.
+ *
+ * @todo Рекурсивный обход объекта
+ *
+ * @param {object} 
+ * @return {object}
+ */
+function encodeAdobe(obj) {
+	Object.keys(obj).forEach(function(key) {
+		if (typeof(obj[key]) === 'string') {
+			obj[key] = encodeURIComponent(obj[key]);
+		}
+	});
+	return obj;
+}
+
 exports.data = function(req,res) {
 	var megaSwitch = {
 		error: function() {
@@ -25,9 +49,10 @@ exports.data = function(req,res) {
 			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
 				var jobsCollection = db.collection('indigoJobs');
 				jobsCollection.find().nextObject(function(err, parcel) {
+					var adobed = encodeAdobe(parcel); 
 					res.json( 200, [{ 
 						action: 'BlankComposer',
-						data: parcel }]
+						data: adobed }]
 					);
 					res.end();
 				});

@@ -84,7 +84,7 @@ Indigo.BlankComposer.prototype.run = function() {
 	catch(e) {
 		throw {
 			message: e.message,
-			source: 'BlankComposer',
+			source: this.name,
 			severity: 'error',
 			jobid: this.dataInput._id
 		};

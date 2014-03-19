@@ -61,7 +61,7 @@ Indigo.JsonBroker.prototype.toJSON = function (obj) {
 Indigo.JsonBroker.prototype.fromJSON = function(string) {
 	try {
 		var obj = eval( '(' + string + ')' );
-		return obj;
+		return this.json_decode(obj);
 	} catch (e) {
 		this.saveString(string);
 	}
@@ -70,6 +70,20 @@ Indigo.JsonBroker.prototype.fromJSON = function(string) {
 /**
  * Protected functions
  */
+
+Indigo.JsonBroker.prototype.json_decode = function(obj) {
+	for (var key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			if (typeof(obj[key]) === 'string') {
+				obj[key] = decodeURIComponent(obj[key]);
+			}
+			if (typeof(obj[key]) === 'object') {
+				obj[key] = this.json_decode(obj[key]);
+			}
+		}
+	}
+	return obj;
+},
 
 /**
  * Преобразование объекта в json формат. 
@@ -104,10 +118,7 @@ Indigo.JsonBroker.prototype.json_encode = function(obj, jsonString) {
 				// Будем считать, что это string
 				// Напрааа-во!
 				// (Повернуть все слэши в "нужную" сторону, чтоб не париться на стороне сервера)
-				var slashString = Pocient;
-				while ( slashString.indexOf('\\') >= 0) {
-					slashString = slashString.replace('\\','/');
-				}
+				var slashString = Pocient.replace(/\\/g,'/');
 				//
 				var cleanString = slashString.toSource().replace('(new String(','').replace('))','');
 				if (obj instanceof Array) {
