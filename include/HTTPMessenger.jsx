@@ -50,6 +50,9 @@ Indigo.HTTPMessenger.prototype.post = function(message) {
 	var httpPath = this.remote + this.dataBroker.getURI() + message.path;
 	var http = new HttpConnection(httpPath);
 	delete message.path;
+	if (message.async) {
+		http.async = true;
+	}
 	var parcel = this.dataBroker.encode(message);
 	http.mime = "application/x-www-form-urlencoded";
 	http.requestheaders = ["User-Agent", "Indigo 1.0"];

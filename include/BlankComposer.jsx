@@ -7,6 +7,8 @@ Indigo.BlankComposer = function() {};
 Indigo.BlankComposer.prototype = new Indigo.BlankComposer();
 Indigo.BlankComposer.prototype.constructor = Indigo.BlankComposer;
 
+Indigo.BlankComposer.prototype.name = 'BlankComposer';
+
 Indigo.BlankComposer.prototype.setup = function(data) {
 	this.dataInput = data;
 };
@@ -127,4 +129,7 @@ Indigo.BlankComposer.prototype.run = function() {
 
 	// Удаляем заполненный бланк из временной директории
 	this.tempBlank.remove();
+
+	// Отчитываемся перед веб-сервером:
+	return 0;
 };

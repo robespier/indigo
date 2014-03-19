@@ -23,9 +23,15 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
 		var action = jobs[jb].action;
 		var data = jobs[jb].data;
 		var worker = new Indigo[action]();
+		// Отправить асинхронное уведомление о начале работы над заданием
+		var feedback = { async: true, jobid: data._id, source: worker.name, info: 'start' };
+		this.messenger.send('info', feedback);
 		try {
 			worker.setup(data);
-			worker.run();
+			feedback.result = worker.run();
+			feedback.info = 'finish';
+			// Отправить уведомление о результатах работы
+			this.messenger.send('info', feedback);
 		} catch (err) {
 			this.messenger.send('error', err);
 		}

@@ -11,11 +11,16 @@ exports.data = function(req,res) {
 			var message = {};
 			if (req.method === 'POST') {
 				message = JSON.parse(req.body.parcel);
-				console.log('here');
 			}
 			res.end();
 		},
-		info: function() { },
+		info: function() {
+			var message = {};
+			if (req.method === 'POST') {
+				message = JSON.parse(req.body.parcel);
+			}
+			res.end();
+		},
 		fetchJobs: function() {
 			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
 				var jobsCollection = db.collection('indigoJobs');
