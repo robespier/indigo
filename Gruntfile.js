@@ -57,6 +57,7 @@ module.exports = function(grunt) {
 				latedef: true,
 				newcap: true,
 				noarg: true,
+				node: true,
 				// Illustrator stuff, not known by JSHint:
 				predef: [
 					'app',
@@ -93,6 +94,9 @@ module.exports = function(grunt) {
 			tests: {
 				src: ['<%= concat.tests.dest %>'],
 			},
+			nodejs: {
+				src: ['indigoWebApp/app.js', 'indigoWebApp/routes/*.js', 'Gruntfile.js'],
+			}
 		},
 		env: {
 			// jsdoc вяло тербует пеменную среды JAVA_HOME
@@ -133,11 +137,11 @@ module.exports = function(grunt) {
 		watch: {
 			estk: {
 				files: '<%= concat.estk.src %>',
-				tasks: ['concat', 'jshint']
+				tasks: ['concat', 'jshint', 'sed']
 			},
-			jsdoc: {
-				files: '<%= jsdoc.dist.src %>',
-				tasks: 'docs',
+			nodejs: {
+				files: '<%= jshint.nodejs.src %>',
+				tasks: ['jshint']
 			},
 			/**
 			 * С сетевого диска не работает;
@@ -174,6 +178,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('docs', ['os_spec', 'jsdoc:dist']);
 	grunt.registerTask('tests', ['concat', 'jshint', 'sed']);
 	// Default task.
-	//grunt.registerTask('default', ['concat', 'os_spec', 'jsdoc:dist', 'jshint:estk', 'sed']);
 	grunt.registerTask('default', ['concat', 'os_spec', 'jshint:estk', 'sed']);
 };
