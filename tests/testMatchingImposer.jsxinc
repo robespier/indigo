@@ -12,7 +12,7 @@ Indigo.Tests.testMatchingImposer.prototype.name = 'testMatchingImposer';
 Indigo.Tests.testMatchingImposer.prototype.setUp = function () {
 	this.pocient = new Indigo.MatchingImposer(this.app);
 	this.pocient.setup(this.getMockJob());
-	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
+	this.pocient.templateFolder = this.testsFilesFolder + '/' + this.name;
 };
 
 /**
@@ -24,7 +24,7 @@ Indigo.Tests.testMatchingImposer.prototype.setUp = function () {
 Indigo.Tests.testMatchingImposer.prototype.run = function() {
 	this.pocient.run();
 	this.assemblies = [
-		this.testsFolder + this.testCommonPath + '001/d9111001_002_UTV_1.pdf',
+		this.testsFilesFolder + this.testCommonPath + '001/d9111001_002_UTV_1.pdf',
 		this.pocient.hotFolder + '/' + 'd9111001_002_UTV_1.pdf',
 	];
 	for (var i=0, l=this.assemblies.length; i < l; i++) {

@@ -25,17 +25,18 @@ Indigo.Tests.testJsonBroker.prototype.run = function() {
 		object: {
 			"bar" : "foo",
 		},
+		path: "\\var\\log\\\\messages"
 	};
-	var expectedString = '{"integer":55,"string":"Arrr","array":["\\u0434\\u0430","no"],"object":{"bar":"foo"}}'; 
+	var expectedString = '{"integer":55,"string":"Arrr","array":["\\u0434\\u0430","no"],"object":{"bar":"foo"},"path":"/var/log//messages"}';
 	var encodedObj = this.pocient.encode(encodeObj);
 	var resultEnc = this.assertEq(encodedObj, expectedString);
 	this.log(resultEnc, '.Encode');
 
 	// Decode test
-	var encodedString = '{"id":55,"result":"Хо-хо!"}';
+	var encodedString = '{"id":55,"result":"%D0%A5%D0%BE-%D1%85%D0%BE!"}';
 	var expectedObj = {
 		id: 55,
-		result: "Хо-хо!",
+		result: "Хо-хо!"
 	};
 	var decodedObj = this.pocient.decode(encodedString);
 	var resultDec = this.assertObjectsSame(decodedObj,expectedObj);

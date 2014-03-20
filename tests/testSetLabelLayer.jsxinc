@@ -9,7 +9,7 @@ Indigo.Tests.testSetLabelLayer.prototype.name = 'testSetLabelLayer';
 Indigo.Tests.testSetLabelLayer.prototype.setUp = function () {
 	this.pocient = new Indigo.BaseImposer(this.app);
 	this.pocient.setup(this.getMockJob());
-	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
+	this.pocient.templateFolder = this.testsFilesFolder + '/' + this.name;
 	this.pocient.openTemplate();
 };
 

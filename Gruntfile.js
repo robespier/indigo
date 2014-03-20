@@ -143,6 +143,10 @@ module.exports = function(grunt) {
 				files: '<%= jshint.nodejs.src %>',
 				tasks: ['jshint:nodejs']
 			},
+			tests: {
+				files: '<%= concat.tests.src %>',
+				tasks: ['concat:tests','jshint:tests', 'sed']
+			}
 			/**
 			 * С сетевого диска не работает;
 			 * С локального работает, но тогда теряет смысл;

@@ -12,7 +12,7 @@ Indigo.Tests.testAssemblyImposer.prototype.name = 'testAssemblyImposer';
 Indigo.Tests.testAssemblyImposer.prototype.setUp = function () {
 	this.pocient = new Indigo.AssemblyImposer(this.app);
 	this.pocient.setup(this.getMockJob());
-	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
+	this.pocient.templateFolder = this.testsFilesFolder + '/' + this.name;
 };
 
 /**
@@ -25,8 +25,8 @@ Indigo.Tests.testAssemblyImposer.prototype.setUp = function () {
 Indigo.Tests.testAssemblyImposer.prototype.run = function() {
 	this.pocient.run();
 	this.assemblies = [
-		this.testsFolder + this.testCommonPath + '001/d9111001_spaklevka_08_klei.pdf',
-		this.testsFolder + this.testCommonPath + '002/d9111002_spaklevka_1_5_klei.pdf',
+		this.testsFilesFolder + this.testCommonPath + '001/d9111001_spaklevka_08_klei.pdf',
+		this.testsFilesFolder + this.testCommonPath + '002/d9111002_spaklevka_1_5_klei.pdf',
 		this.pocient.hotFolder + '/' + 'd9111001_spaklevka_08_klei.pdf',
 		this.pocient.hotFolder + '/' + 'd9111002_spaklevka_1_5_klei.pdf',
 	];

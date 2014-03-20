@@ -9,7 +9,7 @@ Indigo.Tests.testOpenTemplate.prototype.name = "testOpenTemplate";
 Indigo.Tests.testOpenTemplate.prototype.setUp = function () {
 	this.pocient = new Indigo.AssemblyImposer(this.app);
 	this.pocient.setup(this.getMockJob());
-	this.pocient.templateFolder = this.testsFolder + '/' + this.name;
+	this.pocient.templateFolder = this.testsFilesFolder + '/' + this.name;
 };
 
 /**

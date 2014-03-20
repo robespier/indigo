@@ -22,7 +22,8 @@ Indigo.Tests = Indigo.Tests || {
  * Главный класс для выполнения тестов
  *
  * @prop {Applicatin} app Illustrator Application object
- * @prop {Folder} testsFolder Место в файловой системе, где тесты живут
+ * @prop {string} testsFolder Место в файловой системе, где тесты живут
+ * @prop {string} testsFilesFolder Место, где хранятся графические файлы для тестов
  * @prop {array} testNames Массив имён всех доступных тестов
  * @prop {object} pocient Тестируемый класс
  * @constructor
@@ -31,6 +32,7 @@ Indigo.Tests = Indigo.Tests || {
 Indigo.Tests.testSuite = function(app) {
 	this.app = app;
 	this.testsFolder = '/w/tests/';
+	this.testsFilesFolder = '/d/tmp/tests-indigo/';
 	this.testsNames = [];
 };
 
@@ -47,8 +49,6 @@ Indigo.Tests.testSuite.prototype = {
 		var testsFiles = testsSources.getFiles('test*.jsxinc');
 		for (var i=0, l = testsFiles.length; i < l; i++) {
 			var testFileName = testsFiles[i].name;
-			// Теперь этим занимается Grunt:
-			// $.evalFile(this.testsFolder + '\\' + testFileName);
 			var testName = testFileName.replace('.jsxinc','');
 			this.testsNames.push(testName);
 		}
@@ -71,10 +71,7 @@ Indigo.Tests.testSuite.prototype = {
 	runAllTests: function() {
 		for (var i=0, l = this.testsNames.length; i < l; i++) {
 			var className = this.testsNames[i];
-			/*
-			 * TODO: Как избавиться от eval?
-			 */
-			var test = eval('new Indigo.Tests.' + className);
+			var test = new Indigo.Tests[className]();
 			this.execute(test);
 		}
 		return 'AllTests done';
@@ -102,8 +99,8 @@ Indigo.Tests.testSuite.prototype = {
 			"separations" : 'CMYK',
 			"roll" : '2',
 			"print_list" : [
-				{ "name" : this.testsFolder + this.testCommonPath + '001/spaklevka_08_klei.eps' },
-				{ "name" : this.testsFolder + this.testCommonPath + '002/spaklevka_1_5_klei.eps' },
+				{ "name" : this.testsFilesFolder + this.testCommonPath + '001/spaklevka_08_klei.eps' },
+				{ "name" : this.testsFilesFolder + this.testCommonPath + '002/spaklevka_1_5_klei.eps' },
 			],
 		};
 		return job;
@@ -132,7 +129,7 @@ Indigo.Tests.testSuite.prototype = {
 	 */
 	
 	assertUndefined: function (obj) {
-		return (obj === undefined) ? Indigo.Tests.PASS : Indigo.Tests.FAIL;
+		return (typeof(obj) === 'undefined') ? Indigo.Tests.PASS : Indigo.Tests.FAIL;
 	},
 
 	/**
