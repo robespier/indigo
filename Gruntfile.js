@@ -179,7 +179,7 @@ module.exports = function(grunt) {
 	}
 	grunt.registerTask('os_spec', envTasks);
 
-	grunt.registerTask('docs', ['os_spec', 'jsdoc:dist']);
+	grunt.registerTask('docs', ['concat', 'os_spec', 'jsdoc:dist', 'sed']);
 	grunt.registerTask('tests', ['concat', 'jshint', 'sed']);
 	// Default task.
 	grunt.registerTask('default', ['concat', 'os_spec', 'jshint:estk', 'sed']);
