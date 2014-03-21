@@ -31,6 +31,17 @@ Indigo.BlankComposer.prototype.dataMixin = function() {
 	var d = new Date();
 	var dsep = '.';
 	this.dataInput.date = d.getDate() + dsep + Indigo.lpad((d.getMonth()+1),'0',2) + dsep + d.getFullYear();
+
+	// Замена `true` на 'X', а `false` на ' '
+	// Эту замену можно делать в методе заполнения бланка, и этим сэкономить один проход по `dataInput`;
+	// Однако адаптация данных у нас в этом методе собрана, поэтому быть ему тут.
+	for (var key in this.dataInput) {
+		if (this.dataInput.hasOwnProperty(key)) {
+			if (typeof(this.dataInput[key]) === 'boolean') {
+				this.dataInput[key] = this.dataInput[key] ? 'X' : ' ';
+			}
+		}
+	}
 };
 
 /**
@@ -81,11 +92,6 @@ Indigo.BlankComposer.prototype.fillBlank = function() {
 	// Заполняем бланк закака
 	for (var key in dataInput) {
 		if (dataInput.hasOwnProperty(key)) {
-			// todo Логичнее (но не оптимальнее) вынести эту замену
-			// в this.dataMixin()?
-			if (typeof(dataInput[key]) === 'boolean') {
-				dataInput[key] = dataInput[key] ? 'X' : ' ';
-			}
 			// Заполняем только те поля, которые есть в бланке
 			try {
 				blankLayer.pageItems[key].contents = dataInput[key];
