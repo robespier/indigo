@@ -13,6 +13,7 @@ Indigo.Tests.testBlankComposer.prototype.setUp = function() {
 		_id : "532924337fd99ca1d7f8de84",
 		customer : "Пищехимпродукт ООО",
 		designer : "Сергеев Р.",
+		date : '21.03.2014',
 		diam : false,
 		ink_0 : false,
 		ink_1 : true,

@@ -27,10 +27,13 @@ Indigo.BlankComposer.prototype.setup = function(data) {
  * То, что не логично хранить в базе данных, можно навесить тут
  */
 Indigo.BlankComposer.prototype.dataMixin = function() {
-	// Добавить текущую дату в формате 12.03.2014
+	// Добавить текущую дату в формате dd.mm.yyyy
+	// Если дата приехала извне -- ничего не добавлять
 	var d = new Date();
 	var dsep = '.';
-	this.dataInput.date = d.getDate() + dsep + Indigo.lpad((d.getMonth()+1),'0',2) + dsep + d.getFullYear();
+	if (typeof(this.dataInput.date) === 'undefined') {
+		this.dataInput.date = d.getDate() + dsep + Indigo.lpad((d.getMonth()+1),'0',2) + dsep + d.getFullYear();
+	}
 
 	// Замена `true` на 'X', а `false` на ' '
 	// Эту замену можно делать в методе заполнения бланка, и этим сэкономить один проход по `dataInput`;
