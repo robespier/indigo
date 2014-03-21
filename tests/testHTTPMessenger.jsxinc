@@ -1,0 +1,74 @@
+/**
+ *
+ * @constructor
+ */
+Indigo.Tests.testHTTPMessenger = function() {};
+Indigo.Tests.testHTTPMessenger.prototype = new Indigo.Tests.testSuite(app);
+Indigo.Tests.testHTTPMessenger.prototype.constructor = Indigo.Tests.testHTTPMessenger;
+Indigo.Tests.testHTTPMessenger.prototype.name = 'testHTTPMessenger';
+
+/**
+ * `nodejs` (или кто там на 8080 порту сидит) должен быть готов 
+ * к такому повороту событий: ему будут слать тестовые запросы
+ */
+Indigo.Tests.testHTTPMessenger.prototype.setUp = function() {
+
+	var webaccesslib = new ExternalObject('lib:' + Indigo.config.webaccesslib);
+	
+	// Чтобы `jshint` не вопил по поводу неиспользованной переменной, 
+	// задействуем `webaccesslib` хоть как-нибудь:
+	if (typeof(webaccesslib) === 'undefined') { return; }
+	
+	// Фальшивый databroker;
+	var databroker = {
+		getURI: function() {
+			return 'tests/';
+		},
+		decode: function(data) {
+			return data.toString();
+		},
+		encode: function(data) {
+			return data.toString();
+		}
+	};
+	this.pocient = new Indigo.HTTPMessenger(databroker);
+};
+
+Indigo.Tests.testHTTPMessenger.prototype.run = function() {
+	// Проверка получнеия списка заданий с помощью `HTTP GET`
+	var jobs = this.assertEq(this.pocient.receive('fetchJobs'),'fetchjob.test');
+	this.log(jobs, '.FetchJobs');
+	
+	// Проверка асинхронных уведомлений
+	//
+	// Механизм асинхронных вызовов достаточно понятно описан в документации,  
+	// JavaScript Tools Guide CS3.pdf, стр. 171;
+	//
+	// Своими словами: чтобы объект `http` вернул результат асинхронного вызова,  
+	// надо дрочить его метод `pump()` до тех пор, пока `http.lastread` не станет  
+	// отрицательным, а `http.status` не станет равным `HttpConnection.statusCompleted`;
+	//
+	// Очень сильно надеюсь в реальных условиях обойтись без этой фигни, так как  
+	// контроллеру не очень интересна реакция web-сервера на уведомление.
+	//
+	this.pocient.send('info', {async: true});
+	// Если после 10 'пампов' результата так и нет, то уходим из цикла
+	var fuse = 10;
+	var expectedResponse = 'info.test';
+	var actualResponse = '';
+	while ( fuse > 0 ) {
+		var response = this.pocient._pump();
+		if (typeof(response) === 'boolean') {
+			fuse--;
+			continue;
+		} else {
+			actualResponse = response.response;
+			break;
+		}
+	}
+	var result = this.assertEq(expectedResponse, actualResponse);
+	this.log(result, '.Async Message');
+};
+
+Indigo.Tests.testHTTPMessenger.prototype.tearDown = function() {
+};

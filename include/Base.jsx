@@ -36,7 +36,8 @@ var Indigo = Indigo || {
 	 * @memberof Indigo
 	 */
 	config : {
-		blankFile : 'D:\\tmp\\blank.ai',
+		blankFile : 'D:/tmp/blank.ai',
+		webaccesslib: 'D:/bin/Adobe/Adobe Bridge CS3/webaccesslib.dll',
 		webserver : 'http://indigo.aicdr.pro:8080/'
 	}
 };

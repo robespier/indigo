@@ -59,3 +59,7 @@ Indigo.Controller.prototype.run = function() {
 		this.processJobs(jobs);
 	}
 };
+
+Indigo.Controller.prototype.cleanup = function() {
+	this.messenger.cleanup();
+};

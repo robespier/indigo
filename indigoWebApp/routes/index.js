@@ -64,3 +64,18 @@ exports.data = function(req,res) {
 
 	megaSwitch[action]();
 };
+
+exports.tests = function(req, res) {
+	switch(req.params[1]) {
+		case 'fetchJobs':
+			res.send(200, 'fetchjob.test');
+		break;
+		case 'info':
+			res.send(200, 'info.test');
+		break;
+		case 'error':
+			res.send(200, 'error.test');
+		break;
+	}
+	res.end();
+};

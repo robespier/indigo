@@ -6,6 +6,7 @@
  */
 Indigo.HTTPMessenger = function(dataBroker) {
 	this.dataBroker = dataBroker;
+	this.http = new HttpConnection();
 };
 
 Indigo.HTTPMessenger.prototype = new Indigo.Messenger();
@@ -17,9 +18,29 @@ Indigo.HTTPMessenger.prototype.constructor = Indigo.HTTPMessenger;
 Indigo.HTTPMessenger.prototype.remote = Indigo.config.webserver;
 
 /**
- * @protected
+ * Соединение закрываем в конце цикла жизни приложения
  */
-Indigo.HTTPMessenger.prototype.getConnection = function() {
+Indigo.HTTPMessenger.prototype.cleanup = function() {
+	this.http.close();
+};
+
+/**
+ * **Светим наружу метод `http.pump()`**
+ *
+ * Получение данных с асинхронного запроса (`http.async = true`).  
+ * Это как-бы для тестов только. В реальных условиях надеюсь *это* не использовать.
+ *
+ * @return {boolean} false -- данные ещё остались
+ */
+Indigo.HTTPMessenger.prototype._pump = function() {
+	var enough = true;
+	if (this.http.status >= HttpConnection.statusCompleted && this.http.lastread < 0) {
+		return this.http;
+	} else {
+		this.http.pump();
+		enough = false;
+	}
+	return enough;
 };
 
 /**
@@ -47,15 +68,19 @@ Indigo.HTTPMessenger.prototype.send = function(type, data) {
 
 /**
  * POST на сервер
- * @todo соединение не закрывать, кипалайв возможен
  * @protected
  */
 Indigo.HTTPMessenger.prototype.post = function(message) {
 	var httpPath = this.remote + this.dataBroker.getURI() + message.path;
-	var http = new HttpConnection(httpPath);
+	var http = this.http;
+	http.url = httpPath;
 	delete message.path;
 	if (message.async) {
 		http.async = true;
+		// Если передана колбэк-функция, навесить её
+		if (typeof(message.callback) === 'function') {
+			http.onCallback = message.callback;
+		}
 	}
 	var parcel = this.dataBroker.encode(message);
 	http.mime = "application/x-www-form-urlencoded";
@@ -63,21 +88,18 @@ Indigo.HTTPMessenger.prototype.post = function(message) {
 	http.request = 'parcel=' + parcel;
 	http.method = "POST";
 	http.execute();
-	http.close();
 };
 
 /**
  * GET на сервер
- * @todo соединение не закрывать, кипалайв возможен
  * @protected
  */
 Indigo.HTTPMessenger.prototype.get = function(from) {
-	var url = encodeURI(from);
-	var http = new HttpConnection(url);
+	var http = this.http;
+	http.url = encodeURI(from);
 	http.requestheaders = ["User-Agent", "Indigo 1.0"];
 	http.execute();
 	var response = http.response;
-	http.close();
 	return response;
 };
 
