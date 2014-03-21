@@ -1,0 +1,125 @@
+/**
+ *
+ * @constructor
+ */
+Indigo.Tests.testController = function() {};
+Indigo.Tests.testController.prototype = new Indigo.Tests.testSuite(app);
+Indigo.Tests.testController.prototype.constructor = Indigo.Tests.testController;
+Indigo.Tests.testController.prototype.name = 'testController';
+
+Indigo.Tests.testController.prototype.setUp = function() {
+	this.pocient = new Indigo.Controller();
+};
+
+Indigo.Tests.testController.prototype.run = function() {
+	// На каждом тесте будем подсовывать контроллеру
+	// фальшивую реализацию messenger
+
+	//
+	// Вызов несуществующей функции
+	//
+	this.pocient.messenger = {
+		test: this,
+		receive: function() {
+			return [{ action: 'invalidAction', data: { description: 'Invalid Action' } }];
+		},
+		send : function(err, data) {
+			var rst = this.test.assertEq(err, 'error');
+			this.test.log(rst, '.Invalid Action Status');
+			var rms = this.test.assertEq(data.message, 'Invalid action: invalidAction');
+			this.test.log(rms, '.Invalid Action Message');
+		}
+	};
+	this.pocient.run();
+	delete this.pocient.messenger;
+
+	//
+	// Ошибка запроса заданий
+	// 
+	this.pocient.messenger = {
+		receive: function() {
+			return;
+		}
+	};
+	var undefJobs = this.assertEq(this.pocient.run(), 'Job fetch error');
+	this.log(undefJobs, '.FetchJobs undefined');
+	delete this.pocient.messenger;
+
+	//
+	// Фальшивый worker
+	//
+	Indigo.testController = function() {};
+	Indigo.testController.prototype = {
+		name: 'testController',
+		setup: function(data) { return data; },
+		run: function() { return true;  }
+	};
+
+	//
+	// Оптимистический сценарий
+	//
+	this.pocient.messenger = {
+		test: this,
+		receive: function() {
+			return [{ 
+				action: 'testController',
+				data: {
+					_id: 'test',
+					description: 'Optimistic Case' 
+				} 
+			}];
+		},
+		send : function(type, data) {
+			if (type === 'info' && data.info === 'start') {
+				var rss = this.test.assertEq(data.jobid, 'test');
+				this.test.log(rss, '.Feedback start');
+				var wns = this.test.assertEq(data.source, 'testController');
+				this.test.log(wns, '.Feedback source start');
+			}
+			if (type === 'info' && data.info === 'finish') {
+				var rsf = this.test.assertEq(data.jobid, 'test');
+				this.test.log(rsf, '.Feedback finish');
+				var wnt = this.test.assertEq(data.result, true);
+				this.test.log(wnt, '.Worker result');
+				var wnf = this.test.assertEq(data.source, 'testController');
+				this.test.log(wnf, '.Feedback source finish');
+			}
+		}
+	};
+	this.pocient.run();
+	delete this.pocient.messenger;
+
+	//
+	// Пессимистический сценарий - `worker` падает с ошибкой
+	//
+	Indigo.testController.prototype.run = function() {
+		throw {
+			message: 'worker throw test'
+		};
+	};
+	this.pocient.messenger = {
+		test: this,
+		receive: function() {
+			return [{ 
+				action: 'testController',
+				data: {
+					_id: 'test',
+					description: 'Drama!' 
+				} 
+			}];
+		},
+		send : function(type, data) {
+			if (type === 'error') {
+				var rst = this.test.assertEq(type, 'error');
+				this.test.log(rst, '.Worker Crash Status');
+				var rms = this.test.assertEq(data.message, 'worker throw test');
+				this.test.log(rms, '.Worker Crash Message');
+			}
+		}
+	};
+	this.pocient.run();
+	delete this.pocient.messenger;
+};
+
+Indigo.Tests.testController.prototype.tearDown = function() {
+};

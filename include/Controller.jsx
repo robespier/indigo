@@ -22,10 +22,17 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
 	for (var jb=0, jl = jobs.length; jb < jl; jb++) {
 		var action = jobs[jb].action;
 		var data = jobs[jb].data;
-		var worker = new Indigo[action]();
+		var worker = {};
+		try {
+			worker = new Indigo[action]();
+		} catch (err) {
+			this.messenger.send('error', { message: 'Invalid action: ' + action });
+			continue;
+		}
 		// Отправить асинхронное уведомление о начале работы над заданием
 		var feedback = { async: true, jobid: data._id, source: worker.name, info: 'start' };
 		this.messenger.send('info', feedback);
+		// Запустить worker
 		try {
 			worker.setup(data);
 			feedback.result = worker.run();
