@@ -27,7 +27,17 @@
 
 В Extended Script Toolkit:
 
-* `Run.jxs`
+* `bin\Run.jsx`
+
+###Тесты
+
+Тесты собираются с общей сборкой, т.е. когда всем `grunt` наступает.
+
+В Extended Script Toolkit:
+
+* `bin\tests.js`
+
+Результаты видны в JavaScript Console.
 
 ###Сборка документации
 
