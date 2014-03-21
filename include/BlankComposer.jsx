@@ -28,9 +28,9 @@ Indigo.BlankComposer.prototype.setup = function(data) {
  */
 Indigo.BlankComposer.prototype.dataMixin = function() {
 	// Добавить текущую дату в формате 12.03.2014
-	// todo: реализовать нормальный паддинг дат нулями
 	var d = new Date();
-	this.dataInput.date = d.getDate() + '.0' + (d.getMonth()+1) + '.' + d.getFullYear();
+	var dsep = '.';
+	this.dataInput.date = d.getDate() + dsep + Indigo.lpad((d.getMonth()+1),'0',2) + dsep + d.getFullYear();
 };
 
 /**
