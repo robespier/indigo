@@ -26,7 +26,6 @@ module.exports = function(grunt) {
 					'include/AchtungImposer.jsx',
 					'include/MatchingImposer.jsx',
 					'include/BlankComposer.jsx',
-					'include/Job.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx',
 					'include/Messenger.jsx',
@@ -62,7 +61,6 @@ module.exports = function(grunt) {
 				// Illustrator stuff, not known by JSHint:
 				predef: [
 					'app',
-					'BridgeTalk',
 					'Document',
 					'ElementPlacement',
 					'ExportOptionsJPEG',
@@ -75,7 +73,6 @@ module.exports = function(grunt) {
 					'PathItem',
 					'PDFSaveOptions',
 					'SaveOptions',
-					'Socket',
 					'UserInteractionLevel',
 					'ZOrderMethod',
 				],

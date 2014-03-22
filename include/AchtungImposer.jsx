@@ -7,10 +7,11 @@
 Indigo.AchtungImposer = function() {};
 Indigo.AchtungImposer.prototype = new Indigo.BaseImposer(app);
 Indigo.AchtungImposer.prototype.constructor = Indigo.AchtungImposer;
+
 /**
  * @prop {string} achtungLabel Путь к файлу "Внимание..."
  */
-Indigo.AchtungImposer.prototype.achtungLabel = 'Y:\\ACHTUNG.eps';
+Indigo.AchtungImposer.prototype.achtungLabel = Indigo.config.achtungFile;
 
 /** 
  * Размещение этикетки на листе.

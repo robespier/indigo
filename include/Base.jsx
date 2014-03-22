@@ -1,8 +1,8 @@
 ///#target Illustrator-13
 
 /**
- * В Indigo собран код, работающий под управлением
- * Adobe Bridge или Adobe Extended Script Tool Kit
+ * В Indigo собран код, работающий под управлением  
+ * Adobe Extended Script Tool Kit (`estk`)
  * @namespace 
  */
 var Indigo = Indigo || {
@@ -36,6 +36,7 @@ var Indigo = Indigo || {
 	 * @memberof Indigo
 	 */
 	config : {
+		achtungFile: 'Y:/ACHTUNG.eps',
 		blankFile : 'D:/tmp/blank.ai',
 		webaccesslib: 'D:/bin/Adobe/Adobe Bridge CS3/webaccesslib.dll',
 		webserver : 'http://indigo.aicdr.pro:8080/'

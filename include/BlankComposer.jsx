@@ -255,5 +255,5 @@ Indigo.BlankComposer.prototype.run = function() {
 	this.cleanup();
 
 	// Отчитываемся перед веб-сервером:
-	return true;
+	return { done: true };
 };
