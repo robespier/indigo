@@ -30,12 +30,21 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
 			continue;
 		}
 		// Отправить асинхронное уведомление о начале работы над заданием
-		var feedback = { async: true, jobid: data._id, source: worker.name, info: 'start' };
+		var feedback = {
+			async: true,
+			host: $.getenv('computername'),
+			info: 'start',
+			jobid: data._id,
+			source: worker.name,
+			user: $.getenv('username') };
 		this.messenger.send('info', feedback);
+		var start = new Date().getTime();
 		// Запустить worker
 		try {
 			worker.setup(data);
 			feedback.result = worker.run();
+			// Затраты по времени в миллисекундах  
+			feedback.duration = new Date().getTime() - start;
 			feedback.info = 'finish';
 			// Отправить уведомление о результатах работы
 			this.messenger.send('info', feedback);
