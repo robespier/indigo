@@ -15,6 +15,13 @@
 		"monospaceLinks": false,
 		"default": {
 			"outputSourceFiles": true
-		}
-	}
+		},
+		"systemName"      : "Indigo",
+		"footer"          : "",
+		"navType"         : "vertical",
+		"theme"           : "spacelab",
+		"linenums"        : true,
+		"collapseSymbols" : false,
+		"inverseNav"      : true
+	},
 }
