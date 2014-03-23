@@ -62,7 +62,7 @@ current_date.contents = date;
 
 	// Уточняем размеры X и Y
 
-var cutRate = cut.width/cut.height;
+var cutRate = cut_path.width/cut_path.height;
 var labelRate = dataInput['sizeX']/dataInput['sizeY'];
 
 if (cutRate == labelRate) {
@@ -86,7 +86,7 @@ sizeY_label = a_items[1];
 sizeY_label.contents = dataInput['sizeY'];	
 		
 	}
-
+/*
 	// Диаметр этикетки (только для круглых)
 diam_label = a_items[3];
 diam_label.contents = dataInput['diam'];
@@ -248,3 +248,4 @@ myDoc.exportFile (fileSpec, type, exportOptions);
 							// Закрываем документ без сохранения
 
 myDoc.close (SaveOptions.DONOTSAVECHANGES);
+*/
