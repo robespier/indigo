@@ -1,0 +1,223 @@
+﻿<html>
+<head>
+<meta charset="utf-8">
+<title>Бланк заказа</title>
+</head>
+ 
+
+
+<body>
+  <table border="0">
+
+<tr>	<td>№ заказа</td>
+	<td><input type="text" size="40" value="order"></td>
+</tr>
+
+<tr>	<td>Заказчик</td>
+	<td><input type="text" size="40" value="customer"></td>
+</tr>
+
+<tr>	<td>Наименование заказа</td>
+	<td><input type="text" size="40"></td>
+</tr>
+
+<tr>	<td>Тип печати</td>
+	<td> 
+	<form>
+      <select size="1">
+      <option selected="selected">цифровая</option>
+      <option>флексо</option>
+     </select>
+    </form>
+	</td>
+</tr>
+
+<tr>	<td>Менеджер</td>
+	<td><input type="text" size="40"></td>
+</tr>
+
+<tr>	<td>Технолог</td>
+	<td>
+	<form>
+      <select size="1">
+      <option selected="selected">не определен</option>
+	<option>Альмухаметов А.</option>
+      <option>Павленкова Д.</option>
+      <option>Семенов А.</option>
+     </select>
+    </form></td>
+</tr>
+
+<tr>	<td>Тип этикетки</td>
+	<td>
+	<form>
+      <select size="1">
+      <option selected="selected">самоклеящаяся</option>
+      <option>термоусадочная</option>
+      <option>в оборот</option>
+      <option>in-mold</option>
+     </select>
+    </form></td>
+</tr>
+
+<tr>	<td>Штамп высечки</td>
+	<td>
+	<form>
+      <select size="1">
+      <option selected="selected">готовый</option>
+      <option>заказной</option>
+      <option>плоттер</option>
+      <option>без высечки</option>
+     </select>
+    </form></td>
+</tr>
+
+<tr>	<td>№ штампа</td>
+	<td><input type="text" size="40"></td>
+</tr>
+
+<tr>	<td>Тип намотки</td><td>
+<p><input type="radio" name="a" value="hand">
+ ручная</p>
+</td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="radio" name="a" value="auto">
+ автоматическая</p>
+</td>
+</tr>
+
+
+<tr>	<td>Направление намотки</td>
+	<td>
+	<form>
+      <select size="1">
+      <option selected="selected">[1] головой к машине (наружн.)</option>
+      <option>[2] ногами к машине (наружн.)</option>
+      <option>[3] головой вперед (наружн.)</option>
+      <option>[4] ногами вперед (наружн.)</option>
+     </select>
+    </form></td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="radio" name="a" value="auto">
+ автоматическая</p>
+</td>
+</tr>
+
+<tr>	<td>Размер этикетки X</td>
+	<td><input type="text" size="40"></td>
+</tr>
+
+<tr>	<td>Размер этикетки Y</td>
+	<td><input type="text" size="40"></td>
+</tr>
+
+<tr>	<td>Красочность</td><td></td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="checkbox" name="a" value="ink_0">
+ Opaque</p>
+</td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="checkbox" name="a" value="ink_1">
+ Cyan</p>
+</td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="checkbox" name="a" value="ink_2">
+ Magenta</p>
+</td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="checkbox" name="a" value="ink_3">
+ Yellow</p>
+</td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="checkbox" name="a" value="ink_4">
+ Black</p>
+</td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="checkbox" name="a" value="ink_5">
+ Orange</p>
+</td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="checkbox" name="a" value="ink_6">
+ Violet</p>
+</td>
+</tr>
+
+<tr>	<td>Материал</td>
+	<td>
+	<form>
+      <select size="1">
+      <option selected="selected">sem</option>
+      <option>mps</option>
+      <option>pps</option>
+      <option>pew</option>
+      <option>ppt</option>
+     </select>
+    </form></td>
+</tr>
+
+<tr>	<td>Ширина пореза</td>
+	<td><input type="text" size="40"></td>
+</tr>
+
+<tr>	<td>Отделка</td>
+	<td>
+	<form>
+      <select size="1">
+      <option selected="selected">без отделки</option>
+      <option>ламинация</option>
+      <option>лак</option>
+     </select>
+    </form></td>
+</tr>
+
+<tr>	<td>Лак</td><td>
+<p><input type="checkbox" name="a" value="lak_solid">
+ сплошной</p>
+</td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="checkbox" name="a" value="lak_select">
+ выборочный</p>
+</td>
+</tr>
+
+<tr>	<td>Тиснение</td><td>
+<p><input type="radio" name="a" value="tis_cold">
+ холодное</p>
+</td>
+</tr>
+
+<tr>	<td></td><td>
+<p><input type="radio" name="a" value="tis_hot">
+ горячее</p>
+</td>
+</tr>
+
+<tr>	<td>Конгрев</td><td>
+<input type="checkbox" name="a" value="kongrev">
+
+</td>
+</tr>
+
+  </table>
+
+</body>
