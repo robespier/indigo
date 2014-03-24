@@ -11,60 +11,56 @@
   <table border="0">
 
 <tr>	<td>№ заказа</td>
-	<td><input type="text" size="40" value="order"></td>
+	<td><input type="text" name="order" size="40" value="order"></td>
 </tr>
 
 <tr>	<td>Заказчик</td>
-	<td><input type="text" size="40" value="customer"></td>
+	<td><input type="text" name="customer" size="40" value="customer"></td>
 </tr>
 
 <tr>	<td>Наименование заказа</td>
-	<td><input type="text" size="40"></td>
+	<td><input type="text" name="order_name" size="40"></td>
 </tr>
 
 <tr>	<td>Тип печати</td>
 	<td> 
-	<form>
-      <select size="1">
+      <select name="print_type" size="1">
       <option selected="selected">цифровая</option>
       <option>флексо</option>
      </select>
-    </form>
 	</td>
 </tr>
 
 <tr>	<td>Менеджер</td>
-	<td><input type="text" size="40"></td>
+	<td><input type="text" name="manager" size="40"></td>
 </tr>
 
 <tr>	<td>Технолог</td>
 	<td>
-	<form>
-      <select size="1">
+      <select size="1" name="master">
       <option selected="selected">не определен</option>
-	<option>Альмухаметов А.</option>
+      <option>Альмухаметов А.</option>
       <option>Павленкова Д.</option>
       <option>Семенов А.</option>
      </select>
-    </form></td>
+    </td>
 </tr>
 
 <tr>	<td>Тип этикетки</td>
 	<td>
-	<form>
-      <select size="1">
+      <select size="1" name="label_type">
       <option selected="selected">самоклеящаяся</option>
       <option>термоусадочная</option>
       <option>в оборот</option>
       <option>in-mold</option>
      </select>
-    </form></td>
+    </td>
 </tr>
 
 <tr>	<td>Штамп высечки</td>
 	<td>
 	<form>
-      <select size="1">
+      <select size="1" name="stamp_type">
       <option selected="selected">готовый</option>
       <option>заказной</option>
       <option>плоттер</option>
@@ -74,17 +70,17 @@
 </tr>
 
 <tr>	<td>№ штампа</td>
-	<td><input type="text" size="40"></td>
+	<td><input type="text" size="40" name="stamp_id"></td>
 </tr>
 
 <tr>	<td>Тип намотки</td><td>
-<p><input type="radio" name="a" value="hand">
+<p><input type="radio" name="roll" value="hand">
  ручная</p>
 </td>
 </tr>
 
 <tr>	<td></td><td>
-<p><input type="radio" name="a" value="auto">
+<p><input type="radio" value="auto">
  автоматическая</p>
 </td>
 </tr>
@@ -92,28 +88,27 @@
 
 <tr>	<td>Направление намотки</td>
 	<td>
-	<form>
-      <select size="1">
+      <select size="1" name="roll_direct" >
       <option selected="selected">[1] головой к машине (наружн.)</option>
       <option>[2] ногами к машине (наружн.)</option>
       <option>[3] головой вперед (наружн.)</option>
       <option>[4] ногами вперед (наружн.)</option>
      </select>
-    </form></td>
+    </td>
 </tr>
 
 <tr>	<td></td><td>
-<p><input type="radio" name="a" value="auto">
+<p><input type="radio" value="auto">
  автоматическая</p>
 </td>
 </tr>
 
 <tr>	<td>Размер этикетки X</td>
-	<td><input type="text" size="40"></td>
+	<td><input type="text" size="40" name="label_x"></td>
 </tr>
 
 <tr>	<td>Размер этикетки Y</td>
-	<td><input type="text" size="40"></td>
+	<td><input type="text" size="40" name="label_y"></td>
 </tr>
 
 <tr>	<td>Красочность</td><td></td>
