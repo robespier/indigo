@@ -29,6 +29,29 @@ function encodeAdobe(obj) {
 	return obj;
 }
 
+/**
+ * Объект с метаданными формы заказа
+ */
+var blankData = {
+	title : 'Бланк заказа',
+	id: 'fillBlank-form',
+	name: 'fillBlank',
+	method: 'POST',
+	action: 'http://indigo.aicdr.pro:8080/data/json/fillBlank',
+	fields : [
+		{ name: 'order', desc: '№ заказа', type: 'text'},
+		{ name: 'customer', desc: 'Заказчик', type: 'text'},
+		{ name: 'order_name', desc: 'Наименование заказа', type: 'text'},
+		{ name: 'manager', desc: 'Менеджер', type: 'text'},
+		{ name: 'print_type', element: 'select', desc: 'Тип печати', options: ['цифровая','флексо']},
+		{ name: 'master', desc: 'Технолог', type: 'text'}, 
+		{ name: 'label_type', element: 'select', desc: 'Тип этикетки', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
+		{ name: 'roll_type', desc: 'Тип намотки', type: "radio", content: 'ручная' },
+		{ name: 'roll_type', type: "radio", content: 'автоматическая' },
+		{ name: 'submit', element: 'input', type: 'submit'}
+	]
+};
+
 exports.data = function(req,res) {
 	var megaSwitch = {
 		error: function() {
@@ -67,6 +90,10 @@ exports.data = function(req,res) {
 	var action = req.params[2];
 
 	megaSwitch[action]();
+};
+
+exports.forms = function(req, res) {
+	res.render('form', { d: blankData });
 };
 
 exports.tests = function(req, res) {

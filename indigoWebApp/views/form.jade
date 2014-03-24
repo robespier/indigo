@@ -1,0 +1,23 @@
+doctype html
+head
+  title= d.title
+  meta(name="viewport" content="width=device-width, initial-scale=1.0")
+  link(rel='stylesheet', href='/css/bootstrap.min.css')
+html
+  body
+    form(id=d.id, name=d.name, method=d.method, action=d.action)
+      table
+        each field in d.fields
+          tr
+            td
+              =field.desc
+            td
+              case field.element
+                when 'select'
+                  select(name=field.name)
+                    each opt in field.options
+                      option: =opt
+                default
+                  input(name=field.name, type=field.type, value=field.value)
+              =field.content
+

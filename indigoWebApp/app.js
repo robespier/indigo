@@ -6,6 +6,7 @@
 var express = require('express');
 var routes = require('./routes');
 var http = require('http');
+var path = require('path');
 
 var exp = express();
 
@@ -18,6 +19,7 @@ exp.use(express.logger('dev'));
 exp.use(express.bodyParser());
 exp.use(express.methodOverride());
 exp.use(exp.router);
+exp.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' === exp.get('env')) {
@@ -26,6 +28,7 @@ if ('development' === exp.get('env')) {
 
 exp.all('/data/:1/:2', routes.data);
 exp.all('/tests/:1', routes.tests);
+exp.get('/forms/:1', routes.forms);
 
 http.createServer(exp).listen(exp.get('port'), function(){
 	console.log('Express server listening on port ' + exp.get('port'));
