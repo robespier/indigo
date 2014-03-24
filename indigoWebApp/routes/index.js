@@ -82,7 +82,13 @@ exports.data = function(req,res) {
 			});
 		},
 		fillBlank: function() {
-			res.send(200,'Принято!');
+			if (req._body) {
+				MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
+					var jobsCollection = db.collection('indigoJobs');
+					var jobDocument = req.body;
+					jobsCollection.insert(jobDocument, function(err, result) { });
+					});
+				}
 			res.end();
 		}
 	};
