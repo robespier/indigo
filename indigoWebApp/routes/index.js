@@ -57,6 +57,10 @@ exports.data = function(req,res) {
 					res.end();
 				});
 			});
+		},
+		fillBlank: function() {
+			res.send(200,'Принято!');
+			res.end();
 		}
 	};
 	// req.params[1] пока что всегда 'json'; будут другие дата-брокеры -- будет разговор;
