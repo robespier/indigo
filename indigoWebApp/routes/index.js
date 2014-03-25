@@ -38,18 +38,34 @@ var blankData = {
 	name: 'fillBlank',
 	method: 'POST',
 	action: 'http://indigo.aicdr.pro:8080/data/json/fillBlank',
-	fields : [
-		{ name: 'order', desc: '№ заказа', type: 'text'},
-		{ name: 'customer', desc: 'Заказчик', type: 'text'},
-		{ name: 'order_name', desc: 'Наименование заказа', type: 'text'},
-		{ name: 'manager', desc: 'Менеджер', type: 'text'},
-		{ name: 'print_type', element: 'select', desc: 'Тип печати', options: ['цифровая','флексо']},
-		{ name: 'master', desc: 'Технолог', type: 'text'}, 
-		{ name: 'label_type', element: 'select', desc: 'Тип этикетки', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
-		{ name: 'roll_type', desc: 'Тип намотки', type: "radio", content: 'ручная' },
-		{ name: 'roll_type', type: "radio", content: 'автоматическая' },
-		{ name: 'submit', element: 'input', type: 'submit'}
-	]
+	fieldgroups : {
+		base: {
+			css: 'col-md-6',
+			fields: [
+				{ name: 'order', desc: '№ заказа', type: 'text'},
+				{ name: 'customer', desc: 'Заказчик', type: 'text'},
+				{ name: 'order_name', desc: 'Наименование заказа', type: 'text'},
+				{ name: 'manager', desc: 'Менеджер', type: 'text'},
+				{ name: 'master', desc: 'Технолог', type: 'text'}, 
+				{ name: 'designer', desc: 'Дизайнер', type: 'text'} 
+			]
+		},
+		suppl: {
+			css: 'col-md-6',
+			fields: [
+				{ name: 'print_type', element: 'select', desc: 'Тип печати', options: ['цифровая','флексо']},
+				{ name: 'label_type', element: 'select', desc: 'Тип этикетки', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
+				{ name: 'roll_type', type: "radio", value: 'hand', content: 'ручная', desc: 'Тип намотки'},
+				{ name: 'roll_type', type: "radio", value: 'auto', content: 'автоматическая' },
+			]
+		},
+		submit: {
+			css: 'col-md-12',
+			fields: [
+				{ name: 'submit', element: 'button', type: 'submit'}
+			]
+		}
+	}
 };
 
 exports.data = function(req,res) {

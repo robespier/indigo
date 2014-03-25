@@ -5,19 +5,21 @@ head
   link(rel='stylesheet', href='/css/bootstrap.min.css')
 html
   body
-    form(id=d.id, name=d.name, method=d.method, action=d.action)
-      table
-        each field in d.fields
-          tr
-            td
-              =field.desc
-            td
-              case field.element
-                when 'select'
-                  select(name=field.name)
-                    each opt in field.options
-                      option: =opt
-                default
-                  input(name=field.name, type=field.type, value=field.value)
-              =field.content
+    form(id=d.id, name=d.name, method=d.method, action=d.action, class="container form-horizontal")
+      h1 #{d.title}
+      each gr in d.fieldgroups
+        div(class=gr.css)
+          each field in gr.fields
+            .form-group
+              label(class="col-md-4 control-label" for=field.name)
+                =field.desc
+              .col-md-8
+                case field.element
+                  when 'select'
+                    select(name=field.name class="form-control")
+                      each opt in field.options
+                        option: =opt
+                  default
+                    input(name=field.name, type=field.type, value=field.value, class="form-control", id=field.name)
+                =field.content
 
