@@ -1,37 +1,32 @@
-doctype html
-head
-  title= d.title
-  meta(name="viewport" content="width=device-width, initial-scale=1.0")
-  link(rel='stylesheet', href='/css/bootstrap.min.css')
-html
-  body
-    form(id=d.id, name=d.name, method=d.method, action=d.action, class=d.css)
-      h1 #{d.title}
-      each gr in d.fieldgroups
-        div(class=gr.css.whole)
-          each field in gr.fields
-            .form-group
-              label(class=gr.css.labels for=field.name)
-                =field.desc
-              div(class=gr.css.fields)
-                case field.element
-                  when 'select'
-                    select(name=field.name class="form-control")
-                      each opt in field.options
-                        option: =opt
-                  when 'radiolist'
+block content
+  form(id=d.id, name=d.name, method=d.method, action=d.action, class=d.css)
+    h1 #{d.title}
+    each gr in d.fieldgroups
+      div(class=gr.css.whole)
+        each field in gr.fields
+          .form-group
+            label(class=gr.css.labels for=field.name)
+              =field.desc
+            div(class=gr.css.fields)
+              case field.element
+                when 'select'
+                  select(name=field.name class="form-control")
                     each opt in field.options
-                      .radio
-                        label
-                          input(type='radio', name=field.name, value=opt.value, id=opt.value)
-                          =opt.content 
-                  when 'checklist'
-                    each opt in field.options
-                      .checkbox
-                        label
-                          input(type='checkbox', name=opt.name)
-                          =opt.content 
-                  default
-                    input(name=field.name, type=field.type, value=field.value, class="form-control", id=field.name)
-                =field.content
+                      option: =opt
+                when 'radiolist'
+                  each opt in field.options
+                    .radio
+                      label
+                        input(type='radio', name=field.name, value=opt.value, id=opt.value)
+                        =opt.content 
+                when 'checklist'
+                  each opt in field.options
+                    .checkbox
+                      label
+                        input(type='checkbox', name=opt.name)
+                        =opt.content 
+                default
+                  input(name=field.name, type=field.type, value=field.value, class="form-control", id=field.name)
+            =field.content
 
+extends page
