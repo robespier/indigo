@@ -65,6 +65,7 @@ var blankData = {
 				{ name: 'print_type', element: 'select', desc: 'Тип печати', options: ['цифровая','флексо']},
 				{ name: 'label_type', element: 'select', desc: 'Тип этикетки', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
 				{ name: 'roll_type', element: "radiolist", options: [ {value: 'hand', content: 'ручная'}, {value: 'auto', content: 'автоматическая'} ], desc: 'Тип намотки'},
+				{ name: 'inks', element: "checklist", options: [ {name: 'ink_0', content: 'Opaque'}, {name: 'ink_1', content: 'Cyan'} ], desc: 'Красочность'},
 			]
 		},
 		submit: {

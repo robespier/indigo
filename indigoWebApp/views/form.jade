@@ -25,6 +25,12 @@ html
                         label
                           input(type='radio', name=field.name, value=opt.value, id=opt.value)
                           =opt.content 
+                  when 'checklist'
+                    each opt in field.options
+                      .checkbox
+                        label
+                          input(type='checkbox', name=opt.name)
+                          =opt.content 
                   default
                     input(name=field.name, type=field.type, value=field.value, class="form-control", id=field.name)
                 =field.content
