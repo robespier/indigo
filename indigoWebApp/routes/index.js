@@ -38,9 +38,14 @@ var blankData = {
 	name: 'fillBlank',
 	method: 'POST',
 	action: 'http://indigo.aicdr.pro:8080/data/json/fillBlank',
+	css: 'container form-horizontal',
 	fieldgroups : {
 		base: {
-			css: 'col-md-6',
+			css: {
+				whole: 'col-md-6',
+				labels: 'col-md-4 control-label',
+				fields: 'col-md-8'
+			},
 			fields: [
 				{ name: 'order', desc: '№ заказа', type: 'text'},
 				{ name: 'customer', desc: 'Заказчик', type: 'text'},
@@ -51,7 +56,11 @@ var blankData = {
 			]
 		},
 		suppl: {
-			css: 'col-md-6',
+			css: {
+				whole: 'col-md-6',
+				labels: 'col-md-4 control-label',
+				fields: 'col-md-8'
+			},
 			fields: [
 				{ name: 'print_type', element: 'select', desc: 'Тип печати', options: ['цифровая','флексо']},
 				{ name: 'label_type', element: 'select', desc: 'Тип этикетки', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
@@ -60,7 +69,9 @@ var blankData = {
 			]
 		},
 		submit: {
-			css: 'col-md-12',
+			css: {
+				whole: 'col-md-12'
+			},
 			fields: [
 				{ name: 'submit', element: 'button', type: 'submit'}
 			]
