@@ -77,7 +77,7 @@ exports.data = function(req,res) {
 };
 
 exports.forms = function(req, res) {
-	var form = 'blank';
+	var form = req.params[1];
 	res.render('form', { d: forms[form] });
 };
 
