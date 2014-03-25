@@ -50,5 +50,26 @@ module.exports = exports = forms = {
 				]
 			}
 		}
+	},
+	settings : {
+		title : 'Настройки',
+		id: 'settings-form',
+		name: 'settings',
+		method: 'POST',
+		action: 'http://indigo.aicdr.pro:8080/data/json/settings',
+		css: 'container form-horizontal',
+		fieldgroups : {
+			base: {
+				css: {
+					whole: 'col-md-12',
+					labels: 'col-md-4 control-label',
+					fields: 'col-md-8'
+				},
+				fields: [
+					{ name: 'blank_path', desc: 'Путь к файлу шаблона бланка' },
+				]
+			}
+		}
 	}
+
 };
