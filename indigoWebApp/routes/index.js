@@ -73,7 +73,8 @@ var blankData = {
 				whole: 'col-md-12'
 			},
 			fields: [
-				{ name: 'submit', element: 'button', type: 'submit'}
+				{ name: 'submit', element: 'button', type: 'submit'},
+				{ name: 'action', type: 'hidden', value: 'BlankComposer'}
 			]
 		}
 	}
