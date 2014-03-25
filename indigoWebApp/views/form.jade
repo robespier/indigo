@@ -19,6 +19,12 @@ html
                     select(name=field.name class="form-control")
                       each opt in field.options
                         option: =opt
+                  when 'radiolist'
+                    each opt in field.options
+                      .radio
+                        label
+                          input(type='radio', name=field.name, value=opt.value, id=opt.value)
+                          =opt.content 
                   default
                     input(name=field.name, type=field.type, value=field.value, class="form-control", id=field.name)
                 =field.content
