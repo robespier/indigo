@@ -132,6 +132,16 @@ module.exports = function(grunt) {
 				replacement: '#',
 			},
 		},
+		less: {
+			minified: {
+				options: {
+					cleancss: true
+				},
+				files: {
+					'indigoWebApp/public/css/indigo.css': 'indigoWebApp/less/indigo.less'
+				}
+			}
+		},
 		watch: {
 			estk: {
 				files: '<%= concat.estk.src %>',
@@ -144,6 +154,10 @@ module.exports = function(grunt) {
 			tests: {
 				files: '<%= concat.tests.src %>',
 				tasks: ['concat:tests','jshint:tests', 'sed']
+			},
+			less: {
+				files: 'indigoWebApp/less/*',
+				tasks: ['less']
 			}
 			/**
 			 * С сетевого диска не работает;
@@ -164,6 +178,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-jsdoc');
 	grunt.loadNpmTasks('grunt-env');
 	grunt.loadNpmTasks('grunt-sed');

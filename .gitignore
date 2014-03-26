@@ -8,4 +8,4 @@ tmp/
 bin/tests*.js
 node_modules/
 bin/contours/
-/nbproject/private/
+indigoWebApp/public/css/indigo.css
