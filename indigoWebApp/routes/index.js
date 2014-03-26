@@ -60,20 +60,40 @@ exports.data = function(req,res) {
 			});
 		},
 		forms: function() {
-			if (req._body) {
-				MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
-					var jobsCollection = db.collection('indigoJobs');
-					var jobDocument = forms[req.body.form].check(req.body);
-					jobsCollection.insert(jobDocument, function(err, result) { });
-					});
-				}
-			res.end();
+			// Запрос может быть пустым
+			if (!req._body) {
+				res.end();
+				return;
+			}
+			
+			// Есть ли в запросе имя формы и есть ли у нас такая форма
+			var form = {};
+			if (typeof(forms[req.body.form]) === 'object') {
+				form = forms[req.body.form];
+			} else {
+				res.end();
+				return;
+			}
+
+			var jobDocument = form.check(req.body);
+			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
+				var jobsCollection = db.collection(form.db.collection);
+				jobsCollection.insert(jobDocument, function(err, result) {
+					res.end();
+				});
+			});
 		}
 	};
 	// req.params[1] пока что всегда 'json'; будут другие дата-брокеры -- будет разговор;
 	var action = req.params[2];
 
-	megaSwitch[action]();
+	// Можем ли мы обработать этот запрос (есть ли такая функция, которую запросил клиент):	
+	if (typeof(megaSwitch[action]) === 'function') {
+		megaSwitch[action]();
+	} else {
+		res.send(404);
+		res.end();
+	}
 };
 
 exports.forms = function(req, res) {
