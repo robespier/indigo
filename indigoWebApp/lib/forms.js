@@ -1,5 +1,5 @@
 
-module.exports = exports = forms = {
+module.exports = exports = {
 	/**
 	 * Бланк заказа
 	 */
@@ -19,12 +19,12 @@ module.exports = exports = forms = {
 						fields: 'col-md-8'
 					},
 					fields: [
-						{ name: 'order', desc: '№ заказа', type: 'text'},
-						{ name: 'customer', desc: 'Заказчик', type: 'text'},
-						{ name: 'order_name', desc: 'Наименование заказа', type: 'text'},
-						{ name: 'manager', desc: 'Менеджер', type: 'text'},
-						{ name: 'master', desc: 'Технолог', type: 'text'}, 
-						{ name: 'designer', desc: 'Дизайнер', type: 'text'} 
+						{ name: 'order', desc: '№ заказа', type: 'text', css: 'form-group'},
+						{ name: 'customer', desc: 'Заказчик', css: 'form-group', type: 'text'},
+						{ name: 'order_name', desc: 'Наименование заказа', css: 'form-group', type: 'text'},
+						{ name: 'manager', desc: 'Менеджер', css: 'form-group', type: 'text'},
+						{ name: 'master', desc: 'Технолог', css: 'form-group', type: 'text'}, 
+						{ name: 'designer', desc: 'Дизайнер', css: 'form-group', type: 'text'} 
 					]
 				},
 				suppl: {
@@ -34,10 +34,10 @@ module.exports = exports = forms = {
 						fields: 'col-md-8'
 					},
 					fields: [
-						{ name: 'print_type', element: 'select', desc: 'Тип печати', options: ['цифровая','флексо']},
-						{ name: 'label_type', element: 'select', desc: 'Тип этикетки', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
-						{ name: 'roll_type', element: "radiolist", options: [ {value: 'hand', content: 'ручная'}, {value: 'auto', content: 'автоматическая'} ], desc: 'Тип намотки'},
-						{ name: 'inks', element: "checklist", options: [ {name: 'ink_0', content: 'Opaque'}, {name: 'ink_1', content: 'Cyan'} ], desc: 'Красочность'},
+						{ name: 'print_type', element: 'select', desc: 'Тип печати', css: 'form-group', options: ['цифровая','флексо']},
+						{ name: 'label_type', element: 'select', desc: 'Тип этикетки', css: 'form-group', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
+						{ name: 'roll_type', element: "radiolist", css: 'form-group', options: [ {value: 'hand', content: 'ручная'}, {value: 'auto', content: 'автоматическая'} ], desc: 'Тип намотки'},
+						{ name: 'inks', element: "checklist", css: 'form-group', options: [ {name: 'ink_0', content: 'Opaque'}, {name: 'ink_1', content: 'Cyan'} ], desc: 'Красочность'},
 					]
 				},
 				submit: {
@@ -45,7 +45,7 @@ module.exports = exports = forms = {
 						whole: 'col-md-12'
 					},
 					fields: [
-						{ name: 'submit', element: 'button', type: 'submit'},
+						{ name: 'submit', element: 'button', css: 'form-group', type: 'submit'},
 						{ name: 'form', type: 'hidden', value: 'blank' },
 						{ name: 'action', type: 'hidden', value: 'BlankComposer'}
 					]
@@ -64,16 +64,22 @@ module.exports = exports = forms = {
 		/**
 		 * @todo Клонировать параметр `data`
 		 *
-		 * `data` -- это объект `req.body`, и передаётся он по ссылке.  
-		 * Это значит, что изменяя поля `data`, на самом деле мы изменяем 
-		 * `req.body`. А это не самая хорошая идея, так как возможно 
-		 * этот запрос пригодится нам позже и в другом совершенно месте.
+		 * @param {Object} data Request body
+		 * @returns {Boolean} Результат проверки
 		 */
 		check : function(data) {
 			// Эти поля не нужны в `mongodb`:
 			delete data.submit;
 			delete data.form;
-			return data;
+			// Эмулируем ошибку в номере заказа
+			var troublefield = this.metadata.fieldgroups.base.fields[0];
+			troublefield.help = 'Неверный номер заказа';
+			troublefield.css += ' has-error';
+			troublefield.value = data.order;
+			var goodfield = this.metadata.fieldgroups.base.fields[1];
+			goodfield.css += ' has-success';
+			goodfield.value = data.customer;
+			return false;
 		}
 	},
 	/**
@@ -101,6 +107,9 @@ module.exports = exports = forms = {
 			}
 		},
 		check : function(data) {
+			// чтобы Jshint замолчал на время:
+			delete data.submit;
+			delete data.form;
 		}
 	}
 };

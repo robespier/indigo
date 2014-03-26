@@ -4,7 +4,7 @@ block content
     each gr in d.fieldgroups
       div(class=gr.css.whole)
         each field in gr.fields
-          .form-group
+          div(class=field.css)
             label(class=gr.css.labels for=field.name)
               =field.desc
             div(class=gr.css.fields)
@@ -27,6 +27,9 @@ block content
                         =opt.content 
                 default
                   input(name=field.name, type=field.type, value=field.value, class="form-control", id=field.name)
+              if field.help
+                span(class="help-block")
+                  =field.help
             =field.content
 
 extends page
