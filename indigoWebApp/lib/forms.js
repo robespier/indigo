@@ -50,6 +50,10 @@ module.exports = exports = forms = {
 					]
 				}
 			}
+		},
+		check : function(data) {
+			console.log('Document is valid');
+			return data;
 		}
 	},
 	/**
@@ -75,6 +79,8 @@ module.exports = exports = forms = {
 					]
 				}
 			}
+		},
+		check : function(data) {
 		}
 	}
 };
