@@ -59,11 +59,11 @@ exports.data = function(req,res) {
 				});
 			});
 		},
-		fillBlank: function() {
+		forms: function() {
 			if (req._body) {
 				MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
 					var jobsCollection = db.collection('indigoJobs');
-					var jobDocument = forms['blank'].check(req._body);
+					var jobDocument = forms[req.body.form].check(req.body);
 					jobsCollection.insert(jobDocument, function(err, result) { });
 					});
 				}

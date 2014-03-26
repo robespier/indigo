@@ -7,9 +7,9 @@ module.exports = exports = forms = {
 		metadata: {
 			title : 'Бланк заказа',
 			id: 'fillBlank-form',
-			name: 'fillBlank',
+			name: 'blank',
 			method: 'POST',
-			action: 'http://indigo.aicdr.pro:8080/data/json/fillBlank',
+			action: 'http://indigo.aicdr.pro:8080/data/json/forms',
 			css: 'container form-horizontal',
 			fieldgroups : {
 				base: {
@@ -46,6 +46,7 @@ module.exports = exports = forms = {
 					},
 					fields: [
 						{ name: 'submit', element: 'button', type: 'submit'},
+						{ name: 'form', type: 'hidden', value: 'blank' },
 						{ name: 'action', type: 'hidden', value: 'BlankComposer'}
 					]
 				}
