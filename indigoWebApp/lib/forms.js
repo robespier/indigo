@@ -62,24 +62,85 @@ module.exports = exports = {
 			collection: 'indigoJobs'
 		},
 		/**
-		 * @todo Клонировать параметр `data`
+		 * Проверка введённых в форму данных
 		 *
-		 * @param {Object} data Request body
+		 * @param {Object} data Копия req.body
 		 * @returns {Boolean} Результат проверки
 		 */
 		check : function(data) {
 			// Эти поля не нужны в `mongodb`:
 			delete data.submit;
 			delete data.form;
-			// Эмулируем ошибку в номере заказа
-			var troublefield = this.metadata.fieldgroups.base.fields[0];
-			troublefield.help = 'Неверный номер заказа';
-			troublefield.css += ' has-error';
-			troublefield.value = data.order;
-			var goodfield = this.metadata.fieldgroups.base.fields[1];
-			goodfield.css += ' has-success';
-			goodfield.value = data.customer;
-			return false;
+
+			// Для начала определим, какие поля проверять.  
+			var validators = this._map_callbacks_to_fields();
+		
+			// Выполним проверку
+			Object.keys(validators).forEach(function(field) {
+				var validator = validators[field];
+
+				// В данном контексте `this` -- это `data`, так как
+				// мы передали её вторым параметром в `forEach`
+				var value = this[field];
+
+				// Если хотя бы один валидатор найдёт ошибку,
+				// установим в `data` "провальный" флаг;
+				if (!validator.check(value, validator.field)) {
+					this._fail = true;
+				};
+			}, data);
+
+			return data._fail ? false : true;
+		},
+		/**
+		 * Определим, для каких полей реализованы функции проверки
+		 *
+		 * Имя функции проверки (валидатора) совпадает с именем поля.
+		 * Т.е. если в запросе присутствует поле `order` и его нужно 
+		 * проверить, валидатор должен называться `validate.order`. 
+		 * Если валидатора с таким названием нет, поле не проверяется.
+		 * Собираем коллекцию валидаторов и добавляем к ним поля  
+		 * метаданных. В эти поля мы будем писать результаты проверок  
+		 * и отдавать их клиенту в случае возникновения ошибок.
+		 * 
+		 * @return {object} 
+		 */
+		_map_callbacks_to_fields: function() {
+			
+			var	meta_fields = {};
+			
+			var callbacks = this.validate;
+			Object.keys(callbacks).forEach(function(cb) {
+				meta_fields[cb] = {};
+				meta_fields[cb].check = callbacks[cb];
+			});
+
+			var heap = this.metadata.fieldgroups;
+			Object.keys(heap).forEach(function(group) {
+				var fields = heap[group].fields;
+				Object.keys(fields).forEach(function(key) {
+					if (typeof(meta_fields[fields[key].name]) !== 'undefined') {
+						meta_fields[fields[key].name].field = fields[key];
+					}
+				});
+			});
+			
+			return meta_fields;
+		},
+		/**
+		 * Функции проверки полей (валидаторы)
+		 */
+		validate : {
+			order: function(value, field) {
+				var result = true;
+				if (value !== 'e3hvds1') {
+					field.css += ' has-error';
+					field.help = 'Не угадал!';
+					field.value = value;
+					result = false;
+				} 
+				return result;
+			}
 		}
 	},
 	/**
