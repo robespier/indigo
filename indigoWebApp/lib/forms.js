@@ -90,6 +90,24 @@ module.exports = exports = {
 				};
 			}, data);
 
+			// Пример ручной проверки
+			// Зная расположение полей в структуре `metadata`, можно по быстрому
+			// накидать проверку нестандартной логики.
+			//
+			// Дизайнер Бубликов и технолог Баранкин друг друга не переносят.
+			// По работе им лучше не пересекаться, иначе страдает производство.
+			if (data.designer === 'Бубликов' && data.master === 'Баранкин') {
+				var heap = this.metadata.fieldgroups.base.fields,
+					barank = heap[4],
+					bublik = heap[5];
+				barank.css += ' has-warning';
+				barank.value = data.master;
+				bublik.css += ' has-warning';
+				bublik.value = data.designer;
+				barank.help = bublik.help = 'Этих друзей лучше вместе не ставить';
+				data._fail = true;
+			}
+
 			return data._fail ? false : true;
 		},
 		/**
