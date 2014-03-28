@@ -121,8 +121,41 @@ exports.data = function(req,res) {
 };
 
 exports.forms = function(req, res) {
-	var form = req.params[1];
-	res.render('form', { d: forms[form].metadata });
+	// Имя формы приходит как часть запроса (`req.params[1]`)
+	// Создаём форму, если такая у нас имеется
+	if (typeof(forms[req.params[1]]) === 'undefined') {
+		res.render(404);
+		return;
+	}
+	var form = Object.create(forms[req.params[1]]);
+
+	// Готовим параметризующий объект
+	var options = {};
+	options.collection = form.db.collection;
+	
+	// Если в запросе есть `_id`, заполним форму из базы
+	// Иначе покажем пустую
+	if (typeof(req.query._id) !== 'undefined') {
+		options.id = req.query._id;
+		form.load(options, function(err, result) {
+			if (err) {
+				res.render('errors-db', { d: {err: err} }, function(err,result) { res.send(500,result); } );
+				return;
+			}
+			// Пришел пустой ответ. Считаем это ошибкой, хотя можно поступить как угодно.
+			if (result === null) {
+				res.render('errors-db', { d: {err: 'Ни черта не найдено'} }, function(err,result) { res.send(404,result); } );
+				return;
+			}
+			// Заполним форму данными
+			form.merge(result);
+			// Отрисуем заполненную форму
+			res.render('form', { d: form.metadata });
+		});
+	} else {
+		// Отрисуем пустую форму для ввода данных
+		res.render('form', { d: form.metadata });
+	}
 };
 
 exports.tests = function(req, res) {

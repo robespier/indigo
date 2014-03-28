@@ -1,4 +1,6 @@
-var _ = require('lodash');
+var _ = require('lodash'),
+	MongoClient = require('mongodb').MongoClient,
+	ObjectId = require('mongodb').ObjectID;
 
 module.exports = exports = {
 	/**
@@ -162,17 +164,63 @@ module.exports = exports = {
 			return meta_fields;
 		},
 		/**
+		 * Загрузка данных из базы
+		 *
+		 * @param {object} options
+		 * @param {function} next 
+		 */
+		load: function(options, next) {
+			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
+				if (err) { next(err); return; }
+				var jobsCollection = db.collection(options.collection);
+				jobsCollection.find({_id: new ObjectId(options.id)}).nextObject(function(err, parcel) {
+					next(err, parcel);
+				});
+			});
+		},
+		/**
+		 * Вставка данных из базы в поля формы
+		 *
+		 * @param {object} result
+		 */
+		merge: function(result) {
+			// в данном контексте `this` -- это объект `form`
+			// идём по метаданным формы и намешиваем туда данных из `result` и `this._fail`
+			var heap = this.metadata.fieldgroups;
+			Object.keys(heap).forEach(function(group) {
+				var fields = heap[group].fields;
+				Object.keys(fields).forEach(function(key) {
+					// Вынос мозга!
+					// fields[key] -- {object} field
+					// fields[key].name -- 'order', {string}
+					// result[fields[key].name] -- 'd132213', {string}
+					if (typeof(result[fields[key].name]) !== 'undefined') {
+						fields[key].value = result[fields[key].name];
+					}
+					// Поддать ошибок, если есть
+					// result._fail[fields[key].name]) -- 'order', {object} field
+					if (typeof(result._fail) !== 'undefined') {
+						if (typeof(result._fail[fields[key].name]) !== 'undefined') {
+							fields[key] = result._fail[fields[key].name];
+						}
+					}
+				}); 
+			});
+		},
+		/**
 		 * Функции проверки полей (валидаторы)
 		 */
 		validate : {
 			order: function(value, field) {
 				var result = true;
-				if (value !== 'e3hvds1') {
+				// Пример более осмысленной проверки:
+				// Номер заказа должен состоять из цифр и начинаться с 'd'
+				if (!value.match(/^d[0-9]+$/)) {
 					field.css += ' has-error';
-					field.help = 'Не угадал!';
+					field.help = 'Номер заказа вызывает подозрения';
 					field.value = value;
 					result = false;
-				} 
+				}
 				return result;
 			}
 		}
