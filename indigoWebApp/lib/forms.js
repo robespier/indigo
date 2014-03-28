@@ -66,7 +66,7 @@ module.exports = exports = {
 		 * Проверка введённых в форму данных
 		 *
 		 * @param {Object} body req.body
-		 * @returns {Boolean} Результат проверки
+		 * @returns {Object} Результат проверки
 		 */
 		check : function(body) {
 			// Клонируем req.body, чтоб не испортить ненароком.
@@ -80,6 +80,9 @@ module.exports = exports = {
 			// Для начала определим, какие поля проверять.  
 			var validators = this._map_callbacks_to_fields();
 		
+			// Заготовим ёмкость для ошибок
+			data._fail = {};
+
 			// Выполним проверку
 			Object.keys(validators).forEach(function(field) {
 				var validator = validators[field];
@@ -88,10 +91,10 @@ module.exports = exports = {
 				// мы передали её вторым параметром в `forEach`
 				var value = this[field];
 
-				// Если хотя бы один валидатор найдёт ошибку,
-				// установим в `data` "провальный" флаг;
+				// Если валидатор находит в значении поля ошибку,
+				// сохраним это поле в `data`;
 				if (!validator.check(value, validator.field)) {
-					this._fail = true;
+					this._fail[field] = validator.field;
 				}
 			}, data);
 
@@ -110,8 +113,17 @@ module.exports = exports = {
 				bublik.css += ' has-warning';
 				bublik.value = data.designer;
 				barank.help = bublik.help = 'Этих друзей лучше вместе не ставить';
-				data._fail = true;
+				data._fail.master = bublik;
+				data._fail.designer = barank;
 			}
+			
+			// Если ни один валидатор не нарыл ошибок, удалим объект `data._fail`.
+			// Подозреваю, что в будущем отсутствие поля `_fail` в документе 
+			// сильно упростит выборку из базы данных.
+			if (Object.keys(data._fail).length < 1) {
+				delete data._fail;
+			}
+			
 			return data;
 		},
 		/**
