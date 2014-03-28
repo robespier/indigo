@@ -79,8 +79,24 @@ exports.data = function(req,res) {
 			var request_data = form.check(req.body);
 
 			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
+				if (err) {
+					res.render(
+						'errors-db',
+						{ d: { err: err } },
+						function(err,result) { res.send(500,result); }
+					);
+					return;
+				}
 				var jobsCollection = db.collection(form.db.collection);
 				jobsCollection.insert(request_data, function(err, result) {
+					if (err) {
+						res.render(
+							'errors-db',
+							{ d: { err: err } },
+							function(err,result) { res.send(500,result); }
+						);
+						return;
+					} 
 					if (typeof(result) !== 'undefined') {
 						// @todo redirect на страницу с результатом обработки.
 						res.redirect('/'); 
