@@ -4,8 +4,7 @@
  */
 
 var MongoClient = require('mongodb').MongoClient,
-	forms = require('../lib/forms'),
-	_ = require('lodash');
+	forms = require('../lib/forms');
 
 /**
  * Закодировать не-ASCII символы в текстовых полях передаваемого объекта
@@ -77,28 +76,20 @@ exports.data = function(req,res) {
 			}
 
 			// Проверка введённых данных
-			// Возможно что: 
-			//   * данные валидны -- показать клиенту 'Ok';
-			//   * есть ошибки -- вернуть клиенту заполненную форму с указанием на ошибки;
-			//
-			// Клонируем req.body, может ещё сгодится для чего		
-			var request_data = _.clone(req.body, true);
-			if (form.check(request_data)) {
-				// вставляем данные, если всё ОК - рисуем ОК
-				// (не интересно)
-				MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
-					var jobsCollection = db.collection(form.db.collection);
-					jobsCollection.insert(request_data, function(err, result) {
-						if (err) { return result; } // чтобы Jshint замолчал на время
-						res.redirect('/'); // @todo redirect на страницу с океем.
-					});
+			var request_data = form.check(req.body);
+
+			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
+				var jobsCollection = db.collection(form.db.collection);
+				jobsCollection.insert(request_data, function(err, result) {
+					if (typeof(result) !== 'undefined') {
+						// @todo redirect на страницу с результатом обработки.
+						res.redirect('/'); 
+					} else {
+						res.send(500);
+						res.end();
+					}
 				});
-				// вернём клиенту заполненную форму с подсвеченными ошибками
-				// и объяснениями, почему эти данные не канают
-				// (интереснее)
-			} else {
-				res.render('form', { d: form.metadata });
-			}
+			});
 		}
 	};
 	// req.params[1] пока что всегда 'json'; будут другие дата-брокеры -- будет разговор;

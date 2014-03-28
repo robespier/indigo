@@ -1,3 +1,4 @@
+var _ = require('lodash');
 
 module.exports = exports = {
 	/**
@@ -64,10 +65,14 @@ module.exports = exports = {
 		/**
 		 * Проверка введённых в форму данных
 		 *
-		 * @param {Object} data Копия req.body
+		 * @param {Object} body req.body
 		 * @returns {Boolean} Результат проверки
 		 */
-		check : function(data) {
+		check : function(body) {
+			// Клонируем req.body, чтоб не испортить ненароком.
+			// Может, ещё сгодится для чего		
+			var data = _.clone(body, true);
+
 			// Эти поля не нужны в `mongodb`:
 			delete data.submit;
 			delete data.form;
@@ -87,7 +92,7 @@ module.exports = exports = {
 				// установим в `data` "провальный" флаг;
 				if (!validator.check(value, validator.field)) {
 					this._fail = true;
-				};
+				}
 			}, data);
 
 			// Пример ручной проверки
@@ -107,8 +112,7 @@ module.exports = exports = {
 				barank.help = bublik.help = 'Этих друзей лучше вместе не ставить';
 				data._fail = true;
 			}
-
-			return data._fail ? false : true;
+			return data;
 		},
 		/**
 		 * Определим, для каких полей реализованы функции проверки
