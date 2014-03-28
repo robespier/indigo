@@ -93,7 +93,7 @@ module.exports = function(grunt) {
 				src: ['<%= concat.tests.dest %>'],
 			},
 			nodejs: {
-				src: ['indigoWebApp/app.js', 'indigoWebApp/routes/*.js', 'Gruntfile.js'],
+				src: ['indigoWebApp/app.js', 'indigoWebApp/routes/*.js', 'indigoWebApp/lib/*.js', 'Gruntfile.js'],
 			}
 		},
 		env: {

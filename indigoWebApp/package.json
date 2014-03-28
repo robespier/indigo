@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"start": "node app.js"
+		"start": "nodemon --debug app.js --watch app.js --watch lib/ --watch views/ --watch routes/"
 	},
 	"dependencies": {
 		"express": "3.4.0",
