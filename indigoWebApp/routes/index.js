@@ -98,8 +98,9 @@ exports.data = function(req,res) {
 						return;
 					} 
 					if (typeof(result) !== 'undefined') {
-						// @todo redirect на страницу с результатом обработки.
-						res.redirect('/'); 
+						// `redirect` на страницу с результатом обработки
+						var params = '?_id=' + result[0]._id.toString();
+						res.redirect('/forms/'+form.metadata.name+params);
 					} else {
 						res.send(500);
 						res.end();
