@@ -2158,7 +2158,7 @@
       var result = [];
       forIn(object, function(value, key) {
         if (isFunction(value)) {
-          result.push(key);
+          //FIXME: result.push(key);
         }
       });
       return result.sort();
