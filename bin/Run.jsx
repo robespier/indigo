@@ -1,5 +1,12 @@
 #target Illustrator-13
 
+#include "lodash.js"
+var aa_dups = [4,1,2,2,3,4,2,5];
+var aa_uniqs = _.uniq(aa_dups);
+if (aa_dups.length > aa_uniqs.length) {
+	alert('array aa_dups contains repeated values');
+}
+
 #include "mc.jsx"
 /*
 // Обычная сборка
