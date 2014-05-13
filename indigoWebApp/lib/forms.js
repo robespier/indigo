@@ -8,7 +8,7 @@ module.exports = exports = {
 	 */
 	blank : {
 		metadata: {
-			title : 'Бланк заказа',
+			title : 'Order blank',
 			id: 'fillBlank-form',
 			name: 'blank',
 			method: 'POST',
@@ -17,30 +17,44 @@ module.exports = exports = {
 			fieldgroups : {
 				base: {
 					css: {
-						whole: 'col-md-6',
-						labels: 'col-md-4 control-label',
-						fields: 'col-md-8'
+						whole: 'col-md-3',
+						labels: 'col-md-1 control-label',
+						fields: 'col-md-12'
 					},
 					fields: [
-						{ name: 'order', desc: '№ заказа', type: 'text', css: 'form-group'},
+						{ name: 'order', desc: '№_заказа', type: 'text', css: 'form-group'},
 						{ name: 'customer', desc: 'Заказчик', css: 'form-group', type: 'text'},
-						{ name: 'order_name', desc: 'Наименование заказа', css: 'form-group', type: 'text'},
+						{ name: 'order_name', desc: 'Наименование_заказа', css: 'form-group', type: 'text'},
 						{ name: 'manager', desc: 'Менеджер', css: 'form-group', type: 'text'},
 						{ name: 'master', desc: 'Технолог', css: 'form-group', type: 'text'}, 
 						{ name: 'designer', desc: 'Дизайнер', css: 'form-group', type: 'text'} 
 					]
 				},
-				suppl: {
+
+					label_list: {
 					css: {
 						whole: 'col-md-6',
-						labels: 'col-md-4 control-label',
-						fields: 'col-md-8'
+						labels: 'col-md-1 control-label',
+						fields: 'col-md-12'
 					},
 					fields: [
-						{ name: 'print_type', element: 'select', desc: 'Тип печати', css: 'form-group', options: ['цифровая','флексо']},
-						{ name: 'label_type', element: 'select', desc: 'Тип этикетки', css: 'form-group', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
-						{ name: 'roll_type', element: "radiolist", css: 'form-group', options: [ {value: 'hand', content: 'ручная'}, {value: 'auto', content: 'автоматическая'} ], desc: 'Тип намотки'},
-						{ name: 'inks', element: "checklist", css: 'form-group', options: [ {name: 'ink_0', content: 'Opaque'}, {name: 'ink_1', content: 'Cyan'} ], desc: 'Красочность'},
+						{ name: 'assort', desc: 'Ассортимент', type: 'text', css: 'form-group'},
+					]
+				},
+
+					suppl: {
+					css: {
+						whole: 'col-md-3',
+						labels: 'col-md-1 control-label',
+						fields: 'col-md-12'
+					},
+					fields: [
+						{ name: 'print_type', element: 'select', desc: 'Печать', css: 'form-group', options: ['цифровая','флексо']},
+						{ name: 'label_type', element: 'select', desc: 'Этикетка', css: 'form-group', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
+						{ name: 'cut', element: 'select', desc: 'Высечка', css: 'form-group', options: ['готовая','заказная','плоттер','без высекания']},
+						{ name: 'stamp_number', desc: '№_штампа', type: 'text', css: 'form-group'},
+						{ name: 'roll_type', element: "radiolist", css: 'form-group', options: [ {value: 'hand', content: 'ручная'}, {value: 'auto', content: 'автоматическая'} ], desc: 'Намотка'},
+						{ name: 'inks', element: "checklist", css: 'form-group', options: [ {name: 'ink_0', content: 'Opaque'}, {name: 'ink_1', content: 'Cyan'}, {name: 'ink_2', content: 'Magenta'}, {name: 'ink_3', content: 'Yellow'}, {name: 'ink_4', content: 'Black'}, {name: 'ink_5', content: 'Orange'}, {name: 'ink_6', content: 'Violet'} ], desc: 'Красочность'},
 					]
 				},
 				submit: {
