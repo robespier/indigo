@@ -22,9 +22,10 @@ module.exports = exports = {
 						fields: 'col-md-12'
 					},
 					fields: [
-						{ name: 'order', desc: '№_заказа', type: 'text', css: 'form-group'},
+//						{ name: 'order', desc: '№_заказа', type: 'text', css: 'form-group'},
 						{ name: 'customer', desc: 'Заказчик', css: 'form-group', type: 'text'},
 						{ name: 'order_name', desc: 'Наименование_заказа', css: 'form-group', type: 'text'},
+						{ name: 'label_type', element: 'select', desc: 'Этикетка', css: 'form-group', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
 						{ name: 'manager', desc: 'Менеджер', css: 'form-group', type: 'text'},
 						{ name: 'master', desc: 'Технолог', css: 'form-group', type: 'text'}, 
 						{ name: 'designer', desc: 'Дизайнер', css: 'form-group', type: 'text'} 
@@ -38,7 +39,9 @@ module.exports = exports = {
 						fields: 'col-md-12'
 					},
 					fields: [
-						{ name: 'assort', desc: 'Ассортимент', type: 'text', css: 'form-group'},
+						{ name: 'label_1', desc: 'Ассортимент', type: 'text', css: 'form-group'},
+						{ name: 'label_2', type: 'text', css: 'form-group'},
+						{ name: 'label_3', type: 'text', css: 'form-group'},
 					]
 				},
 
@@ -50,9 +53,10 @@ module.exports = exports = {
 					},
 					fields: [
 						{ name: 'print_type', element: 'select', desc: 'Печать', css: 'form-group', options: ['цифровая','флексо']},
-						{ name: 'label_type', element: 'select', desc: 'Этикетка', css: 'form-group', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
 						{ name: 'cut', element: 'select', desc: 'Высечка', css: 'form-group', options: ['готовая','заказная','плоттер','без высекания']},
 						{ name: 'stamp_number', desc: '№_штампа', type: 'text', css: 'form-group'},
+						{ name: 'size_x', desc: 'Размер_этикетки_x', type: 'text', css: 'form-group'},		
+						{ name: 'size_y', desc: 'Размер_этикетки_y', type: 'text', css: 'form-group'},	
 						{ name: 'roll_type', element: "radiolist", css: 'form-group', options: [ {value: 'hand', content: 'ручная'}, {value: 'auto', content: 'автоматическая'} ], desc: 'Намотка'},
 						{ name: 'inks', element: "checklist", css: 'form-group', options: [ {name: 'ink_0', content: 'Opaque'}, {name: 'ink_1', content: 'Cyan'}, {name: 'ink_2', content: 'Magenta'}, {name: 'ink_3', content: 'Yellow'}, {name: 'ink_4', content: 'Black'}, {name: 'ink_5', content: 'Orange'}, {name: 'ink_6', content: 'Violet'} ], desc: 'Красочность'},
 					]
@@ -78,7 +82,7 @@ module.exports = exports = {
 		db: {
 			collection: 'indigoJobs'
 		},
-		/**
+/**
 		 * Проверка введённых в форму данных
 		 *
 		 * @param {Object} body req.body
