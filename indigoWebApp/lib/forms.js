@@ -25,14 +25,14 @@ module.exports = exports = {
 //						{ name: 'order', desc: '№_заказа', type: 'text', css: 'form-group'},
 						{ name: 'customer', desc: 'Заказчик', css: 'form-group', type: 'text'},
 						{ name: 'order_name', desc: 'Наименование_заказа', css: 'form-group', type: 'text'},
-						{ name: 'label_type', element: 'select', desc: 'Этикетка', css: 'form-group', options: ['самоклеющаяся','термоусадочная','в оборот','in-mold']},
+						{ name: 'label_type', element: 'select', desc: 'Этикетка', css: 'form-group', options: ['самоклеящаяся','термоусадочная','в оборот','in-mold']},
 						{ name: 'manager', desc: 'Менеджер', css: 'form-group', type: 'text'},
 						{ name: 'master', desc: 'Технолог', css: 'form-group', type: 'text'}, 
 						{ name: 'designer', desc: 'Дизайнер', css: 'form-group', type: 'text'} 
 					]
 				},
 
-					label_list: {
+				label_list: {
 					css: {
 						whole: 'col-md-6',
 						labels: 'col-md-1 control-label',
@@ -42,10 +42,19 @@ module.exports = exports = {
 						{ name: 'label_1', desc: 'Ассортимент', type: 'text', css: 'form-group'},
 						{ name: 'label_2', type: 'text', css: 'form-group'},
 						{ name: 'label_3', type: 'text', css: 'form-group'},
+						{ name: 'label_4', type: 'text', css: 'form-group'},
+						{ name: 'label_5', type: 'text', css: 'form-group'},
+						{ name: 'label_6', type: 'text', css: 'form-group'},
+						{ name: 'label_7', type: 'text', css: 'form-group'},
+						{ name: 'label_8', type: 'text', css: 'form-group'},
+						{ name: 'label_9', type: 'text', css: 'form-group'},
+						{ name: 'label_10', type: 'text', css: 'form-group'},
+						{ name: 'label_11', type: 'text', css: 'form-group'},
+						{ name: 'label_12', type: 'text', css: 'form-group'},
 					]
 				},
 
-					suppl: {
+				suppl: {
 					css: {
 						whole: 'col-md-3',
 						labels: 'col-md-1 control-label',
@@ -55,12 +64,54 @@ module.exports = exports = {
 						{ name: 'print_type', element: 'select', desc: 'Печать', css: 'form-group', options: ['цифровая','флексо']},
 						{ name: 'cut', element: 'select', desc: 'Высечка', css: 'form-group', options: ['готовая','заказная','плоттер','без высекания']},
 						{ name: 'stamp_number', desc: '№_штампа', type: 'text', css: 'form-group'},
-						{ name: 'size_x', desc: 'Размер_этикетки_x', type: 'text', css: 'form-group'},		
-						{ name: 'size_y', desc: 'Размер_этикетки_y', type: 'text', css: 'form-group'},	
-						{ name: 'roll_type', element: "radiolist", css: 'form-group', options: [ {value: 'hand', content: 'ручная'}, {value: 'auto', content: 'автоматическая'} ], desc: 'Намотка'},
-						{ name: 'inks', element: "checklist", css: 'form-group', options: [ {name: 'ink_0', content: 'Opaque'}, {name: 'ink_1', content: 'Cyan'}, {name: 'ink_2', content: 'Magenta'}, {name: 'ink_3', content: 'Yellow'}, {name: 'ink_4', content: 'Black'}, {name: 'ink_5', content: 'Orange'}, {name: 'ink_6', content: 'Violet'} ], desc: 'Красочность'},
-					]
+						{ name: 'size_x', desc: 'Размер_x', type: 'text', css: 'form-group'},		
+						{ name: 'size_y', desc: 'Размер_y', type: 'text', css: 'form-group'},	
+					],
+				},			
+			
+				ink: {
+					css: {
+						whole: 'col-md-3',
+//						labels: 'col-md-1 control-label',
+//						fields: 'col-md-12'
+					},
+					fields: [						
+						{ name: 'inks', element: "checklist", css: 'col-md-6', desc: 'Красочность',
+							options: [
+								{name: 'ink_0', content: 'Opaque'},
+								{name: 'ink_1', content: 'Cyan'},
+								{name: 'ink_2', content: 'Magenta'},
+								{name: 'ink_3', content: 'Yellow'},
+								{name: 'ink_4', content: 'Black'},
+								{name: 'ink_5', content: 'Orange'},
+								{name: 'ink_6', content: 'Violet'}
+							],
+						},
+					],
 				},
+				pms: {
+					css: {
+						whole: 'col-md-3',
+						labels: 'col-md-4 control-label',
+						fields: 'col-md-8'
+					},
+					fields: [								
+						{ name: 'pms_1', type: 'text', desc: 'PMS'},
+						{ name: 'pms_2', type: 'text', desc: 'PMS'},
+						{ name: 'pms_3', type: 'text', desc: 'PMS'},
+						{ name: 'pms_4', type: 'text', desc: 'PMS'},
+						{ name: 'pms_5', type: 'text', desc: 'PMS'},
+						{ name: 'pms_6', type: 'text', desc: 'PMS'},
+						{ name: 'pms_7', type: 'text', desc: 'PMS'},
+					],
+				},					
+
+//					],
+//				},									
+				
+//						{ name: 'roll_type', element: "radiolist", css: 'form-group', options: [ {value: 'hand', content: 'ручная'}, {value: 'auto', content: 'автоматическая'} ], desc: 'Намотка'},
+//				]
+//				},
 				submit: {
 					css: {
 						whole: 'col-md-12'
