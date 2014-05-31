@@ -34,7 +34,7 @@ module.exports = exports = {
 
 				label_list: {
 					css: {
-						whole: 'col-md-6',
+						whole: 'col-md-5',
 						labels: 'col-md-1 control-label',
 						fields: 'col-md-12'
 					},
@@ -56,7 +56,7 @@ module.exports = exports = {
 
 				suppl: {
 					css: {
-						whole: 'col-md-3',
+						whole: 'col-md-4',
 						labels: 'col-md-1 control-label',
 						fields: 'col-md-12'
 					},
@@ -64,19 +64,19 @@ module.exports = exports = {
 						{ name: 'print_type', element: 'select', desc: 'Печать', css: 'form-group', options: ['цифровая','флексо']},
 						{ name: 'cut', element: 'select', desc: 'Высечка', css: 'form-group', options: ['готовая','заказная','плоттер','без высекания']},
 						{ name: 'stamp_number', desc: '№_штампа', type: 'text', css: 'form-group'},
-						{ name: 'size_x', desc: 'Размер_x', type: 'text', css: 'form-group'},		
-						{ name: 'size_y', desc: 'Размер_y', type: 'text', css: 'form-group'},	
+						{ name: 'size_x', desc: 'x', type: 'text', css: 'col-md-6'},		
+						{ name: 'size_y', desc: 'y', type: 'text', css: 'col-md-6'},	
 					],
 				},			
 			
 				ink: {
 					css: {
-						whole: 'col-md-3',
+						whole: 'col-md-1',
 //						labels: 'col-md-1 control-label',
 //						fields: 'col-md-12'
 					},
 					fields: [						
-						{ name: 'inks', element: "checklist", css: 'col-md-6', desc: 'Красочность',
+						{ name: 'inks', element: "checklist", desc: 'Красочность',
 							options: [
 								{name: 'ink_0', content: 'Opaque'},
 								{name: 'ink_1', content: 'Cyan'},
@@ -91,7 +91,7 @@ module.exports = exports = {
 				},
 				pms: {
 					css: {
-						whole: 'col-md-3',
+						whole: 'col-md-2',
 						labels: 'col-md-4 control-label',
 						fields: 'col-md-8'
 					},
@@ -104,14 +104,45 @@ module.exports = exports = {
 						{ name: 'pms_6', type: 'text', desc: 'PMS'},
 						{ name: 'pms_7', type: 'text', desc: 'PMS'},
 					],
+				},											
+
+				namotka_type: {
+					css: {
+						whole: 'col-md-2',
+					},
+					fields: [
+						{ name: 'roll', element: "radiolist", desc: 'Намотка',
+							options: [
+								{value: 'hand', content: 'ручная'},
+								{value: 'auto', content: 'автоматическая'}
+							],
+						},
+						{ name: 'roll_type', element: "radiolist", desc: 'Тип_намотки',
+							options: [
+								{value: 'outside', content: 'наружная'},
+								{value: 'inside', content: 'внутреняя'}
+							],
+						},
+					],			
 				},					
 
-//					],
-//				},									
-				
-//						{ name: 'roll_type', element: "radiolist", css: 'form-group', options: [ {value: 'hand', content: 'ручная'}, {value: 'auto', content: 'автоматическая'} ], desc: 'Намотка'},
-//				]
-//				},
+				namotka_direction: {
+					css: {
+						whole: 'col-md-2',
+					},
+					fields: [
+						{ name: 'roll_dir', element: "radiolist", desc: 'Направление_намотки',
+							options: [
+								{value: 'head_mashine', content: 'головой к машине'},
+								{value: 'foot_mashine', content: 'ногами к машине'},
+								{value: 'foot_forward', content: 'ногами к вперед'},
+								{value: 'head_forward', content: 'головой к вперед'},
+							],
+						},
+					],			
+				},
+			
+			
 				submit: {
 					css: {
 						whole: 'col-md-12'
