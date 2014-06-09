@@ -14,7 +14,7 @@ body {
 	height:30px;
 	padding:6px 12px;
 	font-size:14px;
-	line-height:1.4;
+	line-height:1.42857143;
 	color:#555;
 	background-color:#000000;
 	background-image:none;
@@ -25,4 +25,18 @@ body {
 	-webkit-transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
 	-o-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 	transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s
+}
+
+element {
+}
+.form-horizontal .form-group {
+    margin-right: -15px;
+        margin-right-value: -15px;
+        margin-right-ltr-source: physical;
+        margin-right-rtl-source: physical;
+    margin-left: -15px;
+        margin-left-value: -15px;
+        margin-left-ltr-source: physical;
+        margin-left-rtl-source: physical;
+    margin-bottom: -15px;
 }
