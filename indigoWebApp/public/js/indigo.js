@@ -68,7 +68,28 @@
 			"tis": "free",
 			"roll": "auto", 
 			"roll_type": "outside", 
-			"roll_dir": "head_mashine",  
+			"roll_dir": "head_forward",
+		};
+
+		/**
+		 * Get image of roll direction
+		 *
+		 * @param {string} direction Predefined direction
+		 * @returns {string} img Icon relative filename
+		 */
+		$scope.getRollImage = function(direction) {
+			var dirMap = {
+				head_mashine: 'roll_1_6',
+				foot_mashine: 'roll_2_5',
+				foot_forward: 'roll_3_7',
+				head_forward: 'roll_4_8',
+			};
+			var img = 'roll_undefinded';
+
+			if (dirMap[direction]) {
+				img = dirMap[direction];
+			}
+			return img + '.png';
 		};
 	}]);
 })();
