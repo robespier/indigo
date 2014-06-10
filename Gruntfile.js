@@ -42,6 +42,22 @@ module.exports = function(grunt) {
 				],
 				dest: 'bin/tests.js',
 			},
+			styles: {
+				src: [
+					'indigoWebApp/bower_components/bootstrap/dist/css/bootstrap.css',
+					'indigoWebApp/public/css/<%= pkg.name %>.css',
+				],
+				dest: 'indigoWebApp/public/css/styles.css',
+			},
+			scripts: {
+				src: [
+					'indigoWebApp/bower_components/angular/angular.js',
+					'indigoWebApp/bower_components/jquery/dist/jquery.js',
+					'indigoWebApp/bower_components/bootstrap/dist/js/bootstrap.js',
+					'indigoWebApp/public/js/<%= pkg.name %>.js',
+				],
+				dest: 'indigoWebApp/public/js/scripts.js',
+			},
 		},
 		jshint: {
 			options: {
