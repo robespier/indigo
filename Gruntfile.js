@@ -74,8 +74,8 @@ module.exports = function(grunt) {
 				newcap: true,
 				noarg: true,
 				node: true,
-				// Illustrator stuff, not known by JSHint:
 				predef: [
+					// Illustrator stuff, not known by JSHint:
 					'app',
 					'Document',
 					'ElementPlacement',
@@ -91,6 +91,8 @@ module.exports = function(grunt) {
 					'SaveOptions',
 					'UserInteractionLevel',
 					'ZOrderMethod',
+					// angular
+					'angular',
 				],
 				sub: true,
 				undef: true,
@@ -110,7 +112,10 @@ module.exports = function(grunt) {
 			},
 			nodejs: {
 				src: ['indigoWebApp/app.js', 'indigoWebApp/routes/*.js', 'Gruntfile.js'],
-			}
+			},
+			browser: {
+				src: ['indigoWebApp/public/js/indigo.js'],
+			},
 		},
 		env: {
 			// jsdoc вяло тербует пеменную среды JAVA_HOME
@@ -160,7 +165,11 @@ module.exports = function(grunt) {
 			tests: {
 				files: '<%= concat.tests.src %>',
 				tasks: ['concat:tests','jshint:tests', 'sed']
-			}
+			},
+			browser: {
+				files: '<%= jshint.browser.src %>',
+				tasks: ['jshint:browser'],
+			},
 			/**
 			 * С сетевого диска не работает;
 			 * С локального работает, но тогда теряет смысл;
