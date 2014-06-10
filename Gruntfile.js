@@ -114,7 +114,10 @@ module.exports = function(grunt) {
 				src: ['indigoWebApp/app.js', 'indigoWebApp/routes/*.js', 'Gruntfile.js'],
 			},
 			browser: {
-				src: ['indigoWebApp/public/js/indigo.js'],
+				src: [
+					'indigoWebApp/public/js/indigo.js',
+					'indigoWebApp/public/js/indigoServices.js'
+				],
 			},
 		},
 		env: {

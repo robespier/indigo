@@ -28,6 +28,7 @@ if ('development' === exp.get('env')) {
 
 exp.all('/data/:1/:2', routes.data);
 exp.all('/tests/:1', routes.tests);
+exp.all('/forms/:1', routes.forms);
 
 http.createServer(exp).listen(exp.get('port'), function(){
 	console.log('Express server listening on port ' + exp.get('port'));
