@@ -145,43 +145,10 @@
 
 					<div class="row">
 						<div class="col-md-5">
-							<label for="inks" class="col-md-0 control-label">Красочность_тиража
-							</label>
-
-
-							<div class="checkbox">
+							<label for="inks" class="col-md-0 control-label">Красочность_тиража</label>
+							<div class="checkbox" ng-repeat="ink in order.inks">
 								<label>
-									<input name="ink_0" type="checkbox">Opaque
-								</label>
-							</div>
-							<div class="checkbox">
-								<label>
-									<input name="ink_1" type="checkbox">Cyan
-								</label>
-							</div>
-							<div class="checkbox">
-								<label>
-									<input name="ink_2" type="checkbox">Magenta
-								</label>
-							</div>
-							<div class="checkbox">
-								<label>
-									<input name="ink_3" type="checkbox">Yellow
-								</label>
-							</div>
-							<div class="checkbox">
-								<label>
-									<input name="ink_4" type="checkbox">Black
-								</label>
-							</div>
-							<div class="checkbox">
-								<label>
-									<input name="ink_5" type="checkbox">Orange
-								</label>
-							</div>
-							<div class="checkbox">
-								<label>
-									<input name="ink_6" type="checkbox">Violet
+									<input name="ink_{{$index}}" ng-model="ink.used" type="checkbox">{{ink.name}}
 								</label>
 							</div>
 						</div>
