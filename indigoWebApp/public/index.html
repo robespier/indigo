@@ -94,10 +94,8 @@
 							<label for="print_type" class="col-md-0 control-label">Печать
 							</label>
 							<select name="print_type" class="form-control">
-								<option selected="selected">цифровая
-								</option>
-								<option>флексо
-								</option>
+								<option value="digital" ng-selected="{{order.print_type == 'digital'}}">цифровая</option>
+								<option value="flexo" ng-selected="{{order.print_type == 'flexo'}}">флексо</option>
 							</select>
 						</div>
 					</div>
