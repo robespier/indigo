@@ -9,3 +9,4 @@ bin/tests*.js
 node_modules/
 bin/contours/
 /nbproject/private/
+bower_components/
