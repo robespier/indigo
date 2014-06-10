@@ -11,9 +11,9 @@
 	<body>
 		<div class="heading">
 			<div class="container">
-				<p>логотип, меню, всякая хрень
+<!--				<p>логотип, меню, всякая хрень
 				</p>
-			</div>
+-->			</div>
 		</div>
 
 		<div class="content">
@@ -32,36 +32,35 @@
 						<label for="order_name" class="col-md-1 control-label">Наименование_заказа
 						</label>
 						<div class="col-md-12">
-							<input name="order_name" id="order_name" class="form-control" type="text">
+							<input name="order_name" id="order_name" class="form-control" type="text" value="{{order.order_name}}">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="manager" class="col-md-1 control-label">Менеджер
 						</label>
 						<div class="col-md-12">
-							<input name="manager" id="manager" class="form-control" type="text">
+							<input name="manager" id="manager" class="form-control" type="text" value="{{order.manager}}">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="master" class="col-md-1 control-label">Технолог
 						</label>
 						<div class="col-md-12">
-							<input name="master" id="master" class="form-control" type="text">
+							<input name="master" id="master" class="form-control" type="text" value="{{order.master}}">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="designer" class="col-md-1 control-label">Дизайнер
 						</label>
 						<div class="col-md-12">
-							<input name="designer" id="designer" class="form-control" type="text">
+							<input name="designer" id="designer" class="form-control" type="text" value="{{order.designer}}">
 						</div>
 					</div>
 				</div>
 
 				<div class="col-md-5">
+					<h2>Ассортимент</h2>
 					<div class="form-group" ng-repeat="label in order.labels">
-						<label for="label_{{$index}}" class="col-md-1 control-label">Ассортимент
-						</label>
 						<div class="col-md-12">
 							<input name="label_{{$index}}" id="label_{{$index}}" class="form-control" type="text" value="{{label.name}}">
 						</div>
