@@ -64,7 +64,7 @@
 			"pms_5": "false",
 			"pms_6": "false",
 			"pms_7": "false",
-			"lak": "free",
+			"lak": "select",
 			"tis": "free",
 			"roll": "auto", 
 			"roll_type": "outside", 
