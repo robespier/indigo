@@ -91,5 +91,14 @@
 			}
 			return img + '.png';
 		};
+
+		/**
+		 * Set roll image from click on rolls radio group
+		 *
+		 * @param {string} direction Predefined direction
+		 */
+		$scope.setRollImage = function(direction) {
+			this.order.roll_dir = direction;
+		};
 	}]);
 })();
