@@ -156,6 +156,20 @@ module.exports = function(grunt) {
 				replacement: '#',
 			},
 		},
+		htmlangular: {
+			options: {
+				tmplext: 'html.tmpl',
+				customtags: [ ],
+				customattrs: [
+					'smart-float',
+				],
+				relaxerror: [ 'The frameborder attribute on the iframe element is obsolete. Use CSS instead.' ],
+				reportpath: null,
+			},
+			files: {
+				src: ['indigoWebApp/public/**/*.html'],
+			},
+		},
 		watch: {
 			estk: {
 				files: '<%= concat.estk.src %>',
@@ -191,6 +205,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-html-angular-validate');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-jsdoc');
 	grunt.loadNpmTasks('grunt-env');
