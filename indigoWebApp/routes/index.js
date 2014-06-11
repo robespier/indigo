@@ -94,8 +94,8 @@ exports.forms = function(req, res) {
 			"print_type": "digital",
 			"cut": "ready",
 			"cut_number": "1152704",
-			"size_x": "53",
-			"size_y": "153",
+			"size_x": 53.5,
+			"size_y": 153.75,
 			labels: [
 				{
 					name: "Глюкосил 90 таб",
