@@ -119,7 +119,7 @@
 					</div>
 
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-6" ng-class="{'has-error': blank.size_x.$invalid}">
 							<label for="size_x" class="col-md-0 control-label">Размер_X</label>
 							<div>
 								<input ng-model="order.size_x" smart-float required name="size_x" id="size_x" class="form-control" type="text">
