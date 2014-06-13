@@ -166,9 +166,11 @@ module.exports = function(grunt) {
 				relaxerror: [ 'The frameborder attribute on the iframe element is obsolete. Use CSS instead.' ],
 				reportpath: null,
 			},
-			files: {
-				src: ['indigoWebApp/public/**/*.html'],
-			},
+			browser: {
+				files: {
+					src: ['indigoWebApp/public/**/*.html'],
+				},
+			}
 		},
 		watch: {
 			estk: {
@@ -186,6 +188,10 @@ module.exports = function(grunt) {
 			browser: {
 				files: '<%= jshint.browser.src %>',
 				tasks: ['jshint:browser'],
+			},
+			validate: {
+				files: ['<%= htmlangular.browser.files.src %>'],
+				tasks: [ 'html' ],
 			},
 			/**
 			 * С сетевого диска не работает;
@@ -222,6 +228,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('docs', ['concat', 'os_spec', 'jsdoc:dist', 'sed']);
 	grunt.registerTask('tests', ['concat', 'jshint', 'sed']);
+	grunt.registerTask('html', ['htmlangular']);
 	// Default task.
 	grunt.registerTask('default', ['concat', 'os_spec', 'jshint:estk', 'sed']);
 };
