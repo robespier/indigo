@@ -37,6 +37,7 @@
 		};
 	}]);
 
+	app.controller('JobBalnk', ['$scope', function($scope) {} ]);
 	/**
 	 * Валидация формы: ожидается положительный float 
 	 *
