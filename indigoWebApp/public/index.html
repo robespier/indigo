@@ -11,134 +11,134 @@
 	<body>
 		<div class="content">
 			<div class="container form-horizontal">
-			<form>
-				<h1>Quick Collect</h1>
-				<div class="col-md-3">
+				<form>
+					<h1>Quick Collect</h1>
+					<div class="col-md-3">
 						<div class="row">
 							<label for="cut_number" class="col-md-1 control-label">№_штампа
 							</label>
-								<input name="cut_number" id="cut_number" class="form-control" type="text">
+							<input name="cut_number" id="cut_number" class="form-control" type="text">
 						</div>	
-<p>
-</p>
-		
-					<div class="row">
-						<div class="col-md-5">
-							<img src="images/roll_undefinded.png" ng-src="images/{{ getRollImage(order.roll_dir) }}" alt="Расположение этикетки на сборке">
-						</div>
-						
-						<div class="col-md-7">
-							<label for="head_mashine">Намоткa
+						<p>
+						</p>
+
+						<div class="row">
+							<div class="col-md-5">
+								<img src="images/roll_undefinded.png" ng-src="images/{{ getRollImage(order.roll_dir) }}" alt="Расположение этикетки на сборке">
+							</div>
+
+							<div class="col-md-7">
+								<label for="head_mashine">Намоткa
+								</label>
+								<div>
+									<div class="radio">
+										<label>
+											<input ng-click="setRollImage('head_mashine')" name="roll_dir" value="head_mashine" id="head_mashine" type="radio">головой к машине
+										</label>
+									</div>
+									<div class="radio">
+										<label>
+											<input ng-click="setRollImage('foot_mashine')" name="roll_dir" value="foot_mashine" id="foot_mashine" type="radio">ногами к машине
+										</label>
+									</div>
+									<div class="radio">
+										<label>
+											<input ng-click="setRollImage('foot_forward')" name="roll_dir" value="foot_forward" id="foot_forward" type="radio">ногами вперед
+										</label>
+									</div>
+									<div class="radio">
+										<label>
+											<input ng-click="setRollImage('head_forward')" name="roll_dir" value="head_forward" id="head_forward" type="radio">головой вперед
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+
+					<div class="col-md-6">
+						<div class="row">
+							<label for="print-list" class="col-md-1 control-label">Принт-лист
 							</label>
-							<div>
-								<div class="radio">
+							<div class="col-md-12">
+								<textarea name="label_path" id="label_path" class="form-control" type="text">
+								</textarea>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="row">
+							<div class="col-md-6">
+								<label for="inks" class="col-md-0 control-label">Красочность
+								</label>
+								<div class="checkbox">
 									<label>
-										<input ng-click="setRollImage('head_mashine')" name="roll_dir" value="head_mashine" id="head_mashine" type="radio">головой к машине
+										<input name="ink_0" type="checkbox">Opaque
 									</label>
 								</div>
-								<div class="radio">
+								<div class="checkbox">
 									<label>
-										<input ng-click="setRollImage('foot_mashine')" name="roll_dir" value="foot_mashine" id="foot_mashine" type="radio">ногами к машине
+										<input name="ink_1" type="checkbox">Cyan
 									</label>
 								</div>
-								<div class="radio">
+								<div class="checkbox">
 									<label>
-										<input ng-click="setRollImage('foot_forward')" name="roll_dir" value="foot_forward" id="foot_forward" type="radio">ногами вперед
+										<input name="ink_2" type="checkbox">Magenta
 									</label>
 								</div>
-								<div class="radio">
+								<div class="checkbox">
 									<label>
-										<input ng-click="setRollImage('head_forward')" name="roll_dir" value="head_forward" id="head_forward" type="radio">головой вперед
+										<input name="ink_3" type="checkbox">Yellow
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input name="ink_4" type="checkbox">Black
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input name="ink_5" type="checkbox">Orange
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input name="ink_6" type="checkbox">Violet
 									</label>
 								</div>
 							</div>
-						</div>
-				</div>	
-			</div>
-
-			<div class="col-md-6">
-				<div class="row">
-						<label for="print-list" class="col-md-1 control-label">Принт-лист
-						</label>
-						<div class="col-md-12">
-							<textarea name="label_path" id="label_path" class="form-control" type="text">
-							</textarea>
-						</div>
-					</div>
-				</div>
-
-			<div class="col-md-3">
-				<div class="row">
-					<div class="col-md-6">
-						<label for="inks" class="col-md-0 control-label">Красочность
-						</label>
-							<div class="checkbox">
-								<label>
-									<input name="ink_0" type="checkbox">Opaque
+							<div class="col-md-6">
+								<label for="inks" class="col-md-0 control-label">Hot Folder
 								</label>
-</div>
-<div class="checkbox">
-<label>
-<input name="ink_1" type="checkbox">Cyan
-</label>
-</div>
-<div class="checkbox">
-<label>
-<input name="ink_2" type="checkbox">Magenta
-</label>
-</div>
-<div class="checkbox">
-<label>
-<input name="ink_3" type="checkbox">Yellow
-</label>
-</div>
-<div class="checkbox">
-<label>
-<input name="ink_4" type="checkbox">Black
-</label>
-</div>
-<div class="checkbox">
-<label>
-<input name="ink_5" type="checkbox">Orange
-</label>
-</div>
-<div class="checkbox">
-<label>
-<input name="ink_6" type="checkbox">Violet
-</label>
-</div>
-</div>
-					<div class="col-md-6">
-						<label for="inks" class="col-md-0 control-label">Hot Folder
-						</label>
-<p>
-</p>
-							<h2>CMYK</h2>
-<!--							<h2>CMYKW</h2>
-							<h2>CMYKOV_White</h2>
--->					</div>
+								<p>
+								</p>
+								<h2>CMYK</h2>
+								<!--							<h2>CMYKW</h2>
+								<h2>CMYKOV_White</h2>
+								-->					</div>
 
-</div>
-</div>
-
-				<div class="col-md-12">
-					<div class="form-group">
-						<label for="submit">
-						</label>
-						<div>
-							<input name="submit" id="submit" class="form-control" type="submit">
 						</div>
 					</div>
-					<input name="form" value="blank" id="form" class="form-control" type="hidden">
-					<input name="action" value="BlankComposer" id="action" class="form-control" type="hidden">
-				</div>
-		</form>
-	</div>
-		<script src="js/angular.js" type="text/javascript"></script>
-		<script src="js/angular-resource.js" type="text/javascript"></script>
-		<script src="js/jquery.js" type="text/javascript"></script>
-		<script src="js/bootstrap.js" type="text/javascript"></script>
-		<script src="js/indigo.js" type="text/javascript"></script>
-		<script src="js/indigoServices.js" type="text/javascript"></script>
-</body>
-</html>
+
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="submit">
+							</label>
+							<div>
+								<input name="submit" id="submit" class="form-control" type="submit">
+							</div>
+						</div>
+						<input name="form" value="blank" id="form" class="form-control" type="hidden">
+						<input name="action" value="BlankComposer" id="action" class="form-control" type="hidden">
+					</div>
+				</form>
+			</div>
+			<script src="js/angular.js" type="text/javascript"></script>
+			<script src="js/angular-resource.js" type="text/javascript"></script>
+			<script src="js/jquery.js" type="text/javascript"></script>
+			<script src="js/bootstrap.js" type="text/javascript"></script>
+			<script src="js/indigo.js" type="text/javascript"></script>
+			<script src="js/indigoServices.js" type="text/javascript"></script>
+		</body>
+	</html>
