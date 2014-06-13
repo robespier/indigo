@@ -2,7 +2,7 @@
 <html ng-app="indigo" ng-controller="OrderBlank">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>{{order.order}}</title>
+		<title>Quick Collect</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="css/bootstrap.css">
 		<link rel="stylesheet" href="css/indigo.css">
@@ -11,306 +11,24 @@
 	<body>
 		<div class="content">
 			<div class="container form-horizontal">
-			<form name="blank" novalidate>
-				<h1>214Ц01892/3</h1>
-
+			<form>
+				<h1>Quick Collect</h1>
 				<div class="col-md-3">
-					<div class="form-group">
-						<label for="customer" class="col-md-1 control-label">Заказчик
-						</label>
-						<div class="col-md-12">
-							<input name="customer" id="customer" class="form-control" type="text" ng-model="order.customer" required>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="order_name" class="col-md-1 control-label">Наименование_заказа
-						</label>
-						<div class="col-md-12">
-							<input name="order_name" id="order_name" class="form-control" type="text">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="manager" class="col-md-1 control-label">Менеджер
-						</label>
-						<div class="col-md-12">
-							<input name="manager" id="manager" class="form-control" type="text">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="master" class="col-md-1 control-label">Технолог
-						</label>
-						<div class="col-md-12">
-							<input name="master" id="master" class="form-control" type="text">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="designer" class="col-md-1 control-label">Дизайнер
-						</label>
-						<div class="col-md-12">
-							<input name="designer" id="designer" class="form-control" type="text">
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-5">
-					<div class="form-group" ng-repeat="label in order.labels">
-						<label for="label_{{$index}}" class="col-md-1 control-label">Ассортимент
-						</label>
-						<div class="col-md-12">
-							<input name="label_{{$index}}" id="label_{{$index}}" class="form-control" type="text" value="{{label.name}}">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-md-12">
-							<button type="button" class="btn btn-default">+</button>
-						</div>
-					</div>	
-				</div>
-
-				<div class="col-md-4">
-					<div class="row">
-						<div class="col-md-6">
-							<label for="label_type" class="col-md-0 control-label">Этикетка
+						<div class="row">
+							<label for="cut_number" class="col-md-1 control-label">№_штампа
 							</label>
-							<select id="label_type" name="label_type" class="form-control">
-								<option selected="selected">самоклеящаяся
-								</option>
-								<option>термоусадочная
-								</option>
-								<option>в оборот
-								</option>
-								<option>in-mold
-								</option>
-							</select>
-						</div>
-
-						<div class="col-md-6">
-							<label for="print_type" class="col-md-0 control-label">Печать
-							</label>
-							<select id="print_type" name="print_type" class="form-control">
-								<option value="digital" ng-selected="{{order.print_type == 'digital'}}">цифровая</option>
-								<option value="flexo" ng-selected="{{order.print_type == 'flexo'}}">флексо</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="row">					
-						<div class="col-md-6">
-							<label for="cut" class="col-md-0 control-label">Высечка
-							</label>
-							<select id="cut" name="cut" class="form-control">
-								<option selected="selected">готовая
-								</option>
-								<option>заказная
-								</option>
-								<option>порез
-								</option>
-								<option>плоттер
-								</option>
-								<option>без высекания
-								</option>
-							</select>
-						</div>
-						<div class="col-md-6">
-							<label for="cut_number" class="col-md-0 control-label">№_штампа
-							</label>
-							<input name="cut_number" id="cut_number" class="form-control" type="text">
+								<input name="cut_number" id="cut_number" class="form-control" type="text">
 						</div>	
-					</div>
-
-					<div class="row">
-						<div class="col-md-6" ng-class="{'has-error': blank.size_x.$invalid}">
-							<label for="size_x" class="col-md-0 control-label">Размер_X</label>
-							<div>
-								<input ng-model="order.size_x" smart-float required name="size_x" id="size_x" class="form-control" type="text">
-							</div>
-						</div>	
-						<div class="col-md-6">
-							<label for="size_y" class="col-md-0 control-label">Размер_Y
-							</label>
-							<div>
-								<input name="size_y" id="size_y" class="form-control" type="text">
-							</div>
-						</div>
-					</div>
-
+<p>
+</p>
+		
 					<div class="row">
 						<div class="col-md-5">
-							<label for="inks" class="col-md-0 control-label">Красочность_тиража</label>
-							<div class="checkbox" ng-repeat="ink in order.inks">
-								<label>
-									<input id="inks" name="ink_{{$index}}" ng-model="ink.used" type="checkbox">{{ink.name}}
-								</label>
-							</div>
-						</div>
-
-						<p>
-						</p>
-
-						<div class="col-md-7">
-							<div>					
-								<label for="pms_1" class="col-md-4 control-label">PMS
-								</label>
-								<div class="col-md-8">
-									<input name="pms_1" id="pms_1" class="form-control" type="text">
-								</div>
-							</div>
-
-							<div>
-								<label for="pms_2" class="col-md-4 control-label">PMS
-								</label>
-								<div class="col-md-8">
-									<input name="pms_2" id="pms_2" class="form-control" type="text">
-								</div>
-							</div>
-
-							<div>
-								<label for="pms_3" class="col-md-4 control-label">PMS
-								</label>
-								<div class="col-md-8"><input name="pms_3" id="pms_3" class="form-control" type="text">
-								</div>
-							</div>
-
-							<div>
-								<label for="pms_4" class="col-md-4 control-label">PMS
-								</label>
-								<div class="col-md-8"><input name="pms_4" id="pms_4" class="form-control" type="text">
-								</div>
-							</div>
-
-							<div>
-								<label for="pms_5" class="col-md-4 control-label">PMS
-								</label>
-								<div class="col-md-8">
-									<input name="pms_5" id="pms_5" class="form-control" type="text">
-								</div>
-							</div>
-
-							<div>
-								<label for="pms_6" class="col-md-4 control-label">PMS
-								</label>
-								<div class="col-md-8">
-									<input name="pms_6" id="pms_6" class="form-control" type="text">
-								</div>
-							</div>
-
-							<div>
-								<label for="pms_7" class="col-md-4 control-label">PMS
-								</label>
-								<div class="col-md-8">
-									<input name="pms_7" id="pms_7" class="form-control" type="text">
-								</div>
-							</div>
-						</div>
-					</div>	
-
-					<div class="row">
-						<div class="col-md-12">
-							<label class="col-md-0 control-label">Лакирование
-							</label>
-						</div>
-						<div class="col-md-3">
-							<div class="radio">
-								<label>
-									<input ng-model="order.lak" name="lak" value="free" id="lak-free" type="radio">без_лака
-								</label>
-							</div>
-						</div>						
-						<div class="col-md-3">
-							<div class="radio">
-								<label>
-									<input ng-model="order.lak" name="lak" value="solid" id="solid" type="radio">сплошной
-								</label>
-							</div>
-						</div>				
-						<div class="col-md-3">
-							<div class="radio">
-								<label>
-									<input ng-model="order.lak" name="lak" value="select" id="select" type="radio">выборочн.
-								</label>
-							</div>
-						</div>				
-						<div class="col-md-3">
-							<div class="radio">
-								<label>
-									<input ng-model="order.lak" name="lak" value="both" id="both" type="radio">оба
-								</label>
-							</div>
-						</div>					
-					</div>				
-
-					<div class="row">
-						<div class="col-md-12">
-							<label for="tis-free" class="col-md-0 control-label">Тиснение
-							</label>
-						</div>
-						<div class="col-md-4">
-							<div class="radio">
-								<label>
-									<input name="tis" value="free" id="tis-free" type="radio">без_тиснения
-								</label>
-							</div>
-						</div>						
-						<div class="col-md-4">
-							<div class="radio">
-								<label>
-									<input name="tis" value="hot" id="hot" type="radio">горячее
-								</label>
-							</div>
-						</div>				
-						<div class="col-md-4">
-							<div class="radio">
-								<label>
-									<input name="tisnenie" value="cold" id="cold" type="radio">холодное
-								</label>
-							</div>
-						</div>								
-					</div>					
-					<p>
-					</p>
-					<div class="row">
-						<div class="col-md-6">
-							<label for="hand">Намотка
-							</label>
-							<div>
-								<div class="radio">
-									<label>
-										<input name="roll" value="hand" id="hand" type="radio">ручная
-									</label>
-								</div>
-								<div class="radio">
-									<label>
-										<input name="roll" value="auto" id="auto" type="radio">автоматическая
-									</label>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-md-6">
-							<label for="outside">Тип_намотки
-							</label>
-							<div>
-								<div class="radio">
-									<label><input name="roll_type" value="outside" id="outside" type="radio">наружная
-									</label>
-								</div>
-								<div class="radio">
-									<label>
-										<input name="roll_type" value="inside" id="inside" type="radio">внутреняя
-									</label>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<p>
-						</p>
-						<div class="col-md-6">
 							<img src="images/roll_undefinded.png" ng-src="images/{{ getRollImage(order.roll_dir) }}" alt="Расположение этикетки на сборке">
 						</div>
-
-						<div class="col-md-6">
-							<label for="head_mashine">Направление_намотки
+						
+						<div class="col-md-7">
+							<label for="head_mashine">Намоткa
 							</label>
 							<div>
 								<div class="radio">
@@ -325,18 +43,83 @@
 								</div>
 								<div class="radio">
 									<label>
-										<input ng-click="setRollImage('foot_forward')" name="roll_dir" value="foot_forward" id="foot_forward" type="radio">ногами к вперед
+										<input ng-click="setRollImage('foot_forward')" name="roll_dir" value="foot_forward" id="foot_forward" type="radio">ногами вперед
 									</label>
 								</div>
 								<div class="radio">
 									<label>
-										<input ng-click="setRollImage('head_forward')" name="roll_dir" value="head_forward" id="head_forward" type="radio">головой к вперед
+										<input ng-click="setRollImage('head_forward')" name="roll_dir" value="head_forward" id="head_forward" type="radio">головой вперед
 									</label>
 								</div>
 							</div>
 						</div>
-					</div>
 				</div>	
+			</div>
+
+			<div class="col-md-6">
+				<div class="row">
+						<label for="print-list" class="col-md-1 control-label">Принт-лист
+						</label>
+						<div class="col-md-12">
+							<textarea name="label_path" id="label_path" class="form-control" type="text">
+							</textarea>
+						</div>
+					</div>
+				</div>
+
+			<div class="col-md-3">
+				<div class="row">
+					<div class="col-md-6">
+						<label for="inks" class="col-md-0 control-label">Красочность
+						</label>
+							<div class="checkbox">
+								<label>
+									<input name="ink_0" type="checkbox">Opaque
+								</label>
+</div>
+<div class="checkbox">
+<label>
+<input name="ink_1" type="checkbox">Cyan
+</label>
+</div>
+<div class="checkbox">
+<label>
+<input name="ink_2" type="checkbox">Magenta
+</label>
+</div>
+<div class="checkbox">
+<label>
+<input name="ink_3" type="checkbox">Yellow
+</label>
+</div>
+<div class="checkbox">
+<label>
+<input name="ink_4" type="checkbox">Black
+</label>
+</div>
+<div class="checkbox">
+<label>
+<input name="ink_5" type="checkbox">Orange
+</label>
+</div>
+<div class="checkbox">
+<label>
+<input name="ink_6" type="checkbox">Violet
+</label>
+</div>
+</div>
+					<div class="col-md-6">
+						<label for="inks" class="col-md-0 control-label">Hot Folder
+						</label>
+<p>
+</p>
+							<h2>CMYK</h2>
+<!--							<h2>CMYKW</h2>
+							<h2>CMYKOV_White</h2>
+-->					</div>
+
+</div>
+</div>
 
 				<div class="col-md-12">
 					<div class="form-group">
@@ -349,14 +132,13 @@
 					<input name="form" value="blank" id="form" class="form-control" type="hidden">
 					<input name="action" value="BlankComposer" id="action" class="form-control" type="hidden">
 				</div>
-			</form>
-			</div>
-		</div>
+		</form>
+	</div>
 		<script src="js/angular.js" type="text/javascript"></script>
 		<script src="js/angular-resource.js" type="text/javascript"></script>
 		<script src="js/jquery.js" type="text/javascript"></script>
 		<script src="js/bootstrap.js" type="text/javascript"></script>
 		<script src="js/indigo.js" type="text/javascript"></script>
 		<script src="js/indigoServices.js" type="text/javascript"></script>
-	</body>
+</body>
 </html>
