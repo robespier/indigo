@@ -182,7 +182,7 @@ module.exports = function(grunt) {
 				tasks: ['jshint:nodejs']
 			},
 			tests: {
-				files: '<%= concat.tests.src %>',
+				files: ['<%= concat.tests.src %>', 'indigoWebApp/test/**/*.js'],
 				tasks: ['concat:tests','jshint:tests', 'sed']
 			},
 			browser: {
