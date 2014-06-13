@@ -57,7 +57,10 @@ exports.data = function(req,res) {
 					res.end();
 				});
 			});
-		}
+		},
+		pushJob: function() {
+			res.send(200);
+		},
 	};
 	// req.params[1] пока что всегда 'json'; будут другие дата-брокеры -- будет разговор;
 	var action = req.params[2];

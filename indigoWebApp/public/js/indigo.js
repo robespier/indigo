@@ -37,7 +37,7 @@
 		};
 	}]);
 
-	app.controller('JobBlank', ['$scope', function($scope) {} ]);
+	app.controller('JobBlank', ['$scope', 'Job', function($scope, Job) {} ]);
 	/**
 	 * Валидация формы: ожидается положительный float 
 	 *
