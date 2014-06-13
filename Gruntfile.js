@@ -214,6 +214,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-html-angular-validate');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-jsdoc');
+	grunt.loadNpmTasks('grunt-notify');
 	grunt.loadNpmTasks('grunt-env');
 	grunt.loadNpmTasks('grunt-sed');
 
