@@ -102,8 +102,50 @@
 		$scope.submit = function() {
 			Job.save($scope.workset);
 		};
+		
+		/**
+		 * Вычислять хотфолдер при клике по красочности
+		 */
+		$scope.calcHF = function() {
+			var inks = toDEC(this.workset.inks);
+			this.workset.hot_folder = getHotFolder(inks);
+		};
+		
+		/**
+		 * Переводит массив "0"/"1" из двоичной системы в десятичную
+		 *
+		 * @param {array} dec Array
+		 * @return {int} out
+		 */
+		function toDEC(dec) {
+			var out = 0, len = dec.length, bit = 1;
+			while(len--) {
+				out += dec[len].used ? bit : 0;
+				bit <<= 1;
+			}
+			return out;
+		}
 
-	} ]);
+		/**
+		 * Определяет hotfolder исходя из красочности задания
+		 *
+		 * @param {int} num
+		 * @return {string} hotfolderName
+		 */
+		function getHotFolder(num) { 
+			var hotfolderName = '';
+			if (num % 4 === 0) {
+				if (num <= 60) {
+					hotfolderName = "CMYK";
+				} else {
+				hotfolderName = "CMYKW";
+				}
+			} else {
+				hotfolderName = "CMYKOW_White";
+			}
+			return hotfolderName;
+		}
+	}]);
 	/**
 	 * Валидация формы: ожидается положительный float 
 	 *
