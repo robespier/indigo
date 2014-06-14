@@ -38,6 +38,10 @@
 	}]);
 
 	app.controller('JobBlank', ['$scope', 'Job', 'Blank', function($scope, Job, Blank) {
+
+		$scope.workset = {
+			cut_number: 0,
+		};
 		/**
 		 * Загрузка данных бланка откуда-нибудь
 		 * _id на шару, нода сейчас отвечает единственным набором данных

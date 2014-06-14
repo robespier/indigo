@@ -9,7 +9,8 @@ describe('upload illustrator job', function() {
 	});
 
 	it('"cut_number" should be ok', function() {
-		var cn = element(by.model('cut_number'));
+		var cn = element(by.model('workset.cut_number'));
+		cn.clear();
 		cn.sendKeys('2128506');
 	});
 });
