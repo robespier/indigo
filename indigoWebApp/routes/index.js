@@ -59,7 +59,21 @@ exports.data = function(req,res) {
 			});
 		},
 		pushJob: function() {
-			res.send(200);
+			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
+				if (err) {
+					res.send(500);
+					return;
+				}
+				var workset = req.body;
+				var jobs = db.collection('indigoJobs');
+				jobs.findAndModify({_id: 'current'}, [], workset, {upsert: true, w: 1}, function(err, result) {
+					if (err) {
+						res.send(500);
+					} else {
+						res.send(200, result);
+					}
+				});
+			});
 		},
 	};
 	// req.params[1] пока что всегда 'json'; будут другие дата-брокеры -- будет разговор;
