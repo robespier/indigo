@@ -43,7 +43,7 @@
 		 * Значения по умолчанию
 		 */
 		$scope.workset = {
-			cut_number: 1000,
+//			cut_number: 1000,
 			roll: 'hand',
 			roll_type: 'outside',
 			roll_dir: 'head_forward',
