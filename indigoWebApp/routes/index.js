@@ -48,7 +48,7 @@ exports.data = function(req,res) {
 		fetchJobs: function() {
 			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
 				var jobsCollection = db.collection('indigoJobs');
-				jobsCollection.find().nextObject(function(err, parcel) {
+				jobsCollection.find({status:'pending'}).nextObject(function(err, parcel) {
 					var adobed = encodeAdobe(parcel); 
 					res.json( 200, [{ 
 						action: 'BlankComposer',

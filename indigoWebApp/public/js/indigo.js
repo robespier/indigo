@@ -100,6 +100,7 @@
 		};
 
 		$scope.submit = function() {
+			$scope.workset.status = 'pending';
 			Job.save($scope.workset);
 		};
 		
