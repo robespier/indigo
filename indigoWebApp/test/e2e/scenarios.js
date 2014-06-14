@@ -7,5 +7,9 @@ describe('upload illustrator job', function() {
 	beforeEach(function() {
 		browser.get('index.html');
 	});
-	it('should be ok', function() { });
+
+	it('"cut_number" should be ok', function() {
+		var cn = element(by.model('cut_number'));
+		cn.sendKeys('2128506');
+	});
 });
