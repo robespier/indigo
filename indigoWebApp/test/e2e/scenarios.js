@@ -13,4 +13,13 @@ describe('upload illustrator job', function() {
 		cn.clear();
 		cn.sendKeys('2128506');
 	});
+
+	// @todo Пепсиколов вводит всякую хрень вместо номера штампа //
+	
+	// @todo Пепсиколов ничего не вводит, сабмитит пустую форму //
+
+	it('should be submit', function() {
+		var sbm = element(by.model('submit'));
+		sbm.click();
+	});
 });
