@@ -39,8 +39,29 @@
 
 	app.controller('JobBlank', ['$scope', 'Job', 'Blank', function($scope, Job, Blank) {
 
+		/**
+		 * Значения по умолчанию
+		 */
 		$scope.workset = {
-			cut_number: 0,
+			cut_number: 1000,
+			roll: 'hand',
+			roll_type: 'outside',
+			roll_dir: 'head_forward',
+			inks: [ 
+				{ name: 'Opaque', used: false },
+				{ name: 'Cyan', used: true },
+				{ name: 'Magenta', used: true },
+				{ name: 'Yellow', used: true },
+				{ name: 'Black', used: true },
+				{ name: 'Orange', used: false },
+				{ name: 'Violet', used: false },
+			],
+			hot_folder: 'CMYK',
+			actions: [
+				{ name: 'assembly', process: true },
+				{ name: 'matching', process: false },
+				{ name: 'achtung', process: false },
+			],
 		};
 		/**
 		 * Загрузка данных бланка откуда-нибудь

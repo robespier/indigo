@@ -18,22 +18,20 @@
 							<label for="cut_number" class="col-md-1 control-label">№_штампа</label>
 							<input ng-model="workset.cut_number" name="cut_number" id="cut_number" class="form-control" type="text">
 						</div>	
-						<p>
-						</p>
+						<p> </p>
 
 						<div class="row">
 							<div class="col-md-5">
-								<label for="hand">Намотка
-								</label>
+								<label for="hand">Намотка</label>
 								<div>
 									<div class="radio">
 										<label>
-											<input name="roll" value="hand" id="hand" type="radio">ручная
+											<input ng-model="workset.roll" name="roll" value="hand" id="hand" type="radio">ручная
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input name="roll" value="auto" id="auto" type="radio">автомат.
+											<input ng-model="workset.roll" name="roll" value="auto" id="auto" type="radio">автомат.
 										</label>
 									</div>
 								</div>
@@ -44,20 +42,20 @@
 								</label>
 								<div>
 									<div class="radio">
-										<label><input name="roll_type" value="outside" id="outside" type="radio">наружная
+										<label>
+											<input ng-model="workset.roll_type" name="roll_type" value="outside" id="outside" type="radio">наружная
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input name="roll_type" value="inside" id="inside" type="radio">внутреняя
+											<input ng-model="workset.roll_type" name="roll_type" value="inside" id="inside" type="radio">внутреняя
 										</label>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="row">
-							<p>
-							</p>
+							<p> </p>
 							<div class="col-md-5">
 								<img src="images/roll_1_6.png" ng-src="images/{{ getRollImage(order.roll_dir) }}" alt="Расположение этикетки на сборке">
 							</div>
@@ -68,22 +66,22 @@
 								<div>
 									<div class="radio">
 										<label>
-											<input ng-click="setRollImage('head_mashine')" name="roll_dir" value="head_mashine" id="head_mashine" type="radio">головой к машине
+											<input ng-model="workset.roll_dir" ng-click="setRollImage('head_mashine')" name="roll_dir" value="head_mashine" id="head_mashine" type="radio">головой к машине
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input ng-click="setRollImage('foot_mashine')" name="roll_dir" value="foot_mashine" id="foot_mashine" type="radio">ногами к машине
+											<input ng-model="workset.roll_dir" ng-click="setRollImage('foot_mashine')" name="roll_dir" value="foot_mashine" id="foot_mashine" type="radio">ногами к машине
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input ng-click="setRollImage('foot_forward')" name="roll_dir" value="foot_forward" id="foot_forward" type="radio">ногами вперед
+											<input ng-model="workset.roll_dir" ng-click="setRollImage('foot_forward')" name="roll_dir" value="foot_forward" id="foot_forward" type="radio">ногами вперед
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input ng-click="setRollImage('head_forward')" name="roll_dir" value="head_forward" id="head_forward" type="radio">головой вперед
+											<input ng-model="workset.roll_dir" ng-click="setRollImage('head_forward')" name="roll_dir" value="head_forward" id="head_forward" type="radio">головой вперед
 										</label>
 									</div>
 								</div>
@@ -93,10 +91,9 @@
 
 					<div class="col-md-6">
 						<div class="row">
-							<label for="label_path" class="col-md-1 control-label">Принт-лист
-							</label>
+							<label for="label_path" class="col-md-1 control-label">Принт-лист</label>
 							<div class="col-md-12">
-								<textarea name="label_path" id="label_path" class="form-control"></textarea>
+								<textarea ng-model="workset.label_path" rows=10 name="label_path" id="label_path" class="form-control"></textarea>
 							</div>
 						</div>
 					</div>
@@ -104,70 +101,65 @@
 					<div class="col-md-3">
 						<div class="row">
 							<div class="col-md-5">
-								<label class="col-md-0 control-label">Красочность
-								</label>
+								<label class="col-md-0 control-label">Красочность</label>
 								<div class="checkbox">
 									<label>
-										<input name="ink_0" type="checkbox">Opaque
+										<input ng-model="workset.inks[0].used" name="ink_0" type="checkbox">Opaque
 									</label>
 								</div>
 								<div class="checkbox">
 									<label>
-										<input name="ink_1" type="checkbox">Cyan
+										<input ng-model="workset.inks[1].used" name="ink_1" type="checkbox">Cyan
 									</label>
 								</div>
 								<div class="checkbox">
 									<label>
-										<input name="ink_2" type="checkbox">Magenta
+										<input ng-model="workset.inks[2].used" name="ink_2" type="checkbox">Magenta
 									</label>
 								</div>
 								<div class="checkbox">
 									<label>
-										<input name="ink_3" type="checkbox">Yellow
+										<input ng-model="workset.inks[3].used" name="ink_3" type="checkbox">Yellow
 									</label>
 								</div>
 								<div class="checkbox">
 									<label>
-										<input name="ink_4" type="checkbox">Black
+										<input ng-model="workset.inks[4].used" name="ink_4" type="checkbox">Black
 									</label>
 								</div>
 								<div class="checkbox">
 									<label>
-										<input name="ink_5" type="checkbox">Orange
+										<input ng-model="workset.inks[5].used" name="ink_5" type="checkbox">Orange
 									</label>
 								</div>
 								<div class="checkbox">
 									<label>
-										<input name="ink_6" type="checkbox">Violet
+										<input ng-model="workset.inks[6].used" name="ink_6" type="checkbox">Violet
 									</label>
 								</div>
 							</div>
 							<div class="col-md-7">
-								<label class="col-md-0 control-label">Hot Folder
-								</label>
-								<p>
-								</p>
-								<h2>CMYK</h2>
-								<!--							<h2>CMYKW</h2>
-								<h2>CMYKOV_White</h2>
-								-->					</div>
+								<label class="col-md-0 control-label">Hot Folder</label>
+								<p> </p>
+								<h2>{{workset.hot_folder}}</h2>
+							</div>
 
 							<div class="col-md-7">
 								<label class="col-md-0 control-label">Action
 								</label>
 								<div class="checkbox">
 									<label>
-										<input name="assembly" type="checkbox">Обычная сборка
+										<input ng-model="workset.actions[0].process" name="assembly" type="checkbox">Обычная сборка
 									</label>
 								</div>	
 								<div class="checkbox">
 									<label>
-										<input name="matching" type="checkbox">Утверждение
+										<input ng-model="workset.actions[1].process" name="matching" type="checkbox">Утверждение
 									</label>
 								</div>
 								<div class="checkbox">
 									<label>
-										<input name="achtung" type="checkbox">Aхтунг!
+										<input ng-model="workset.actions[2].process" name="achtung" type="checkbox">Aхтунг!
 									</label>
 								</div>
 							</div>
