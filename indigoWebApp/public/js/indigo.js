@@ -78,6 +78,10 @@
 			this.order.roll_dir = direction;
 		};
 
+		$scope.submit = function() {
+			Job.save($scope.workset);
+		};
+
 	} ]);
 	/**
 	 * Валидация формы: ожидается положительный float 

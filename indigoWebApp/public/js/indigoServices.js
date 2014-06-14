@@ -5,6 +5,5 @@
 	}]);
 	indigoDatasource.factory('Job', ['$resource', function($resource) {
 		return $resource('data/json/pushJob');
-	}
-	]);
+	}]);
 })();

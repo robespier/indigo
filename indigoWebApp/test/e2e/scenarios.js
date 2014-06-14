@@ -18,8 +18,9 @@ describe('upload illustrator job', function() {
 	
 	// @todo Пепсиколов ничего не вводит, сабмитит пустую форму //
 
+	// Пепсиколов сабмитит форму //
 	it('should be submit', function() {
-		var sbm = element(by.model('submit'));
+		var sbm = element(by.id('submit'));
 		sbm.click();
 	});
 });
