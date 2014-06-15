@@ -58,7 +58,7 @@
 			],
 			hot_folder: 'CMYK',
 			actions: [
-				{ name: 'assembly', process: true },
+				{ name: 'AssemblyImposer', process: true },
 				{ name: 'matching', process: false },
 				{ name: 'achtung', process: false },
 			],
