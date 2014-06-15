@@ -19,12 +19,12 @@ Indigo.BaseImposer.prototype = {
 	 * @param {object} job Параметризующий объект с деталями задания
 	 */
 	setup: function(job) {
-		this.temp = job.template;
-		this.roll_number = job.roll; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
-		this.hotfolderName = job.separations;
+		this.temp = job.cut_number;
+		this.roll_number = "0"; // логику намоток не помню, так что 0 для проверки; job.roll; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
+		this.hotfolderName = job.hot_folder;
 		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
 		this.templateFolder = new Folder ('D:\\work\\template'); //Каталог шаблонов сборки
-		this.printList = job.print_list; //Массив строк из принт-листа
+		this.printList = job.label_path.split('\n'); //Массив строк из принт-листа
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
 		this.job = job;
@@ -120,7 +120,7 @@ Indigo.BaseImposer.prototype = {
 		this.labels = []; 
 		for (var i=0, prl = this.printList.length; i < prl; i++) {
 			// Создаем ссылку на файл этикетки
-			var labelObjectFile = new File (this.printList[i].name);
+			var labelObjectFile = new File (this.printList[i]);
 			// Сохраняем ссылку на файл в экземплярной переменной
 			this.labels.push(labelObjectFile);
 		}
