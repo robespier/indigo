@@ -49,11 +49,17 @@ exports.data = function(req,res) {
 			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
 				var jobsCollection = db.collection('indigoJobs');
 				jobsCollection.find({status:'pending'}).nextObject(function(err, parcel) {
+					// Создаём массив заданий для Иллюстратора
+					var jobs = [];
 					var adobed = encodeAdobe(parcel); 
-					res.json( 200, [{ 
-						action: 'BlankComposer',
-						data: adobed }]
-					);
+					Object.keys(parcel.actions).forEach(function(key) {
+						jobs.push({
+							action: parcel.actions[key].name,
+							data: adobed,
+						});
+					});
+					// Держи, кормилец:
+					res.json( 200, jobs );
 					res.end();
 				});
 			});
