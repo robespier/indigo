@@ -37,7 +37,10 @@ var Indigo = Indigo || {
 	 */
 	config : {
 		achtungFile: 'Y:/ACHTUNG.eps',
-		webaccesslib: 'C:/Program Files (x86)/Adobe/Adobe Bridge CS3/webaccesslib.dll',
+		webaccesslib: [
+			'C:/Program Files (x86)/Adobe/Adobe Bridge CS3/webaccesslib.dll',
+			'D:/bin/Adobe/Adobe Bridge CS3/webaccesslib.dll'
+		],
 		webserver : 'http://indigo.aicdr.pro:8080/'
 	}
 };
