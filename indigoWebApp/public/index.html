@@ -15,10 +15,10 @@
 					<h1>Quick Collect</h1>
 					<div class="col-md-3">
 						<div class="row">
-							<label for="cut_number" class="col-md-1 control-label">№_штампа</label>
+							<label for="cut_number" class="col-md-1 control-label">Штамп</label>
 							<input ng-model="workset.cut_number" name="cut_number" id="cut_number" class="form-control" type="text">
 						</div>	
-					<div class="row">
+<!--					<div class="row">
 						<div class="col-md-6">
 							<label for="size_x" class="col-md-0 control-label">Размер_X</label>
 							<div>
@@ -68,15 +68,16 @@
 								</div>
 							</div>
 						</div>
-						<div class="row">
+-->						<div class="row">
 							<p> </p>
 							<div class="col-md-5">
+								<label for="head_mashine">Намотка
+								</label>
 								<img src="images/roll_1_6.png" ng-src="images/{{ getRollImage(order.roll_dir) }}" alt="Расположение этикетки на сборке">
 							</div>
 
 							<div class="col-md-7">
-								<label for="head_mashine">Направление_намотки
-								</label>
+							<p> </p>
 								<div>
 									<div class="radio">
 										<label>
