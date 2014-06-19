@@ -4,6 +4,7 @@ chai.use(chaiAsPromised);
 var expect = chai.expect;
 
 describe('upload illustrator job', function() {
+
 	beforeEach(function() {
 		browser.get('index.html');
 	});
@@ -20,7 +21,15 @@ describe('upload illustrator job', function() {
 
 	// Пепсиколов сабмитит форму //
 	it('should be submit', function() {
-		var sbm = element(by.id('submit'));
+		var cutNumber = element(by.model('workset.cut_number')),
+			roll = element(by.id('foot_mashine')),
+			labels = element(by.name('label_path')),
+			sbm = element(by.id('submit'));
+		cutNumber.sendKeys('4090354');
+		roll.click();
+		labels.sendKeys("Y:\\d9\\111\\001\\spaklevka_08_klei.eps");
+		labels.sendKeys(protractor.Key.ENTER);
+		labels.sendKeys("Y:\\d9\\111\\002\\spaklevka_1_5_klei.eps");
 		sbm.click();
 	});
 });
