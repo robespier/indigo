@@ -13,6 +13,7 @@ describe('upload illustrator job', function() {
 		sbm = element(by.id('submit'));
 	});
 
+	// incomplete //
 	it('"cut_number" should be ok', function() {
 		var cn = element(by.model('workset.cut_number'));
 		cn.clear();
@@ -42,5 +43,42 @@ describe('upload illustrator job', function() {
 		labels.sendKeys(protractor.Key.ENTER);
 		labels.sendKeys("Y:\\d9\\111\\002\\spaklevka_1_5_klei.eps");
 		sbm.click();
+	});
+});
+
+describe('select hotfolder', function() {
+	var Op, C, M, Y, B, Or, V,
+		hotFolder;
+
+	beforeEach(function() {
+		browser.get('index.html');
+		Op = element(by.name('ink_0'));
+		C  = element(by.name('ink_1'));
+		M  = element(by.name('ink_2'));
+		Y  = element(by.name('ink_3'));
+		B  = element(by.name('ink_4'));
+		Or = element(by.name('ink_5'));
+		V  = element(by.name('ink_6'));
+		hotFolder = element(by.tagName('h2'));
+	});
+
+	it('should be initial CMYK', function() {
+		expect(hotFolder.getText()).to.eventually.equal('CMYK');
+	});
+
+	it('should be CMYKW', function() {
+		Op.click();
+		expect(hotFolder.getText()).to.eventually.equal('CMYKW');
+	});
+
+	it('should be CMYKOW_White', function() {
+		V.click();
+		expect(hotFolder.getText()).to.eventually.equal('CMYKOW_White');
+	});
+
+	it('should be back to CMYK', function() {
+		Op.click();
+		Op.click();
+		expect(hotFolder.getText()).to.eventually.equal('CMYK');
 	});
 });
