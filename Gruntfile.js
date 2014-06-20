@@ -93,6 +93,15 @@ module.exports = function(grunt) {
 					'ZOrderMethod',
 					// angular
 					'angular',
+					// tests
+					'beforeEach',
+					'browser',
+					'by',
+					'describe',
+					'element',
+					'it',
+					'protractor',
+
 				],
 				sub: true,
 				undef: true,
@@ -108,7 +117,7 @@ module.exports = function(grunt) {
 				},
 			},
 			tests: {
-				src: ['<%= concat.tests.dest %>'],
+				src: ['<%= concat.tests.dest %>', 'indigoWebApp/test/**/*.js'],
 			},
 			nodejs: {
 				src: ['indigoWebApp/app.js', 'indigoWebApp/routes/*.js', 'Gruntfile.js'],
