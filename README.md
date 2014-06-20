@@ -31,6 +31,8 @@
 
 ###Тесты
 
+#### Для Иллюстратора
+
 Тесты собираются с общей сборкой, т.е. когда всем `grunt` наступает.
 
 В Extended Script Toolkit:
@@ -38,6 +40,12 @@
 * `bin\tests.js`
 
 Результаты видны в JavaScript Console.
+
+#### В браузере
+
+В командном интерпретаторе Windows:
+
+* `protractor indigoWebApp/test/protractor.conf.js`
 
 ###Сборка документации
 
