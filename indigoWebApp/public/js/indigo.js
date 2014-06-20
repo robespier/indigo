@@ -43,7 +43,6 @@
 		 * Значения по умолчанию
 		 */
 		$scope.workset = {
-//			cut_number: 1000,
 			roll: 'hand',
 			roll_type: 'outside',
 			roll_dir: 'head_forward',
@@ -63,6 +62,7 @@
 				{ name: 'achtung', process: false },
 			],
 		};
+		
 		/**
 		 * Загрузка данных бланка откуда-нибудь
 		 * _id на шару, нода сейчас отвечает единственным набором данных
@@ -110,6 +110,14 @@
 		$scope.calcHF = function() {
 			var inks = toDEC(this.workset.inks);
 			this.workset.hot_folder = getHotFolder(inks);
+		};
+
+		/**
+		 * Убирать все двойные кавычки из принт-листа
+		 * fixes #3
+		 */
+		$scope.dropQuotes = function() {
+			this.workset.label_path = this.workset.label_path.replace(/\"/g,'');
 		};
 		
 		/**
