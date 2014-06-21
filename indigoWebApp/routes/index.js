@@ -53,10 +53,12 @@ exports.data = function(req,res) {
 					var jobs = [];
 					var adobed = encodeAdobe(parcel); 
 					Object.keys(parcel.actions).forEach(function(key) {
-						jobs.push({
-							action: parcel.actions[key].name,
-							data: adobed,
-						});
+						if (parcel.actions[key].process) {
+							jobs.push({
+								action: parcel.actions[key].name,
+								data: adobed,
+							});
+						}
 					});
 					// Держи, кормилец:
 					res.json( 200, jobs );
