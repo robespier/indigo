@@ -13,12 +13,6 @@ Indigo.Tests.testHTTPMessenger.prototype.name = 'testHTTPMessenger';
  */
 Indigo.Tests.testHTTPMessenger.prototype.setUp = function() {
 
-	var webaccesslib = new ExternalObject('lib:' + Indigo.config.webaccesslib);
-	
-	// Чтобы `jshint` не вопил по поводу неиспользованной переменной, 
-	// задействуем `webaccesslib` хоть как-нибудь:
-	if (typeof(webaccesslib) === 'undefined') { return; }
-	
 	// Фальшивый databroker;
 	var databroker = {
 		getURI: function() {
