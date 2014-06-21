@@ -72,12 +72,14 @@ exports.data = function(req,res) {
 				}
 				var workset = req.body;
 				var jobs = db.collection('indigoJobs');
-				jobs.findAndModify({_id: 'current'}, [], workset, {upsert: true, w: 1}, function(err, result) {
-					if (err) {
-						res.send(500);
-					} else {
-						res.send(200, result);
-					}
+				jobs.remove(function(){
+					jobs.findAndModify({_id: 'current'}, [], workset, {upsert: true, w: 1}, function(err, result) {
+						if (err) {
+							res.send(500);
+						} else {
+							res.send(200, result);
+						}
+					});
 				});
 			});
 		},
