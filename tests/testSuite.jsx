@@ -106,13 +106,13 @@ Indigo.Tests.testSuite.prototype = {
 	getMockJob: function() {
 		this.testCommonPath = '/testCommons/d9/111/';
 		var job = {
-			"template" : this.name,
-			"separations" : 'CMYK',
+			"cut_number" : this.name,
+			"hot_folder" : 'CMYK',
 			"roll" : '2',
-			"print_list" : [
-				{ "name" : this.testsFilesFolder + this.testCommonPath + '001/spaklevka_08_klei.eps' },
-				{ "name" : this.testsFilesFolder + this.testCommonPath + '002/spaklevka_1_5_klei.eps' },
-			],
+			"label_path" : [
+				this.testsFilesFolder + this.testCommonPath + '001/spaklevka_08_klei.eps',
+				this.testsFilesFolder + this.testCommonPath + '002/spaklevka_1_5_klei.eps',
+			].join('\n'),
 		};
 		return job;
 	},
