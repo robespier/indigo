@@ -96,7 +96,11 @@ Indigo.JsonBroker.prototype.json_encode = function(obj, jsonString) {
 				continue;
 			}
 			if (Pocient instanceof Object) {
-				jsonString += '"' + i + '":' + '{' + this.json_encode(Pocient, '') + '},';
+				if (obj instanceof Array) {
+					jsonString += '{' + this.json_encode(Pocient, '') + '},';
+				} else {
+					jsonString += '"' + i + '":' + '{' + this.json_encode(Pocient, '') + '},';
+				}
 				continue;
 			}
 			if (typeof(Pocient) === 'boolean') {
