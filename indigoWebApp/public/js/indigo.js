@@ -150,7 +150,7 @@
 				hotfolderName = "CMYKW";
 				}
 			} else {
-				hotfolderName = "CMYKOW_White";
+				hotfolderName = "CMYKOV_White";
 			}
 			return hotfolderName;
 		}
