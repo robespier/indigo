@@ -261,14 +261,39 @@ Indigo.BaseImposer.prototype = {
 			targetName[i]= this.labels[i].parent.name;
 		}
 
-		targetName.sort();
+if (targetName.length === 1) {
+	this.range = targetName[0];
+	
+// Если массив из одного значения, то this.range равен ему.
+// в противном случае, мы проверяем на уникальность все элементы массива
 
-		var range = targetName[0] + '_' + targetName[targetName.length-1];
+} else {
+		
+	targetName.sort();
+	var unique;
+	
+	for (i=1, l=targetName.length; i < l; i++) {
+		if (targetName[0] === targetName[i]) {
+			unique = 0;			
+		} else {
+			unique = 1;
+		}		
+	}
+
+	if (unique < 1) {
+	this.range = targetName[0];
+// если уникальность равна нулю, значит элементы  targetName одинаковые
+// и range будет представлен одним числом,
+// в противном случае, элементы  targetName - разные, тогда range будет составной.
+		} else {
+	this.range = targetName[0] + '_' + targetName[targetName.length-1];			
+	}
+}
 
 		// Common Name prefix
 		var cName = this.child.parent.parent.name + this.child.parent.name;
 		// Имя файла сборки
-		return this.getPDFPart(index, range, cName);
+		return this.getPDFPart(index, this.range, cName);
 	},
 
 	/**
