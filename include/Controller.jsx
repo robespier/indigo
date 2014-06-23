@@ -37,7 +37,7 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
 			jobid: data._id,
 			source: worker.name,
 			user: $.getenv('username') };
-		//this.messenger.send('info', feedback);
+		this.messenger.send('info', feedback);
 		var start = new Date().getTime();
 		// Запустить worker
 		try {
@@ -47,7 +47,7 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
 			feedback.duration = new Date().getTime() - start;
 			feedback.info = 'finish';
 			// Отправить уведомление о результатах работы
-			//this.messenger.send('info', feedback);
+			this.messenger.send('info', feedback);
 		} catch (err) {
 			this.messenger.send('error', err);
 		}
