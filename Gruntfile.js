@@ -25,6 +25,7 @@ module.exports = function(grunt) {
 					'include/AssemblyImposer.jsx',
 					'include/AchtungImposer.jsx',
 					'include/MatchingImposer.jsx',
+					'include/TemplateScanner.jsx',
 					'include/BlankComposer.jsx',
 					'include/DataBroker.jsx',
 					'include/JsonBroker.jsx',
