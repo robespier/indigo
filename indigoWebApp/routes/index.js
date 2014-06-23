@@ -3,7 +3,8 @@
  * GET home page.
  */
 
-var MongoClient = require('mongodb').MongoClient;
+var MongoClient = require('mongodb').MongoClient,
+	ObjectID = require('mongodb').ObjectID;
 
 /**
  * Закодировать не-ASCII символы в текстовых полях передаваемого объекта
@@ -30,6 +31,45 @@ function encodeAdobe(obj) {
 }
 
 exports.data = function(req,res) {
+
+	/**
+	 * Тут обрабатываются запросы от контроллера Иллюстратора 
+	 *
+	 * `start`, `finish` -- см. Controller.jsx, 36, 48
+	 * `storeTemplates` -- метод, который мы выбрали в качестве обработчика (хранится в монге вместе с заданием)
+	 *
+	 */	
+	var model = {
+		start: {
+			/**
+			 * Обновляем статус задания: с `pending` на `running`
+			 */
+			storeTemplates: function(db, parcel) {
+				var id = new ObjectID(parcel.jobid);
+				var jobsCollection = db.collection('indigoJobs');
+				jobsCollection.update({_id: id}, {$set: {status: "running"}}, function() {
+					console.info('[%s]: Job %s started from %s by %s', new Date(), parcel.jobid, parcel.host, parcel.user);
+				});
+			},
+		},
+		finish: {
+			/**
+			 * Вставляем список шаблонов в коллекцию `indigoTemplates`
+			 * @todo Обновляем статус задания: `done` или `error`
+			 */
+			storeTemplates: function(db, parcel) {
+				var templatesCollection = db.collection('indigoTemplates');
+				templatesCollection.insert(parcel.result.data, {w: 1}, function(err) {
+					if (err) {
+						console.err('[%s]: Job %s failed with %s', new Date(), parcel.jobid, err);
+					} else {
+						console.info('[%s]: Job %s finished', new Date(), parcel.jobid);
+					}
+				});
+			},
+		},
+	};
+
 	var megaSwitch = {
 		error: function() {
 			var message = {};
@@ -38,10 +78,42 @@ exports.data = function(req,res) {
 			}
 			res.end();
 		},
+		/**
+		 * Тут маршрутизируются запросы от Иллюстратора со статусом `info`
+		 *
+		 * При получении запроса мы:
+		 * 
+		 * * преобразуем сообщение из тела запроса в объект `message`;
+		 * * достаем из этого объекта id задания и делаем из него монговский ObjectID;
+		 * * тянем из коллекции indigoJobs это задание по его ObjectID и смотрим массив callbacks;
+		 * * если в массиве callbacks нашлись функции, которые можно выполнить, то 
+		 *   выполняем их асинхронно (точнее, ставим в очередь на выполнение в process.nextTick);
+		 * * 
+		 */
 		info: function() {
 			var message = {};
 			if (req.method === 'POST') {
 				message = JSON.parse(req.body.parcel);
+				var id = new ObjectID(message.jobid);
+				MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db){
+					var jobsCollection = db.collection('indigoJobs');
+					jobsCollection.find({_id: id}).nextObject(function(err, parcel) {
+						var i = message.info;
+						var callbacks = parcel.callbacks;
+						Object.keys(callbacks).forEach(function(key) {
+							try {
+								var fn = model[i][callbacks[key]];
+								if (typeof(fn) === 'function') {
+									process.nextTick(function() {
+										fn(db, message);
+									});
+								}
+							} catch (e) {
+								console.error('Requested method not implemented yet: %s.%s', i, callbacks[key]);
+							}
+						});
+					});
+				});
 			}
 			res.end();
 		},
