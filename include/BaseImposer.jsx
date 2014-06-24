@@ -255,7 +255,20 @@ Indigo.BaseImposer.prototype = {
 			this.child = this.currentLabel.file.parent;
 		}
 
-		// Определение диапазон папок 
+		this.setNameRange();
+
+		// Common Name prefix
+		var cName = this.child.parent.parent.name + this.child.parent.name;
+		// Имя файла сборки
+		return this.getPDFPart(index, this.range, cName);
+	},
+
+	/**
+	 * Определение диапазона папок
+	 *
+	 * @return {string} range
+	 */ 
+	setNameRange: function() {
 		var targetName = [];
 		for (var i=0, l=this.labels.length; i < l; i++) {
 			targetName[i]= this.labels[i].parent.name;
@@ -291,11 +304,7 @@ Indigo.BaseImposer.prototype = {
 				this.range = targetName[0] + '_' + targetName[targetName.length-1];			
 			}
 		}
-
-		// Common Name prefix
-		var cName = this.child.parent.parent.name + this.child.parent.name;
-		// Имя файла сборки
-		return this.getPDFPart(index, this.range, cName);
+		return this.range;
 	},
 
 	/**
