@@ -21,6 +21,9 @@ Indigo.Tests.testAchtungImposer.prototype.run = function() {
 	// d9111001_002_ACHTUNG.pdf
 	var result = this.assertFileExists(this.testsFilesFolder + this.testCommonPath + '001/d9111001_002_ACHTUNG.pdf');
 	this.log(result, '.Created');
+	// В хотфолдере должен лежать его брат-близнец:
+	var hotResult = this.assertFileExists(this.pocient.hotFolder + '/' + 'd9111001_002_ACHTUNG.pdf');
+	this.log(hotResult, '.InHotFolder');
 };
 
 /**
@@ -28,7 +31,7 @@ Indigo.Tests.testAchtungImposer.prototype.run = function() {
  */
 Indigo.Tests.testAchtungImposer.prototype.tearDown = function() {
 	var testResult = new File(this.testsFilesFolder + this.testCommonPath + '001/d9111001_002_ACHTUNG.pdf');
-	if (testResult.exists) {
-		testResult.remove();
-	}
+	if (testResult.exists) { testResult.remove(); }
+	var hotResult = new File(this.pocient.hotFolder + '/' + 'd9111001_002_ACHTUNG.pdf');
+	if (hotResult.exists) { hotResult.remove(); }
 };

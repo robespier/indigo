@@ -28,9 +28,9 @@ describe('select hotfolder', function() {
 		expect(hotFolder.getText()).to.eventually.equal('CMYKW');
 	});
 
-	it('should be CMYKOW_White', function() {
+	it('should be CMYKOV_White', function() {
 		V.click();
-		expect(hotFolder.getText()).to.eventually.equal('CMYKOW_White');
+		expect(hotFolder.getText()).to.eventually.equal('CMYKOV_White');
 	});
 
 	it('should be back to CMYK', function() {

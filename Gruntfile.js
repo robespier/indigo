@@ -19,7 +19,7 @@ module.exports = function(grunt) {
 			},
 			estk: {
 				src: [
-					'include/Base.jsx',
+					'include/Config.jsx',
 					'include/Utils.jsx',
 					'include/BaseImposer.jsx',
 					'include/AssemblyImposer.jsx',

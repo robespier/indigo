@@ -16,7 +16,7 @@ Indigo.AchtungImposer.prototype.achtungLabel = Indigo.config.achtungFile;
 /** 
  * Размещение этикетки на листе.
  * В данном случае this.labels идёт лесом, мы ставим единственный
- * файл (ACHTUNG.eps) по ценру печатного листа и масштабируем его
+ * файл (ACHTUNG.eps) по центру печатного листа и масштабируем его
  * до максимально возможного размера
  *
  * @return {void}
@@ -44,7 +44,7 @@ Indigo.AchtungImposer.prototype.imposeLabels = function() {
 	var height_percent = (template.height * HeightRatioPercent) / achtungPlace.height;
 	achtungPlace.resize (width_percent, height_percent);
 
-	// Сдесь currentLabel необходим для того, чтобы Ахтунг упал 
+	// Здесь currentLabel необходим для того, чтобы Ахтунг упал 
 	// в нужное место (туда, где лежит первая этикетка задания)
 	this.currentLabel = this.labels[0];
 	

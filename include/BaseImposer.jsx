@@ -22,8 +22,8 @@ Indigo.BaseImposer.prototype = {
 		this.temp = job.cut_number;
 		this.roll_number = "0"; // логику намоток не помню, так что 0 для проверки; job.roll; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
 		this.hotfolderName = job.hot_folder;
-		this.hotFolder = new Folder ('X:\\' + this.hotfolderName); //Горячая папка
-		this.templateFolder = new Folder ('D:\\work\\template'); //Каталог шаблонов сборки
+		this.hotFolder = new Folder (Indigo.config.HFRoot + this.hotfolderName); //Горячая папка
+		this.templateFolder = new Folder (Indigo.config.TmplRoot); //Каталог шаблонов сборки
 		this.printList = job.label_path.split('\n'); //Массив строк из принт-листа
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
@@ -255,20 +255,56 @@ Indigo.BaseImposer.prototype = {
 			this.child = this.currentLabel.file.parent;
 		}
 
-		// Определение диапазон папок 
+		this.setNameRange();
+
+		// Common Name prefix
+		var cName = this.child.parent.parent.name + this.child.parent.name;
+		// Имя файла сборки
+		return this.getPDFPart(index, this.range, cName);
+	},
+
+	/**
+	 * Определение диапазона папок
+	 *
+	 * @return {string} range
+	 */ 
+	setNameRange: function() {
 		var targetName = [];
 		for (var i=0, l=this.labels.length; i < l; i++) {
 			targetName[i]= this.labels[i].parent.name;
 		}
 
-		targetName.sort();
+		if (targetName.length === 1) {
+			this.range = targetName[0];
 
-		var range = targetName[0] + '_' + targetName[targetName.length-1];
+			// Если массив из одного значения, то this.range равен ему.
+			// в противном случае, мы проверяем на уникальность все элементы массива
 
-		// Common Name prefix
-		var cName = this.child.parent.parent.name + this.child.parent.name;
-		// Имя файла сборки
-		return this.getPDFPart(index, range, cName);
+		} else {
+
+			targetName.sort();
+			var unique;
+
+			// @@todo Глаз режут объявления i и l без var, будто бы в global гадим.
+			// Может, другие имена использовать, чисто для красоты?
+			for (i=1, l=targetName.length; i < l; i++) {
+				if (targetName[0] === targetName[i]) {
+					unique = 0;			
+				} else {
+					unique = 1;
+				}		
+			}
+
+			if (unique < 1) {
+				this.range = targetName[0];
+				// если уникальность равна нулю, значит элементы  targetName одинаковые
+				// и range будет представлен одним числом,
+				// в противном случае, элементы  targetName - разные, тогда range будет составной.
+			} else {
+				this.range = targetName[0] + '_' + targetName[targetName.length-1];			
+			}
+		}
+		return this.range;
 	},
 
 	/**

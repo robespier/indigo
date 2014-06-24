@@ -104,7 +104,8 @@ Indigo.Tests.testSuite.prototype = {
 	 *
 	 */
 	getMockJob: function() {
-		this.testCommonPath = '/testCommons/d9/111/';
+		this.testCommonPath = 'testCommons/d9/111/';
+		Indigo.config.HFRoot =  this.testsFilesFolder + 'testCommons/' + 'RIP/';
 		var job = {
 			"cut_number" : this.name,
 			"hot_folder" : 'CMYK',

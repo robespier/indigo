@@ -58,8 +58,8 @@
 			hot_folder: 'CMYK',
 			actions: [
 				{ name: 'AssemblyImposer', process: true },
-				{ name: 'matching', process: false },
-				{ name: 'achtung', process: false },
+				{ name: 'MatchingImposer', process: true },
+				{ name: 'AchtungImposer', process: true },
 			],
 		};
 		
@@ -150,7 +150,7 @@
 				hotfolderName = "CMYKW";
 				}
 			} else {
-				hotfolderName = "CMYKOW_White";
+				hotfolderName = "CMYKOV_White";
 			}
 			return hotfolderName;
 		}
