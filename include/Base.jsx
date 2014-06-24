@@ -41,6 +41,10 @@ var Indigo = Indigo || {
 			'C:/Program Files (x86)/Adobe/Adobe Bridge CS3/webaccesslib.dll',
 			'D:/bin/Adobe/Adobe Bridge CS3/webaccesslib.dll'
 		],
-		webserver : 'http://indigo.aicdr.pro:8080/'
+		webserver : 'http://indigo.aicdr.pro:8080/',
+		// Корень хотфолдеров
+		HFRoot : 'X:/',
+		// Корень шаблонов
+		TmplRoot : 'D:/work/template',
 	}
 };
