@@ -3,7 +3,8 @@
  * GET home page.
  */
 
-var ObjectID = require('mongodb').ObjectID;
+var ObjectID = require('mongodb').ObjectID,
+	model = require('../lib/model');
 
 /**
  * Закодировать не-ASCII символы в текстовых полях передаваемого объекта
@@ -30,44 +31,6 @@ function encodeAdobe(obj) {
 }
 
 exports.data = function(req,res) {
-
-	/**
-	 * Тут обрабатываются запросы от контроллера Иллюстратора 
-	 *
-	 * `start`, `finish` -- см. Controller.jsx, 36, 48
-	 * `storeTemplates` -- метод, который мы выбрали в качестве обработчика (хранится в монге вместе с заданием)
-	 *
-	 */	
-	var model = {
-		start: {
-			/**
-			 * Обновляем статус задания: с `pending` на `running`
-			 */
-			storeTemplates: function(db, parcel) {
-				var id = new ObjectID(parcel.jobid);
-				var jobsCollection = db.collection('indigoJobs');
-				jobsCollection.update({_id: id}, {$set: {status: "running"}}, function() {
-					console.info('[%s]: Job %s started from %s by %s', new Date(), parcel.jobid, parcel.host, parcel.user);
-				});
-			},
-		},
-		finish: {
-			/**
-			 * Вставляем список шаблонов в коллекцию `indigoTemplates`
-			 * @todo Обновляем статус задания: `done` или `error`
-			 */
-			storeTemplates: function(db, parcel) {
-				var templatesCollection = db.collection('indigoTemplates');
-				templatesCollection.insert(parcel.result.data, {w: 1}, function(err) {
-					if (err) {
-						console.err('[%s]: Job %s failed with %s', new Date(), parcel.jobid, err);
-					} else {
-						console.info('[%s]: Job %s finished', new Date(), parcel.jobid);
-					}
-				});
-			},
-		},
-	};
 
 	var megaSwitch = {
 		error: function() {
