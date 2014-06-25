@@ -150,6 +150,11 @@ exports.data = function(req,res) {
 	// req.params[1] пока что всегда 'json'; будут другие дата-брокеры -- будет разговор;
 	var action = req.params[2];
 
+	if (typeof(megaSwitch[action]) !== 'function') {
+		res.send(404);
+		return;
+	}
+
 	megaSwitch[action]();
 };
 
