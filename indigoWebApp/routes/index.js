@@ -117,7 +117,12 @@ exports.data = function(req,res) {
 		fetchJobs: function() {
 			var jobsCollection = req.db.collection('indigoJobs');
 			jobsCollection.find({status:'pending'}).nextObject(function(err, parcel) {
-				// Создаём массив заданий для Иллюстратора
+				// Создаём массив заданий для Иллюстратора, если есть
+				if (!parcel) {
+					// а если нет, возвращаем пустой объект
+					res.json(200, {});
+					return;
+				}
 				var jobs = [];
 				var adobed = encodeAdobe(parcel); 
 				Object.keys(parcel.actions).forEach(function(key) {
