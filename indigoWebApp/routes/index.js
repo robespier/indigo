@@ -3,8 +3,7 @@
  * GET home page.
  */
 
-var MongoClient = require('mongodb').MongoClient,
-	ObjectID = require('mongodb').ObjectID;
+var ObjectID = require('mongodb').ObjectID;
 
 /**
  * Закодировать не-ASCII символы в текстовых полях передаваемого объекта
@@ -95,65 +94,55 @@ exports.data = function(req,res) {
 			if (req.method === 'POST') {
 				message = JSON.parse(req.body.parcel);
 				var id = new ObjectID(message.jobid);
-				MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db){
-					var jobsCollection = db.collection('indigoJobs');
-					jobsCollection.find({_id: id}).nextObject(function(err, parcel) {
-						var i = message.info;
-						var callbacks = parcel.callbacks;
-						Object.keys(callbacks).forEach(function(key) {
-							try {
-								var fn = model[i][callbacks[key]];
-								if (typeof(fn) === 'function') {
-									process.nextTick(function() {
-										fn(db, message);
-									});
-								}
-							} catch (e) {
-								console.error('Requested method not implemented yet: %s.%s', i, callbacks[key]);
+				var jobsCollection = req.db.collection('indigoJobs');
+				jobsCollection.find({_id: id}).nextObject(function(err, parcel) {
+					var i = message.info;
+					var callbacks = parcel.callbacks;
+					Object.keys(callbacks).forEach(function(key) {
+						try {
+							var fn = model[i][callbacks[key]];
+							if (typeof(fn) === 'function') {
+								process.nextTick(function() {
+									fn(req.db, message);
+								});
 							}
-						});
+						} catch (e) {
+							console.error('Requested method not implemented yet: %s.%s', i, callbacks[key]);
+						}
 					});
 				});
 			}
 			res.end();
 		},
 		fetchJobs: function() {
-			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
-				var jobsCollection = db.collection('indigoJobs');
-				jobsCollection.find({status:'pending'}).nextObject(function(err, parcel) {
-					// Создаём массив заданий для Иллюстратора
-					var jobs = [];
-					var adobed = encodeAdobe(parcel); 
-					Object.keys(parcel.actions).forEach(function(key) {
-						if (parcel.actions[key].process) {
-							jobs.push({
-								action: parcel.actions[key].name,
-								data: adobed,
-							});
-						}
-					});
-					// Держи, кормилец:
-					res.json( 200, jobs );
-					res.end();
+			var jobsCollection = req.db.collection('indigoJobs');
+			jobsCollection.find({status:'pending'}).nextObject(function(err, parcel) {
+				// Создаём массив заданий для Иллюстратора
+				var jobs = [];
+				var adobed = encodeAdobe(parcel); 
+				Object.keys(parcel.actions).forEach(function(key) {
+					if (parcel.actions[key].process) {
+						jobs.push({
+							action: parcel.actions[key].name,
+							data: adobed,
+						});
+					}
 				});
+				// Держи, кормилец:
+				res.json( 200, jobs );
+				res.end();
 			});
 		},
 		pushJob: function() {
-			MongoClient.connect('mongodb://127.0.0.1:27017/indigo', function(err, db) {
-				if (err) {
-					res.send(500);
-					return;
-				}
-				var workset = req.body;
-				var jobs = db.collection('indigoJobs');
-				jobs.remove(function(){
-					jobs.findAndModify({_id: 'current'}, [], workset, {upsert: true, w: 1}, function(err, result) {
-						if (err) {
-							res.send(500);
-						} else {
-							res.send(200, result);
-						}
-					});
+			var workset = req.body;
+			var jobs = req.db.collection('indigoJobs');
+			jobs.remove(function(){
+				jobs.findAndModify({_id: 'current'}, [], workset, {upsert: true, w: 1}, function(err, result) {
+					if (err) {
+						res.send(500);
+					} else {
+						res.send(200, result);
+					}
 				});
 			});
 		},
