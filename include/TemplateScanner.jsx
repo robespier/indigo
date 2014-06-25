@@ -7,6 +7,7 @@ Indigo.TemplateScanner.prototype = new Indigo.BaseImposer(app);
 Indigo.TemplateScanner.prototype.constructor = Indigo.TemplateScanner;
 
 Indigo.TemplateScanner.prototype.currentLabel = null;
+Indigo.TemplateScanner.prototype.name = 'TemplateScanner';
 
 /**
  * Реализация run() из BaseImposer
