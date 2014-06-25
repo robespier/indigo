@@ -1,0 +1,36 @@
+/**
+ * 
+ * @classdesc testTemplateScanner
+ * 
+ * @constructor
+ */
+Indigo.Tests.testTemplateScanner = function() {};
+Indigo.Tests.testTemplateScanner.prototype = new Indigo.Tests.testSuite(app);
+Indigo.Tests.testTemplateScanner.prototype.constructor = Indigo.Tests.testTemplateScanner;
+Indigo.Tests.testTemplateScanner.prototype.name = 'testTemplateScanner';
+
+Indigo.Tests.testTemplateScanner.prototype.setUp = function () {
+	this.pocient = new Indigo.TemplateScanner(this.app);
+	this.pocient.setup(this.getMockJob());
+	this.pocient.templateFolder = new Folder(this.testsFilesFolder + this.name);
+};
+
+/**
+ * Test
+ */
+Indigo.Tests.testTemplateScanner.prototype.run = function() {
+	this.pocient.getTemplates();
+	var templatesList = this.assertEq(this.pocient.templates.length, 3);
+	this.log(templatesList, '.FindExpected');
+
+	var templatesSpecs = this.pocient.run();
+	this.log(this.assertEq(this.pocient.templates.length, 0), '.AllProcessedArr');
+	this.log(this.assertEq(templatesSpecs.data.length, 3), '.AllProcessedObj');
+	
+	var spec = templatesSpecs.data[0];
+	this.log(this.assertEq(spec.name, 't-01'), '.Name');
+	this.log(this.assertEq(spec.width, 215.433), '.Width');
+	this.log(this.assertEq(spec.height, 394.016), '.Height');
+};
+
+Indigo.Tests.testTemplateScanner.prototype.tearDown = function() {};
