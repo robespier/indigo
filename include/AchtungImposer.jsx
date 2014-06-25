@@ -8,6 +8,7 @@ Indigo.AchtungImposer = function() {};
 Indigo.AchtungImposer.prototype = new Indigo.BaseImposer(app);
 Indigo.AchtungImposer.prototype.constructor = Indigo.AchtungImposer;
 
+Indigo.AchtungImposer.prototype.name = 'AchtungImposer';
 /**
  * @prop {string} achtungLabel Путь к файлу "Внимание..."
  */

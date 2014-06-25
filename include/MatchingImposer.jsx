@@ -8,6 +8,7 @@ Indigo.MatchingImposer.prototype = new Indigo.BaseImposer(app);
 Indigo.MatchingImposer.prototype.constructor = Indigo.MatchingImposer;
 
 Indigo.MatchingImposer.prototype.currentLabel = null;
+Indigo.MatchingImposer.prototype.name = 'MatchingImposer';
 
 /**
  * Размещение этикеток на листе. 
