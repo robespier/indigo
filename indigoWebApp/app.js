@@ -7,6 +7,7 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
+var mongods = require('./lib/mongods');
 
 var exp = express();
 
@@ -18,6 +19,7 @@ exp.use(express.favicon());
 exp.use(express.logger('dev'));
 exp.use(express.bodyParser());
 exp.use(express.methodOverride());
+exp.use(mongods({ dburl:'mongodb://127.0.0.1:27017/indigo' }));
 exp.use(exp.router);
 exp.use(express.static(path.join(__dirname, 'public')));
 
