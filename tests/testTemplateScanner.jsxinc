@@ -31,6 +31,10 @@ Indigo.Tests.testTemplateScanner.prototype.run = function() {
 	this.log(this.assertEq(spec.name, 't-01'), '.Name');
 	this.log(this.assertEq(spec.width, 215.433), '.Width');
 	this.log(this.assertEq(spec.height, 394.016), '.Height');
+
+	this.pocient.templateFolder = new Folder('/dev/random');
+	var exc = this.assertThrows(this.pocient.getTemplates, 'Template folder not found');
+	this.log(exc, 'ThrowsExpected');
 };
 
 Indigo.Tests.testTemplateScanner.prototype.tearDown = function() {};

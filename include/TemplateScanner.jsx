@@ -41,9 +41,19 @@ Indigo.TemplateScanner.prototype.run = function () {
  *
  * На рекурсию не замарачиваемся, предполагаем, что все  
  * шаблоны лежат в корне templateFolder с расширением .ait
+ *
+ * @throws {customException} Нет папки с шаблонами
  */
 Indigo.TemplateScanner.prototype.getTemplates = function() {
-	this.templates = this.templateFolder.getFiles('*.ait');
+	if (this.templateFolder.exists) {
+		this.templates = this.templateFolder.getFiles('*.ait');
+	} else {
+		throw {
+			message: 'Template folder not found',
+			file: this.templateFolder.fullName,
+			jobid: this.job._id,
+		};
+	}
 };
 
 /**

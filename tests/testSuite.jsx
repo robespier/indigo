@@ -191,6 +191,26 @@ Indigo.Tests.testSuite.prototype = {
 	},
 
 	/**
+	 * Функция fn должна бросить исключение с сообщением message
+	 *
+	 * fn вызывается в контексте this === тестируемому классу
+	 *
+	 * @param {function} fn
+	 * @param {string} message
+	 * @return {string} (pass|fail)
+	 */
+	assertThrows : function(fn, message) {
+		var assert = Indigo.Tests.FAIL;
+		try { fn.call(this.pocient); }
+		catch (e) {
+			if ( e.message === message) {
+				assert = Indigo.Tests.PASS;
+			}
+		}
+		return assert;
+	},
+
+	/**
 	 * Совершенно бессовестно (и бездумно) украдено отсюда:
 	 * @see http://stackoverflow.com/questions/1068834/object-comparison-in-javascript
 	 * @todo Что всё таки этот метод делает?
