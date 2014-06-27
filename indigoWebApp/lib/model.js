@@ -68,7 +68,7 @@ exports.chargeTS = function(db, rescan) {
 					callback();
 				});
 			} else {
-				templates.find(null, {_id: 0, name: 1}).each(function(err, templateName) {
+				templates.find({status: "done"}, {_id: 0, name: 1}).each(function(err, templateName) {
 					if (templateName === null) { 
 						callback(); 
 					} else {
