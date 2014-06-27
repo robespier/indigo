@@ -13,6 +13,19 @@ Indigo.round3 = function(num) {
 };
 
 /**
+ * Расширение array методом contains()
+ *
+ * @example
+ * [1,2,3].contains[3] === true
+ */
+Array.prototype.contains = function(item) {
+	for (var i = 0, l = this.length; i < l; i++) {
+		if (this[i] === item) { return true; }
+	}
+	return false;
+};
+
+/**
  * Паддинг слева
  *
  * Крадено, чуть подправлено:
