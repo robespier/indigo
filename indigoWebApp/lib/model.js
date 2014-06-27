@@ -29,8 +29,11 @@ exports.finish = {
 	 * @todo Обновляем статус задания: `done` или `error`
 	 */
 	storeTemplates: function(db, parcel) {
-		var templatesCollection = db.collection('indigoTemplates');
-		templatesCollection.insert(parcel.result.data, {w: 1}, function(err) {
+		var templatesCollection = db.collection('indigoTemplates'),
+			templates = parcel.result.data;
+		async.each(templates, function(t, callback) {
+			templatesCollection.findAndModify({name: t.name}, [], t, {upsert: true, w: 1}, callback);
+		}, function(err) {
 			if (err) {
 				console.error('[%s]: Job %s failed with %s', new Date(), parcel.jobid, err);
 			} else {
