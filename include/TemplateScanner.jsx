@@ -21,12 +21,21 @@ Indigo.TemplateScanner.prototype.run = function () {
 	// проходом цикла. Поэтому итератор написан схожим образом 
 	for (var i = this.templates.length; i > 0; i--) {
 		var t = this.openTemplate();
-		var c = this.getLowerCut();
-		templatesHeap.push({
-			name: this.temp.name.replace('.ait',''),
-			width: Indigo.round3(c.width),
-			height: Indigo.round3(c.height),
-		});
+		
+		var info = {};
+		info.name = this.temp.name.replace('.ait','');
+	
+		var valid = this.validate();
+		if (valid.length > 0) {
+			info.status = 'error';
+			info.errors = valid;
+		} else {
+			var c = this.getLowerCut();
+			info.width = Indigo.round3(c.width);
+			info.height = Indigo.round3(c.height);
+			info.status = 'done';
+		}
+		templatesHeap.push(info);
 		t.close();
 	}
 	var results = {
@@ -34,6 +43,43 @@ Indigo.TemplateScanner.prototype.run = function () {
 		data: templatesHeap,
 	};
 	return results;
+};
+
+/**
+ * aihint для шаблона
+ * 
+ * проверка наличия необходимых слоёв и графических стилей
+ *
+ * @return {array} errors 
+ */
+Indigo.TemplateScanner.prototype.validate = function () {
+	var t = this.template;
+	var errors = [];
+
+	if (t.layers.length > 2) {
+		errors.push('More than two layers in template');
+	}
+	var expectedLayers = ['cut', 'mark'];
+	for (var il = 0, ll = expectedLayers.length; il < ll; il++) {
+		try {
+			var expectedLayer = t.layers[expectedLayers[il]];
+		} catch (e) {
+			errors.push('No "' + expectedLayers[il] + '" layer in template');
+		}
+	}
+
+	if (t.graphicStyles.length !== 6) {
+		errors.push('Rolls unstable');
+	}
+	var expectedStyles = ['roll_1_6', 'roll_2_5', 'roll_3_7', 'roll_4_8'];
+	for (var is = 0, ls = expectedStyles.length; is < ls; is++) {
+		try {
+			var expectedStyle = t.graphicStyles[expectedStyles[is]];
+		} catch (e) {
+			errors.push('Roll "' + expectedStyles[is] + '" absent');
+		}
+	}
+	return errors;
 };
 
 /**
