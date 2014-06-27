@@ -114,6 +114,33 @@ exports.data = function(req,res) {
 				});
 			});
 		},
+		//
+		// Запрос на создание задания для TemplateScanner, из браузера:
+		// 
+		// http://indigo.aicdr.pro:8080/data/json/chargeTS
+		// 
+		// либо
+		// 
+		// http://indigo.aicdr.pro:8080/data/json/chargeTS?rescan=1
+		// 
+		// Если параметр rescan установлен, то база шаблонов будет сброшена 
+		// и сканирование шаблонов будет выполнено "с чистого листа".
+		// По умолчанию (т.е. когда rescan не установлен) будут сканироваться 
+		// только недостающие шаблоны, которые есть на диске, но отсутствуют в базе.
+		//
+		// Использовать GET тут идеологически неверно, потому что вставка в базу
+		// это деструктивная операция, тут нужен POST или PUT. На данном этапе
+		// проще использовать GET для передачи параметра rescan в строке запроса.
+		//
+		// @todo Но потом POST
+		// 
+		chargeTS: function() {
+			var rescan = req.query['rescan'] ? true : false;
+			process.nextTick(function() {
+				model.chargeTS(req.db, rescan);
+			});
+			res.end();
+		},
 	};
 	// req.params[1] пока что всегда 'json'; будут другие дата-брокеры -- будет разговор;
 	var action = req.params[2];

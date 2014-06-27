@@ -1,3 +1,5 @@
+var async = require('async');
+
 /**
  * Тут обрабатываются запросы от контроллера Иллюстратора 
  *
@@ -36,4 +38,46 @@ exports.finish = {
 			}
 		});
 	},
+};
+
+/**
+ * Создание в mongo задания для TemplateScanner
+ *
+ * @param {object} db MongoDB
+ * @param {boolean} rescan
+ */
+exports.chargeTS = function(db, rescan) {
+	var templates = db.collection('indigoTemplates'),
+		jobs = db.collection('indigoJobs'),
+		todo = {
+			actions: [{
+				name: "TemplateScanner",
+				process: true
+			}],
+			status: "pending",
+			label_path: "",
+			callbacks:["storeTemplates"],
+			templates: [],
+		};
+	async.series([
+		function(callback) {
+			if (rescan) { 
+				// параметр rescan установлен, следовательно, сканирование будет полным;
+				// значит, очищаем коллекцию indigoTemplates;
+				templates.remove(function() {
+					callback();
+				});
+			} else {
+				templates.find(null, {_id: 0, name: 1}).each(function(err, templateName) {
+					if (templateName === null) { 
+						callback(); 
+					} else {
+						todo.templates.push(templateName.name);
+					}
+				});
+			}
+		}, function() {
+			jobs.insert(todo, {w: 0});
+		}
+	]);
 };
