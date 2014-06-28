@@ -15,7 +15,7 @@
 					<h1>Quick Collect</h1>
 					<div class="col-md-3">
 						<div class="row">
-							<label for="cut_number" class="col-md-1 control-label">Штамп</label>
+							<label for="cut_number" class="col-md-1 control-label">Номер_штампа</label>
 							<input ng-model="workset.cut_number" name="cut_number" id="cut_number" class="form-control" type="text">
 						</div>	
 <!--					<div class="row">
@@ -34,9 +34,14 @@
 						</div>
 					</div>
 						<p> </p>
-						<div class="row">
+
+						</div>
+-->					<div class="row">
+							<p> </p>
 							<div class="col-md-5">
-								<label for="hand">Намотка</label>
+								<label for="head_mashine">
+
+								<label for="hand">Тип намотки</label>
 								<div>
 									<div class="radio">
 										<label>
@@ -49,10 +54,14 @@
 										</label>
 									</div>
 								</div>
+																</label>
+								<img id="roll_image" src="images/roll_1_6.png" ng-src="images/{{ getRollImage(order.roll_dir) }}" alt="Расположение этикетки на сборке">
 							</div>
 
-							<div class="col-md-7">
-								<label for="outside">Тип_намотки
+							<div class="col-md-7">					
+							
+							<div>
+								<label for="outside">Напр. намотки
 								</label>
 								<div>
 									<div class="radio">
@@ -67,18 +76,8 @@
 									</div>
 								</div>
 							</div>
-						</div>
--->						<div class="row">
-							<p> </p>
-							<div class="col-md-5">
-								<label for="head_mashine">Намотка
-								</label>
-								<img id="roll_image" src="images/roll_1_6.png" ng-src="images/{{ getRollImage(order.roll_dir) }}" alt="Расположение этикетки на сборке">
-							</div>
-
-							<div class="col-md-7">
-							<p> </p>
-								<div>
+							<p> </p>							
+							<div>
 									<div class="radio">
 										<label>
 											<input ng-model="workset.roll_dir" ng-click="setRollImage('head_mashine')" name="roll_dir" value="head_mashine" id="head_mashine" type="radio">головой к машине
