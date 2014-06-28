@@ -16,11 +16,25 @@ Indigo.Tests.HtmlReporter.prototype.finish = function() {
 };
 
 Indigo.Tests.HtmlReporter.prototype.addHeader = function() {
-	this.output.writeln('<table>');
+	this.output.writeln('<!DOCTYPE html>');
+	this.output.writeln('<html>');
+	this.output.writeln('<head>');
+	this.output.writeln('<meta http-equiv="content-type" content="text/html; charset=UTF-8">');
+	this.output.writeln('<title>Indigo TestRunner report</title>');
+	this.output.writeln('<link rel="stylesheet" href="bootstrap.css">');
+
+	this.output.writeln('</head>');
+	this.output.writeln('<body>');
+	this.output.writeln('<div class="container">');
+	this.output.writeln('<h1>Host: ' + $.getenv('computername') + ', time: ' + new Date() + '</h1>');
+	this.output.writeln('<table class="table table-condensed">');
 };
 
 Indigo.Tests.HtmlReporter.prototype.addFooter = function() {
 	this.output.writeln('</table>');
+	this.output.writeln('</div>');
+	this.output.writeln('</body>');
+	this.output.writeln('</html>');
 };
 
 Indigo.Tests.HtmlReporter.prototype.log = function(entry) {
@@ -29,9 +43,9 @@ Indigo.Tests.HtmlReporter.prototype.log = function(entry) {
 	if (!this.allTests) { 
 		return;
 	}
-	var statusClass = 'test--fail';
+	var statusClass = 'danger';
 	if (entry.result === Indigo.Tests.PASS) {
-		statusClass = 'test--pass';
+		statusClass = 'success';
 	}
 	var logline = [];
 	logline.push('<tr class="' + statusClass + '">');
