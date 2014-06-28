@@ -63,6 +63,11 @@ Indigo.Tests.testSuite.prototype = {
 			var testName = testFileName.replace('.jsxinc','');
 			this.testsNames.push(testName);
 		}
+
+		// Репортер по умолчанию -- HTML
+		if (typeof(this.reporter) === 'undefined') {
+			this.reporter = new Indigo.Tests.HtmlReporter();
+		}
 	},
 
 	/**
@@ -80,11 +85,24 @@ Indigo.Tests.testSuite.prototype = {
 	 * Запуск всех тестов, которые только есть 
 	 */
 	runAllTests: function() {
+		this.reporter.allTests = true;
+		this.reporter.start();
 		for (var i=0, l = this.testsNames.length; i < l; i++) {
 			var className = this.testsNames[i];
 			var test = new Indigo.Tests[className]();
-			this.execute(test);
+			test.reporter = this.reporter;
+			try {
+				this.execute(test);
+			} catch (e) {
+				this.reporter.log({
+					result: Indigo.Tests.FAIL,
+					name: className,
+					message: e.message
+				});
+				test.tearDown();
+			}
 		}
+		this.reporter.finish();
 		return 'AllTests done';
 	},
 
@@ -133,6 +151,15 @@ Indigo.Tests.testSuite.prototype = {
 	 * @param {string} message Дополнительная информация
 	 */
 	log: function(result, message) {
+		var entry = {
+			result: result,
+			name: this.name,
+			message: message
+		};
+		if (typeof(this.reporter) !== 'undefined') {
+			this.reporter.log(entry);
+		}
+		// Дублируем результат в консоль
 		$.writeln(result + this.name + message);
 	},
 

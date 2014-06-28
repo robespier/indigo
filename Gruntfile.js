@@ -38,6 +38,7 @@ module.exports = function(grunt) {
 			tests: {
 				src: [
 					'tests/testSuite.jsx',
+					'tests/html-reporter.jsx',
 					'tests/*.jsxinc',
 					'tests/testRun.jsx'
 				],

@@ -15,6 +15,7 @@
 ///#include "../include/indigo.jsxinc"
 
 Indigo.Tests.ts = new Indigo.Tests.testSuite(app);
+Indigo.Tests.ts.reporter = new Indigo.Tests.HtmlReporter();
 Indigo.Tests.ts.init();
 // Запустить все тесты...
 Indigo.Tests.ts.runAllTests();
