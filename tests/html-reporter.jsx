@@ -1,40 +1,53 @@
+/**
+ * @classdesc Коряво получилось.
+ *
+ * @todo Но на первое время сойдёт
+ */
 Indigo.Tests.HtmlReporter = function() {
+	this.hitPass = 0;
+	this.hitFail = 0;
+	this.output = '';
 };
 
 Indigo.Tests.HtmlReporter.prototype.start = function() {
-	this.output = new File('../tests/reports/estk/index.html');
-	if (!this.output.parent.exists) {
-		this.output.parent.create();
-	}
-	this.output.open('w');
 	this.addHeader();
+	this.timeStart = new Date().getTime();
 };
 
 Indigo.Tests.HtmlReporter.prototype.finish = function() {
+	this.timeFinish = new Date().getTime();
 	this.addFooter();
-	this.output.close();
+	this._flushReport();
 };
 
 Indigo.Tests.HtmlReporter.prototype.addHeader = function() {
-	this.output.writeln('<!DOCTYPE html>');
-	this.output.writeln('<html>');
-	this.output.writeln('<head>');
-	this.output.writeln('<meta http-equiv="content-type" content="text/html; charset=UTF-8">');
-	this.output.writeln('<title>Indigo TestRunner report</title>');
-	this.output.writeln('<link rel="stylesheet" href="bootstrap.css">');
+	var header = [];
 
-	this.output.writeln('</head>');
-	this.output.writeln('<body>');
-	this.output.writeln('<div class="container">');
-	this.output.writeln('<h1>Host: ' + $.getenv('computername') + ', time: ' + new Date() + '</h1>');
-	this.output.writeln('<table class="table table-condensed">');
+	header.push('<!DOCTYPE html>');
+	header.push('<html>');
+	header.push('<head>');
+	header.push('<meta http-equiv="content-type" content="text/html; charset=UTF-8">');
+	header.push('<title>Indigo TestRunner report</title>');
+	header.push('<link rel="stylesheet" href="bootstrap.css">');
+
+	header.push('</head>');
+	header.push('<body>');
+	header.push('<div class="container">');
+	header.push('<h1>Host: ' + $.getenv('computername') + ', time: ' + new Date() + '</h1>');
+	header.push('<table class="table table-condensed">');
+
+	this.header = header;
 };
 
 Indigo.Tests.HtmlReporter.prototype.addFooter = function() {
-	this.output.writeln('</table>');
-	this.output.writeln('</div>');
-	this.output.writeln('</body>');
-	this.output.writeln('</html>');
+	var footer = [];
+
+	footer.push('</table>');
+	footer.push('</div>');
+	footer.push('</body>');
+	footer.push('</html>');
+
+	this.footer = footer;
 };
 
 Indigo.Tests.HtmlReporter.prototype.log = function(entry) {
@@ -43,9 +56,13 @@ Indigo.Tests.HtmlReporter.prototype.log = function(entry) {
 	if (!this.allTests) { 
 		return;
 	}
-	var statusClass = 'danger';
+	var statusClass = '';
 	if (entry.result === Indigo.Tests.PASS) {
 		statusClass = 'success';
+		++this.hitPass;
+	} else {
+		statusClass = 'danger';
+		++this.hitFail;
 	}
 	var logline = [];
 	logline.push('<tr class="' + statusClass + '">');
@@ -53,5 +70,37 @@ Indigo.Tests.HtmlReporter.prototype.log = function(entry) {
 	logline.push('<td class="test--name">' + entry.name + '</td>');
 	logline.push('<td class="test--message">' + entry.message + '</td>');
 	logline.push('</tr>');
-	this.output.writeln(logline.join(''));
+	this.output += logline.join('');
+};
+
+Indigo.Tests.HtmlReporter.prototype._injectResults = function() {
+	// @@todo Коряво, ох коряво
+	// Вынимаем из массива хидера последний элемент, который открывает рапорт
+	var reportStarter = this.header.pop();
+
+	var summary = [];
+	summary.push('<div class="panel"><h3>Summary:');
+	summary.push('<span class="text-success">Passed: ' + this.hitPass + '</span>');
+	summary.push('<span class="text-danger">Failed: ' + this.hitFail + '</span>');
+	summary.push('<span>Timing: ' + (this.timeFinish - this.timeStart) + ' ms.</span>');
+	summary.push('</h3></div>');
+	
+	// Внедряем рапорт в хидер
+	this.header = this.header.concat(summary);
+	
+	// Закрываем рапорт заранее сохранённым элементом
+	this.header.push(reportStarter);
+};
+
+Indigo.Tests.HtmlReporter.prototype._flushReport = function() {
+	this._injectResults();
+	var output = new File('../tests/reports/estk/index.html');
+	if (!output.parent.exists) {
+		output.parent.create();
+	}
+	output.open('w');
+	output.write(this.header.join('\n'));
+	output.write(this.output);
+	output.write(this.footer.join('\n'));
+	output.close();
 };
