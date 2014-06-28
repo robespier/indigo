@@ -19,10 +19,26 @@ Indigo.Tests.testTemplateScanner.prototype.setUp = function () {
  * Test
  */
 Indigo.Tests.testTemplateScanner.prototype.run = function() {
-	this.pocient.getTemplates();
-	var templatesList = this.assertEq(this.pocient.templates.length, 3);
-	this.log(templatesList, '.FindExpected');
 
+	this.pocient.job.templates = ['t-01', 't-03'];
+	this.pocient.getTemplates();
+	var templatesList = this.assertEq(this.pocient.templates.length, 1);
+	this.log(templatesList, '.FindExpected 1');
+	var filteredName = this.pocient.templates[0].name;
+	var filtered = this.assertEq(filteredName, 't-02.ait');
+	this.log(filtered, '.FindExpected t-02');
+
+	this.pocient.job.templates = ['t-01', 't-02', 't-03'];
+	this.pocient.getTemplates();
+	templatesList = this.assertEq(this.pocient.templates.length, 0);
+	this.log(templatesList, '.FindExpected 0');
+
+	this.pocient.job.templates = [];
+	this.pocient.getTemplates();
+	templatesList = this.assertEq(this.pocient.templates.length, 3);
+	this.log(templatesList, '.FindExpected 3');
+
+	this.pocient.job.templates = [];
 	var templatesSpecs = this.pocient.run();
 	this.log(this.assertEq(this.pocient.templates.length, 0), '.AllProcessedArr');
 	this.log(this.assertEq(templatesSpecs.data.length, 3), '.AllProcessedObj');
