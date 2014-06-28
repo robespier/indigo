@@ -44,9 +44,25 @@ Indigo.Tests.testTemplateScanner.prototype.run = function() {
 	this.log(this.assertEq(templatesSpecs.data.length, 3), '.AllProcessedObj');
 	
 	var spec = templatesSpecs.data[0];
-	this.log(this.assertEq(spec.name, 't-01'), '.Name');
+	this.log(this.assertEq(spec.name, 't-01'), '.Name 1');
+	this.log(this.assertEq(spec.status, 'done'), '.Status');
 	this.log(this.assertEq(spec.width, 215.433), '.Width');
 	this.log(this.assertEq(spec.height, 394.016), '.Height');
+
+	spec = templatesSpecs.data[1];
+	this.log(this.assertEq(spec.name, 't-02'), '.Name 2');
+	this.log(this.assertEq(spec.status, 'error'), '.Status');
+	this.log(this.assertInstanceOf(spec.errors, Array), '.Has Errors');
+	this.log(this.assertEq(spec.errors.length, 2), '.Has Exact Errors');
+	this.log(this.assertEq(spec.errors[0], 'Rolls unstable'), '.ErrMessage1');
+	this.log(this.assertEq(spec.errors[1], 'Roll "roll_2_5" absent'), '.ErrMessage2');
+
+	spec = templatesSpecs.data[2];
+	this.log(this.assertEq(spec.name, 't-03'), '.Name 3');
+	this.log(this.assertEq(spec.status, 'error'), '.Status');
+	this.log(this.assertInstanceOf(spec.errors, Array), '.Has Errors');
+	this.log(this.assertEq(spec.errors.length, 1), '.Has Exact Errors');
+	this.log(this.assertEq(spec.errors[0], 'No "cut" layer in template'), '.ErrMessage1');
 
 	this.pocient.templateFolder = new Folder('/dev/random');
 	var exc = this.assertThrows(this.pocient.getTemplates, 'Template folder not found');
