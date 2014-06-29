@@ -42,8 +42,8 @@ Indigo.Tests = Indigo.Tests || {
  */
 Indigo.Tests.testSuite = function(app) {
 	this.app = app;
-	this.testsFolder = '/w/tests/';
-	this.testsFilesFolder = '/d/tmp/tests-indigo/';
+	this.testsFolder = $.getenv('indigo_tests') ? $.getenv('indigo_tests') : '../tests/';
+	this.testsFilesFolder = $.getenv('indigo_tests_files') ? $.getenv('indigo_tests_files') : this.testsFolder;
 	this.testsNames = [];
 };
 
@@ -86,7 +86,7 @@ Indigo.Tests.testSuite.prototype = {
 	 */
 	runAllTests: function() {
 		this.reporter.allTests = true;
-		this.reporter.start();
+		this.reporter.start({suite: this});
 		for (var i=0, l = this.testsNames.length; i < l; i++) {
 			var className = this.testsNames[i];
 			var test = new Indigo.Tests[className]();

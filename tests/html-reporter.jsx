@@ -9,7 +9,8 @@ Indigo.Tests.HtmlReporter = function() {
 	this.output = '';
 };
 
-Indigo.Tests.HtmlReporter.prototype.start = function() {
+Indigo.Tests.HtmlReporter.prototype.start = function(options) {
+	this.suite = options.suite;
 	this.addHeader();
 	this.timeStart = new Date().getTime();
 };
@@ -94,7 +95,7 @@ Indigo.Tests.HtmlReporter.prototype._injectResults = function() {
 
 Indigo.Tests.HtmlReporter.prototype._flushReport = function() {
 	this._injectResults();
-	var output = new File('../tests/reports/estk/index.html');
+	var output = new File(this.suite.testsFilesFolder + 'reports/estk/index.html');
 	if (!output.parent.exists) {
 		output.parent.create();
 	}
