@@ -23,50 +23,50 @@ Indigo.Tests.testTemplateScanner.prototype.run = function() {
 	this.pocient.job.templates = ['t-01', 't-03'];
 	this.pocient.getTemplates();
 	var templatesList = this.assertEq(this.pocient.templates.length, 1);
-	this.log(templatesList, '.FindExpected 1');
+	this.log(templatesList, 'Filter templates: find expected');
 	var filteredName = this.pocient.templates[0].name;
 	var filtered = this.assertEq(filteredName, 't-02.ait');
-	this.log(filtered, '.FindExpected t-02');
+	this.log(filtered, 'Filter templates: find expected file');
 
 	this.pocient.job.templates = ['t-01', 't-02', 't-03'];
 	this.pocient.getTemplates();
 	templatesList = this.assertEq(this.pocient.templates.length, 0);
-	this.log(templatesList, '.FindExpected 0');
+	this.log(templatesList, 'Filter templates: nothing found');
 
 	this.pocient.job.templates = [];
 	this.pocient.getTemplates();
 	templatesList = this.assertEq(this.pocient.templates.length, 3);
-	this.log(templatesList, '.FindExpected 3');
+	this.log(templatesList, 'Filter templates: find all');
 
 	this.pocient.job.templates = [];
 	var templatesSpecs = this.pocient.run();
-	this.log(this.assertEq(this.pocient.templates.length, 0), '.AllProcessedArr');
-	this.log(this.assertEq(templatesSpecs.data.length, 3), '.AllProcessedObj');
+	this.log(this.assertEq(this.pocient.templates.length, 0), 'Processed Templates array is empty');
+	this.log(this.assertEq(templatesSpecs.data.length, 3), 'Processed Templates object contains all specs');
 	
 	var spec = templatesSpecs.data[0];
-	this.log(this.assertEq(spec.name, 't-01'), '.Name 1');
-	this.log(this.assertEq(spec.status, 'done'), '.Status');
-	this.log(this.assertEq(spec.width, 215.433), '.Width');
-	this.log(this.assertEq(spec.height, 394.016), '.Height');
+	this.log(this.assertEq(spec.name, 't-01'), 'Template data: template name t-01');
+	this.log(this.assertEq(spec.status, 'done'), 't-01: Status is ok');
+	this.log(this.assertEq(spec.width, 215.433), 't-01: Width is ok');
+	this.log(this.assertEq(spec.height, 394.016), 't-01: Height is ok');
 
 	spec = templatesSpecs.data[1];
-	this.log(this.assertEq(spec.name, 't-02'), '.Name 2');
-	this.log(this.assertEq(spec.status, 'error'), '.Status');
-	this.log(this.assertInstanceOf(spec.errors, Array), '.Has Errors');
-	this.log(this.assertEq(spec.errors.length, 2), '.Has Exact Errors');
-	this.log(this.assertEq(spec.errors[0], 'Rolls unstable'), '.ErrMessage1');
-	this.log(this.assertEq(spec.errors[1], 'Roll "roll_2_5" absent'), '.ErrMessage2');
+	this.log(this.assertEq(spec.name, 't-02'), 'Template data: template name t-02');
+	this.log(this.assertEq(spec.status, 'error'), 't-02: Status is error');
+	this.log(this.assertInstanceOf(spec.errors, Array), 't-02: Has errors array');
+	this.log(this.assertEq(spec.errors.length, 2), 't-02: Has exact number of errors');
+	this.log(this.assertEq(spec.errors[0], 'Rolls unstable'), 't-02: Expected error message 1');
+	this.log(this.assertEq(spec.errors[1], 'Roll "roll_2_5" absent'), 't-02: Expected error message 2');
 
 	spec = templatesSpecs.data[2];
-	this.log(this.assertEq(spec.name, 't-03'), '.Name 3');
-	this.log(this.assertEq(spec.status, 'error'), '.Status');
-	this.log(this.assertInstanceOf(spec.errors, Array), '.Has Errors');
-	this.log(this.assertEq(spec.errors.length, 1), '.Has Exact Errors');
-	this.log(this.assertEq(spec.errors[0], 'No "cut" layer in template'), '.ErrMessage1');
+	this.log(this.assertEq(spec.name, 't-03'), 'Template data: template name t-03');
+	this.log(this.assertEq(spec.status, 'error'), 't-03: Status is error');
+	this.log(this.assertInstanceOf(spec.errors, Array), 't-03: Has errors array');
+	this.log(this.assertEq(spec.errors.length, 1), 't-03: Has exact number of errors');
+	this.log(this.assertEq(spec.errors[0], 'No "cut" layer in template'), 't-03: Expected error message');
 
 	this.pocient.templateFolder = new Folder('/dev/random');
 	var exc = this.assertThrows(this.pocient.getTemplates, 'Template folder not found');
-	this.log(exc, 'ThrowsExpected');
+	this.log(exc, 'Throws expected exception if template folder missing');
 };
 
 Indigo.Tests.testTemplateScanner.prototype.tearDown = function() {};

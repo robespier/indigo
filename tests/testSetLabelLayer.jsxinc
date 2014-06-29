@@ -21,7 +21,7 @@ Indigo.Tests.testSetLabelLayer.prototype.run = function() {
 	var resultIns = this.assertInstanceOf(layer, Layer);
 	var resultStr = this.assertEq(layer.name, 'label');
 	var resultInt = this.assertEq(layer.zOrderPosition,1);
-	this.log(resultIns, '.Type');
-	this.log(resultStr, '.Name');
-	this.log(resultInt, '.Position');
+	this.log(resultIns, 'LabelLayer is instance of Layer');
+	this.log(resultStr, 'LabelLayer has expected name');
+	this.log(resultInt, 'LabelLayer has expected position');
 };

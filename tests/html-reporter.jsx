@@ -67,8 +67,7 @@ Indigo.Tests.HtmlReporter.prototype.log = function(entry) {
 	}
 	var logline = [];
 	logline.push('<tr class="' + statusClass + '">');
-	logline.push('<td class="test--status">' + entry.result + '</td>');
-	logline.push('<td class="test--name">' + entry.name + '</td>');
+	logline.push('<td class="test--name">' + entry.name.replace(/^test/,'') + '</td>');
 	logline.push('<td class="test--message">' + entry.message + '</td>');
 	logline.push('</tr>');
 	this.output += logline.join('');

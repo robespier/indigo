@@ -160,7 +160,7 @@ Indigo.Tests.testSuite.prototype = {
 			this.reporter.log(entry);
 		}
 		// Дублируем результат в консоль
-		$.writeln(result + this.name + message);
+		$.writeln(result + this.name + '.' + message);
 	},
 
 	/**

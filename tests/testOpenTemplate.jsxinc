@@ -18,9 +18,9 @@ Indigo.Tests.testOpenTemplate.prototype.setUp = function () {
 Indigo.Tests.testOpenTemplate.prototype.run = function() {
 	var template = this.pocient.openTemplate();
 	var result = this.assertInstanceOf(template, Document);
-	this.log(result, '.Open');
+	this.log(result, 'Expected file opened');
 
 	this.pocient.templateFolder = new Folder('/dev/random');
 	var exc = this.assertThrows(this.pocient.openTemplate, 'The specified file could not be opened because it could not be found');
-	this.log(exc, '.ThrowsExpected');
+	this.log(exc, 'Throws expected exception on missing template file');
 };

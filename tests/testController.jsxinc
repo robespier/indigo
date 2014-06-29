@@ -25,9 +25,9 @@ Indigo.Tests.testController.prototype.run = function() {
 		},
 		send : function(err, data) {
 			var rst = this.test.assertEq(err, 'error');
-			this.test.log(rst, '.Invalid Action Status');
+			this.test.log(rst, 'Non-existing Action from messenger: Expected error status');
 			var rms = this.test.assertEq(data.message, 'Invalid action: invalidAction');
-			this.test.log(rms, '.Invalid Action Message');
+			this.test.log(rms, 'Non-existing Action from messenger: Expected error message');
 		}
 	};
 	this.pocient.run();
@@ -42,7 +42,7 @@ Indigo.Tests.testController.prototype.run = function() {
 		}
 	};
 	var undefJobs = this.assertEq(this.pocient.run(), 'Job fetch error');
-	this.log(undefJobs, '.FetchJobs undefined');
+	this.log(undefJobs, 'Intercept job fetch error');
 	delete this.pocient.messenger;
 
 	//
@@ -72,17 +72,17 @@ Indigo.Tests.testController.prototype.run = function() {
 		send : function(type, data) {
 			if (type === 'info' && data.info === 'start') {
 				var rss = this.test.assertEq(data.jobid, 'test');
-				this.test.log(rss, '.Feedback start');
+				this.test.log(rss, 'Job start notification with expected id');
 				var wns = this.test.assertEq(data.source, 'testController');
-				this.test.log(wns, '.Feedback source start');
+				this.test.log(wns, 'Job start notification with expected source');
 			}
 			if (type === 'info' && data.info === 'finish') {
 				var rsf = this.test.assertEq(data.jobid, 'test');
-				this.test.log(rsf, '.Feedback finish');
+				this.test.log(rsf, 'Job finish notification with expected id');
 				var wnt = this.test.assertEq(data.result, true);
-				this.test.log(wnt, '.Worker result');
+				this.test.log(wnt, 'Worker send some results with job finish');
 				var wnf = this.test.assertEq(data.source, 'testController');
-				this.test.log(wnf, '.Feedback source finish');
+				this.test.log(wnf, 'Job finish notification with expected source');
 			}
 		}
 	};
@@ -111,9 +111,9 @@ Indigo.Tests.testController.prototype.run = function() {
 		send : function(type, data) {
 			if (type === 'error') {
 				var rst = this.test.assertEq(type, 'error');
-				this.test.log(rst, '.Worker Crash Status');
+				this.test.log(rst, 'Intercept worker exceptions with expected status');
 				var rms = this.test.assertEq(data.message, 'worker throw test');
-				this.test.log(rms, '.Worker Crash Message');
+				this.test.log(rms, 'Intercept worker exceptions with expected message');
 			}
 		}
 	};

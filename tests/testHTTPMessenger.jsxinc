@@ -31,7 +31,7 @@ Indigo.Tests.testHTTPMessenger.prototype.setUp = function() {
 Indigo.Tests.testHTTPMessenger.prototype.run = function() {
 	// Проверка получнеия списка заданий с помощью `HTTP GET`
 	var jobs = this.assertEq(this.pocient.receive('fetchJobs'),'fetchjob.test');
-	this.log(jobs, '.FetchJobs');
+	this.log(jobs, 'Synchronously fetch job list from REAL webserver');
 	
 	// Проверка асинхронных уведомлений
 	//
@@ -61,7 +61,7 @@ Indigo.Tests.testHTTPMessenger.prototype.run = function() {
 		}
 	}
 	var result = this.assertEq(expectedResponse, actualResponse);
-	this.log(result, '.Async Message');
+	this.log(result, 'Send async message to REAL webserver');
 };
 
 Indigo.Tests.testHTTPMessenger.prototype.tearDown = function() {

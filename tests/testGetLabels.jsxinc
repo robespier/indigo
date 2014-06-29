@@ -18,8 +18,8 @@ Indigo.Tests.testGetLabels.prototype.run = function() {
 	var labels = this.pocient.getLabels();
 	var resultAr = this.assertInstanceOf(labels, Array);
 	var resultCn = this.assertEq(labels.length, 2);
-	this.log(resultAr, '.Type');
-	this.log(resultCn, '.Length');
+	this.log(resultAr, 'BaseImposer.getLabes() returns array');
+	this.log(resultCn, 'Labels array has expected length');
 };
 
 /**

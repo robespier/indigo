@@ -21,6 +21,6 @@ Indigo.Tests.testGetLowerCut.prototype.run = function() {
 	var lowerCut = this.pocient.getLowerCut();
 	var resultIns = this.assertInstanceOf(lowerCut,PathItem);
 	var resultStr = this.assertEq(lowerCut.name,'testTargetPass');
-	this.log(resultIns, '.Type');
-	this.log(resultStr, '.Name');
+	this.log(resultIns, 'LowerCut is PathItem instance');
+	this.log(resultStr, 'LowerCut in expected position');
 };

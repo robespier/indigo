@@ -20,10 +20,10 @@ Indigo.Tests.testAchtungImposer.prototype.run = function() {
 	// В первой папке задания должен лежать файл:
 	// d9111001_002_ACHTUNG.pdf
 	var result = this.assertFileExists(this.testsFilesFolder + this.testCommonPath + '001/d9111001_002_ACHTUNG.pdf');
-	this.log(result, '.Created');
+	this.log(result, 'Achtung created in job folder');
 	// В хотфолдере должен лежать его брат-близнец:
 	var hotResult = this.assertFileExists(this.pocient.hotFolder + '/' + 'd9111001_002_ACHTUNG.pdf');
-	this.log(hotResult, '.InHotFolder');
+	this.log(hotResult, 'Achtung created in hot folder');
 };
 
 /**

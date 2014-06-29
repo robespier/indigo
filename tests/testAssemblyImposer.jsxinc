@@ -32,7 +32,8 @@ Indigo.Tests.testAssemblyImposer.prototype.run = function() {
 	];
 	for (var i=0, l=this.assemblies.length; i < l; i++) {
 		var result = this.assertFileExists(this.assemblies[i]);
-		this.log(result, '.Created');
+		var message = (i < 2) ? 'PDF created in expected location' : 'PDF created in hot folder';
+		this.log(result, message);
 	}
 };
 
