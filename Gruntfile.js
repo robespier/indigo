@@ -39,6 +39,7 @@ module.exports = function(grunt) {
 				src: [
 					'tests/testSuite.jsx',
 					'tests/html-reporter.jsx',
+					'tests/coverage-reporter.jsx',
 					'tests/*.jsxinc',
 					'tests/testRun.jsx'
 				],
@@ -103,7 +104,8 @@ module.exports = function(grunt) {
 					'element',
 					'it',
 					'protractor',
-
+					// blanket
+					'_$jscoverage',
 				],
 				sub: true,
 				undef: true,
@@ -167,6 +169,16 @@ module.exports = function(grunt) {
 				replacement: '#',
 			},
 		},
+		blanket: {
+			instrument: {
+				options: {
+					extensions: ['.jsxinc']
+				},
+				files: {
+					'include/': ['include/'],
+				},
+			},
+		},
 		htmlangular: {
 			options: {
 				tmplext: 'html.tmpl',
@@ -219,6 +231,7 @@ module.exports = function(grunt) {
 	// These plugins provide necessary tasks.
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-blanket');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -241,6 +254,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('docs', ['concat', 'os_spec', 'jsdoc:dist', 'sed']);
 	grunt.registerTask('tests', ['concat', 'jshint', 'sed']);
 	grunt.registerTask('html', ['htmlangular']);
+	grunt.registerTask('instrument', ['concat', 'blanket', 'sed']);
 	// Default task.
 	grunt.registerTask('default', ['concat', 'os_spec', 'jshint:estk', 'sed']);
 };

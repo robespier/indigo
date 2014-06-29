@@ -86,7 +86,7 @@ Indigo.Tests.testSuite.prototype = {
 	 */
 	runAllTests: function() {
 		this.reporter.allTests = true;
-		this.reporter.start({suite: this});
+		this.reporter.start({suite: this, name: 'index'});
 		for (var i=0, l = this.testsNames.length; i < l; i++) {
 			var className = this.testsNames[i];
 			var test = new Indigo.Tests[className]();
@@ -103,6 +103,38 @@ Indigo.Tests.testSuite.prototype = {
 			}
 		}
 		this.reporter.finish();
+		
+		// Создать отчёт о покрытии, если есть из чего
+		// _$jscoverage создаст blanket в глобальном пространстве имён
+		// если сделать `grunt instrument`
+		if (typeof(_$jscoverage) !== 'undefined') {
+			var coverep = new Indigo.Tests.CoverageReporter();
+			coverep.start({suite: this, name: 'coverage'});
+			for(var c in _$jscoverage) {
+				if (_$jscoverage.hasOwnProperty(c)) {
+					var cov = _$jscoverage[c];
+					cov.source.unshift(''); // WTF?
+					for (var ln = 0, ll = cov.length; ln < ll; ln++) {
+						var entry = {};
+						entry.lineNumber = ln + 1;
+						// Добавить bootstrap-классы -- BAD!
+						// @@todo Добавлять в другом месте
+						if (typeof(cov[ln]) === 'undefined') {
+							entry.bclass = '';
+						} else if (cov[ln] === 0) {
+							entry.bclass = 'danger';
+						} else {
+							entry.bclass = 'success';
+						}
+						entry.hit = cov[ln] ? cov[ln] : '';
+						entry.code = cov.source[ln];
+						coverep.log(entry);
+					}
+				}
+			}
+			coverep.finish();
+		}
+		
 		return 'AllTests done';
 	},
 
