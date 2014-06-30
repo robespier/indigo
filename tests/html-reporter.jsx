@@ -74,27 +74,31 @@ Indigo.Tests.HtmlReporter.prototype.log = function(entry) {
 	this.output += logline.join('');
 };
 
-Indigo.Tests.HtmlReporter.prototype._injectResults = function() {
+Indigo.Tests.HtmlReporter.prototype.injectResults = function() {
 	// @@todo Коряво, ох коряво
 	// Вынимаем из массива хидера последний элемент, который открывает рапорт
 	var reportStarter = this.header.pop();
 
-	var summary = [];
-	summary.push('<div class="panel"><h3>Summary:');
-	summary.push('<span class="text-success">Passed: ' + this.hitPass + '</span>');
-	summary.push('<span class="text-danger">Failed: ' + this.hitFail + '</span>');
-	summary.push('<span>Timing: ' + (this.timeFinish - this.timeStart) + ' ms.</span>');
-	summary.push('</h3></div>');
-	
 	// Внедряем рапорт в хидер
+	var summary = this._injectResults();
 	this.header = this.header.concat(summary);
 	
 	// Закрываем рапорт заранее сохранённым элементом
 	this.header.push(reportStarter);
 };
 
+Indigo.Tests.HtmlReporter.prototype._injectResults = function() {
+	var summary = [];
+	summary.push('<div class="panel"><h3>Summary:');
+	summary.push('<span class="text-success">Passed: ' + this.hitPass + '</span>');
+	summary.push('<span class="text-danger">Failed: ' + this.hitFail + '</span>');
+	summary.push('<span>Timing: ' + (this.timeFinish - this.timeStart) + ' ms.</span>');
+	summary.push('</h3></div>');
+	return summary;
+};
+
 Indigo.Tests.HtmlReporter.prototype._flushReport = function() {
-	this._injectResults();
+	this.injectResults();
 	var output = new File(this.suite.testsFilesFolder + 'reports/estk/' + this.report + '.html');
 	output.encoding = 'UTF-8';
 	if (!output.parent.exists) {

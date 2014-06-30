@@ -109,6 +109,9 @@ Indigo.Tests.testSuite.prototype = {
 		// если сделать `grunt instrument`
 		if (typeof(_$jscoverage) !== 'undefined') {
 			var coverep = new Indigo.Tests.CoverageReporter();
+			coverep.sloc = 0;
+			coverep.hits = 0;
+			coverep.misses = 0;
 			coverep.start({suite: this, name: 'coverage'});
 			for(var c in _$jscoverage) {
 				if (_$jscoverage.hasOwnProperty(c)) {
@@ -117,16 +120,7 @@ Indigo.Tests.testSuite.prototype = {
 					for (var ln = 0, ll = cov.length; ln < ll; ln++) {
 						var entry = {};
 						entry.lineNumber = ln + 1;
-						// Добавить bootstrap-классы -- BAD!
-						// @@todo Добавлять в другом месте
-						if (typeof(cov[ln]) === 'undefined') {
-							entry.bclass = '';
-						} else if (cov[ln] === 0) {
-							entry.bclass = 'danger';
-						} else {
-							entry.bclass = 'success';
-						}
-						entry.hit = cov[ln] ? cov[ln] : '';
+						entry.hit = cov[ln];
 						entry.code = cov.source[ln];
 						coverep.log(entry);
 					}
