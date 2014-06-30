@@ -12,3 +12,4 @@ bin/contours/
 bower_components/
 indigoWebApp/public/css/styles.css
 indigoWebApp/public/js/scripts.js
+*.log
