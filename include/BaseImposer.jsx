@@ -139,6 +139,7 @@ Indigo.BaseImposer.prototype = {
 		if (this.labels.length < 2) {
 			return false;
 		}
+		return true;
 	},
 
 	/**

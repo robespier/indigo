@@ -35,6 +35,10 @@ Indigo.Tests.testAssemblyImposer.prototype.run = function() {
 		var message = (i < 2) ? 'PDF created in expected location' : 'PDF created in hot folder';
 		this.log(result, message);
 	}
+	//
+	// isNeed()
+	//
+	this.log(this.assertEq(this.pocient.isNeed(), true), 'isNeed() is always true');
 };
 
 /**

@@ -1,0 +1,57 @@
+/**
+ * Setup
+ */
+Indigo.Tests.testBaseImposer = function() {};
+Indigo.Tests.testBaseImposer.prototype = new Indigo.Tests.testSuite(app);
+Indigo.Tests.testBaseImposer.prototype.constructor = Indigo.Tests.testBaseImposer;
+Indigo.Tests.testBaseImposer.prototype.name = "testBaseImposer";
+
+Indigo.Tests.testBaseImposer.prototype.setUp = function () {
+	this.pocient = new Indigo.BaseImposer(this.app);
+	this.pocient.setup(this.getMockJob());
+};
+
+/**
+ * Test
+ */
+Indigo.Tests.testBaseImposer.prototype.run = function() {
+	//
+	// getLabels()
+	//
+	var labels = this.pocient.getLabels();
+	var resultAr = this.assertInstanceOf(labels, Array);
+	var resultCn = this.assertEq(labels.length, 2);
+	this.log(resultAr, 'getLabes(): Returns array');
+	this.log(resultCn, 'Labels array has expected length');
+	//
+	// isNeed() true
+	//
+	this.log(this.assertEq(this.pocient.isNeed(), true), 'inNeed() is true when labels > 1');
+	//
+	// setNameRange()
+	//
+	// Последовательный диапазон
+	var longRange = this.pocient.setNameRange();
+	var resultLong = this.assertEq(longRange, '001_002');
+	this.log(resultLong, 'setNameRange(): Sequent labels concatenated');
+	// Повторяющийся диапазон
+	this.pocient.labels.push(this.pocient.labels[0]);
+	var dupRange = this.pocient.setNameRange();
+	var resultDup = this.assertEq(dupRange, '001_002');
+	this.log(resultDup, 'setNameRange(): Duplicate labels merged');
+	// Одна этикетка
+	this.pocient.labels = [ this.pocient.labels[0] ];
+	var oneRange = this.pocient.setNameRange();
+	var resultOne = this.assertEq(oneRange, '001');
+	this.log(resultOne, 'setNameRange(): Single label passed');
+	//
+	// isNeed() false
+	//
+	this.log(this.assertEq(this.pocient.isNeed(), false), 'inNeed() is false when labels === 1');
+};
+
+/**
+ * Superclass override: do nothing;
+ */
+Indigo.Tests.testBaseImposer.prototype.tearDown = function() {
+};
