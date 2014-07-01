@@ -21,4 +21,4 @@ Indigo.Tests.ts.init();
 Indigo.Tests.ts.runAllTests();
 
 // ...или запустить один тест:
-//Indigo.Tests.ts.execute(new Indigo.Tests.testTemplateScanner());
+//Indigo.Tests.ts.execute(new Indigo.Tests.testBaseImposer());
