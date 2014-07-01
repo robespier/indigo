@@ -309,21 +309,40 @@ Indigo.BaseImposer.prototype = {
 	},
 
 	/**
-	 * Экспорт сборки в формате PDF 
+	 * Экспорт сборки в формате PDF
+	 *
 	 * @param {string} fileName Имя файла для экспорта
+	 * @throws {customException} IO error
 	 * @return {void}
 	 */
 	exportPDF: function(fileName) {
-		this.ResultFilePDF = new File (fileName);
-		this.template.saveAs(this.ResultFilePDF, this.PDFSettings);
+		this.ResultFilePDF = new File(fileName);
+		try {
+			this.template.saveAs(this.ResultFilePDF, this.PDFSettings);
+		} catch (e) {
+			throw {
+				message: e.message,
+				file: fileName,
+			};
+		}
 	},
 
 	/**
 	 * Копирование готового файла сборки в "горячую" папку растрового процессора
+	 *
+	 * File.copy() не бросает исключения в случае неудачи. Он возвращает boolean
+	 *
+	 * @throws {customException} IO error
 	 * @return {void}
 	 */
 	sendtoHotFolder: function() {
-		this.ResultFilePDF.copy(this.hotFolder + '\\' + this.ResultFilePDF.name);	
+		var success = this.ResultFilePDF.copy(this.hotFolder + '\\' + this.ResultFilePDF.name);
+		if (!success) {
+			throw {
+				message: 'Copy to hotfolder failed', 
+				file: this.ResultFilePDF.name,
+			};
+		}
 	},
 
 	/**

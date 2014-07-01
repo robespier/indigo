@@ -24,6 +24,13 @@ Indigo.Tests.testAchtungImposer.prototype.run = function() {
 	// В хотфолдере должен лежать его брат-близнец:
 	var hotResult = this.assertFileExists(this.pocient.hotFolder + '/' + 'd9111001_002_ACHTUNG.pdf');
 	this.log(hotResult, 'Achtung created in hot folder');
+	// 
+	// IO Exception handling
+	//
+	var shitExportPDF = this.assertThrows(this.pocient.exportPDF);
+	this.log(shitExportPDF, 'Achtung throw exception on exportPDF()');
+	var shitHotFolder = this.assertThrows(this.pocient.sendtoHotFolder);
+	this.log(shitHotFolder, 'Achtung throw exception on sendtoHotFolder()');
 };
 
 /**

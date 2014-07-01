@@ -244,7 +244,8 @@ Indigo.Tests.testSuite.prototype = {
 	},
 
 	/**
-	 * Функция fn должна бросить исключение с сообщением message
+	 * Функция fn должна бросить исключение
+	 * Возможно, с сообщением message
 	 *
 	 * fn вызывается в контексте this === тестируемому классу
 	 *
@@ -256,7 +257,10 @@ Indigo.Tests.testSuite.prototype = {
 		var assert = Indigo.Tests.FAIL;
 		try { fn.call(this.pocient); }
 		catch (e) {
-			if ( e.message === message) {
+			if (typeof(message) === 'undefined') {
+				assert = Indigo.Tests.PASS;
+			}
+			if (e.message === message) {
 				assert = Indigo.Tests.PASS;
 			}
 		}
