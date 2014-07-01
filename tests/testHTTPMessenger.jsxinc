@@ -62,6 +62,21 @@ Indigo.Tests.testHTTPMessenger.prototype.run = function() {
 	}
 	var result = this.assertEq(expectedResponse, actualResponse);
 	this.log(result, 'Send async message to REAL webserver');
+	// Проверка значений по умолчанию
+	this.post = function(data) {
+		this.log(this.assertEq(data.async, true), 'Defaults: async is true');
+		this.log(this.assertEq(data.path, 'info'), 'Defaults: route === info');
+		this.log(this.assertEq(data.info, 'finish'), 'Defaults: info === finish');
+	};
+	this.pocient.send.call(this,null,{});
+	// WTF? Вместе с исключением estk передаёт код, который его бросил. 
+	// Нам он не нужен, мы его дропаем.
+	// @@todo Это похоже на рудимент. 
+	this.post = function(data) {
+		this.log(this.assertUndefined(data.source), 'Code supplied with exception message is dropped');
+	};
+	this.pocient.send.call(this,'error',{ source: 'bad code' });
+	
 };
 
 Indigo.Tests.testHTTPMessenger.prototype.tearDown = function() {

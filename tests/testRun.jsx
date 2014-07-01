@@ -21,4 +21,4 @@ Indigo.Tests.ts.init();
 Indigo.Tests.ts.runAllTests();
 
 // ...или запустить один тест:
-//Indigo.Tests.ts.execute(new Indigo.Tests.testBaseImposer());
+//Indigo.Tests.ts.execute(new Indigo.Tests.testHTTPMessenger());
