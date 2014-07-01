@@ -20,6 +20,7 @@ Indigo.Tests.testTemplateScanner.prototype.setUp = function () {
  */
 Indigo.Tests.testTemplateScanner.prototype.run = function() {
 
+	// getTemplates()
 	this.pocient.job.templates = ['t-01', 't-03'];
 	this.pocient.getTemplates();
 	var templatesList = this.assertEq(this.pocient.templates.length, 1);
@@ -38,18 +39,35 @@ Indigo.Tests.testTemplateScanner.prototype.run = function() {
 	templatesList = this.assertEq(this.pocient.templates.length, 3);
 	this.log(templatesList, 'Filter templates: find all');
 
+	// Run
+	this.pocient.chunkSize = 2;
+	var sendCount = 0;
+	var expectedSpecs = [];
+	// Инъекция send():
+	this.pocient.send = function(data) {
+		if (sendCount === 0) {
+			expectedSpecs.push(data[0]);
+			expectedSpecs.push(data[1]);
+		}
+		if (sendCount === 1) {
+			expectedSpecs.push(data[0]);
+		}
+		++sendCount;
+	};
+
 	this.pocient.job.templates = [];
 	var templatesSpecs = this.pocient.run();
 	this.log(this.assertEq(this.pocient.templates.length, 0), 'Processed Templates array is empty');
-	this.log(this.assertEq(templatesSpecs.data.length, 3), 'Processed Templates object contains all specs');
+	this.log(this.assertEq(templatesSpecs.affected, 3), 'Responce with number of affected documents');
+	this.log(this.assertEq(sendCount, 2), 'Method send() called twice');
 	
-	var spec = templatesSpecs.data[0];
+	var spec = expectedSpecs[0];
 	this.log(this.assertEq(spec.name, 't-01'), 'Template data: template name t-01');
 	this.log(this.assertEq(spec.status, 'done'), 't-01: Status is ok');
 	this.log(this.assertEq(spec.width, 215.433), 't-01: Width is ok');
 	this.log(this.assertEq(spec.height, 394.016), 't-01: Height is ok');
 
-	spec = templatesSpecs.data[1];
+	spec = expectedSpecs[1];
 	this.log(this.assertEq(spec.name, 't-02'), 'Template data: template name t-02');
 	this.log(this.assertEq(spec.status, 'error'), 't-02: Status is error');
 	this.log(this.assertInstanceOf(spec.errors, Array), 't-02: Has errors array');
@@ -57,7 +75,7 @@ Indigo.Tests.testTemplateScanner.prototype.run = function() {
 	this.log(this.assertEq(spec.errors[0], 'Rolls unstable'), 't-02: Expected error message 1');
 	this.log(this.assertEq(spec.errors[1], 'Roll "roll_2_5" absent'), 't-02: Expected error message 2');
 
-	spec = templatesSpecs.data[2];
+	spec = expectedSpecs[2];
 	this.log(this.assertEq(spec.name, 't-03'), 'Template data: template name t-03');
 	this.log(this.assertEq(spec.status, 'error'), 't-03: Status is error');
 	this.log(this.assertInstanceOf(spec.errors, Array), 't-03: Has errors array');

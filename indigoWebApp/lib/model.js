@@ -31,6 +31,14 @@ exports.finish = {
 	storeTemplates: function(db, parcel) {
 		var templatesCollection = db.collection('indigoTemplates'),
 			templates = parcel.result.data;
+		if (parcel.result.completed) {
+			console.info('[%s]: Job %s finished, %s documents affected', new Date(), parcel.jobid, parcel.result.affected);
+			return;
+		}
+		if (typeof(templates) === 'undefined' || (templates.length < 1))  {
+			console.info('[%s]: Job %s Templates array is empty ', new Date(), parcel.jobid);
+			return;
+		}
 		async.each(templates, function(t, callback) {
 			templatesCollection.findAndModify({name: t.name}, [], t, {upsert: true, w: 1}, callback);
 		}, function(err) {

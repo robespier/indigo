@@ -15,11 +15,33 @@ Indigo.TemplateScanner.prototype.name = 'TemplateScanner';
  * @return {Object} result Список имён шаблонов с размерами этикетки
  */
 Indigo.TemplateScanner.prototype.run = function () {
+	// Размер буфера, по умолчанию 50	
+	var chunkSize = this.chunkSize ? this.chunkSize : 50;
+	
+	// Заполнение массива шаблонов
 	this.getTemplates();
-	var templatesHeap = [];
+
+	var templatesHeap = [],
+		affected = this.templates.length;
+
+	//
+	// Передача промежуточных результатов 
+	//
+	function sendChunk(piece) {
+		var success = true;
+		try {
+			this.send(piece);
+		} catch (e) {
+			success = false;
+		}
+		return success;
+	}
+
 	// Массив templates.length будет сокращаться на 1 с каждым
-	// проходом цикла. Поэтому итератор написан схожим образом 
-	for (var i = this.templates.length; i > 0; i--) {
+	// проходом цикла. Поэтому итератор написан схожим образом.
+	// Каждые `chunkSize` проходов цикла будет происходить сброс 
+	// результатов в базу.
+	for (var i = this.templates.length, chsz = 1; i > 0; i--, chsz++) {
 		var t = this.openTemplate();
 		
 		var info = {};
@@ -37,12 +59,20 @@ Indigo.TemplateScanner.prototype.run = function () {
 		}
 		templatesHeap.push(info);
 		t.close();
+
+		if (chsz >= chunkSize) {
+			chsz = 0;
+			if (sendChunk.call(this, templatesHeap)) {
+				templatesHeap = [];
+			}
+		}
 	}
-	var results = {
-		name: 'templatesList',
-		data: templatesHeap,
-	};
-	return results;
+	// Добиваем остатки, если есть
+	if (templatesHeap.length > 0) {
+		sendChunk.call(this, templatesHeap);
+	}
+
+	return {completed: 'victory', affected: affected};
 };
 
 /**
