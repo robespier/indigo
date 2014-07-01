@@ -332,6 +332,39 @@ Indigo.BaseImposer.prototype = {
 	closeTemplate: function() {
 		this.template.close(SaveOptions.DONOTSAVECHANGES);
 	},
+
+	/**
+	 * Интерфейс к мессенджеру
+	 *
+	 * @param {string} status
+	 * @param {object} message
+	 * @return {boolean} sended
+	 */
+	send: function(status, message) {
+		var sended, type, parcel;
+		// Присутствие мессенджера не обязательно:
+		if ((typeof(this.messenger) !== 'undefined') && typeof(this.messenger.send) === 'function') {
+			// Если первый параметр опущен (точнее, первым идёт message):
+			if (typeof(message) === 'undefined') {
+				type = null;
+				parcel = status;
+			} else {
+				type = status;
+				parcel = message;
+			}
+			// Обязаловка:
+			// _id : required,
+			// result: {data: required}
+			var wrapper = {
+				jobid : this.job._id,
+				result: { data: parcel },
+			};
+			this.messenger.send(type, wrapper);
+		} else {
+			sended = false;
+		}
+		return sended;
+	},
 	
 	/**
 	 * Логика выполнения сборок. 

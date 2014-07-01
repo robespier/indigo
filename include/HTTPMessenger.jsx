@@ -58,7 +58,21 @@ Indigo.HTTPMessenger.prototype.receive = function(type, data) {
 };
 
 Indigo.HTTPMessenger.prototype.send = function(type, data) {
+	// Установка значений по умолчанию
+	if (typeof(data.info) === 'undefined') {
+		data.info = 'finish';
+	}
+	// Запрос будет асинхронным, если свойство async не установлено явно в false
+	if (typeof(data.async) === 'undefined') {
+		data.async = true;
+	}
+	// По умолчанию маршрутизация на info, если иное не укзазно явно 
+	if (!type) { 
+		type = 'info'; 
+	}
+	
 	data.path = type;
+	
 	// При возникновении ошибки исходный код пересылать не обязательно
 	if (type === 'error' && data.source) {
 		delete data.source;

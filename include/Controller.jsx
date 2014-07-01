@@ -29,9 +29,11 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
 			this.messenger.send('error', { message: 'Invalid action: ' + action });
 			continue;
 		}
+		// Светим в messenger в worker
+		// worker сможет самостоятельно отправлять _промежуточные_ результаты работы
+		worker.messenger = this.messenger;
 		// Отправить асинхронное уведомление о начале работы над заданием
 		var feedback = {
-			async: true,
 			host: $.getenv('computername'),
 			info: 'start',
 			jobid: data._id,
