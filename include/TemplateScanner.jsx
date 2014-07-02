@@ -46,6 +46,9 @@ Indigo.TemplateScanner.prototype.run = function () {
 		
 		var info = {};
 		info.name = this.temp.name.replace('.ait','');
+		// Убираем первый слэш из имени, второй заменяем двоеточием:
+		// /d/work/template -> d:/work/template
+		info.path = this.temp.fullName.replace(/^\/(.)/,"$1:");
 	
 		var valid = this.validate();
 		if (valid.length > 0) {

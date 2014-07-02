@@ -2,6 +2,7 @@
 	<table class="table table-condensed table-hover">
 		<tr ng-repeat="template in list | startFrom: currentPage*pageSize | limitTo: 20">
 			<td ng-class="{'text-danger': template.status==='error'}">{{template.name}}</td>
+			<td><a href="file:///{{template.path}}">open</a></td>
 			<td>{{template.errors}}</td>
 		</tr>
 	</table> 
