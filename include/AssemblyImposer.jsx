@@ -7,6 +7,7 @@ Indigo.AssemblyImposer.prototype = new Indigo.BaseImposer(app);
 Indigo.AssemblyImposer.prototype.constructor = Indigo.AssemblyImposer;
 
 Indigo.AssemblyImposer.prototype.currentLabel = null;
+Indigo.AssemblyImposer.prototype.name = 'AssemblyImposer';
 
 /**
  * Получение ссылки на файл шаблона
