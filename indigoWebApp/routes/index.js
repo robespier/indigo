@@ -141,6 +141,12 @@ exports.data = function(req,res) {
 			});
 			res.end();
 		},
+		templates: function() {
+			var templates = req.db.collection('indigoTemplates');
+			templates.find().toArray(function(err, docs) {
+				res.json(docs);
+			});
+		},
 	};
 	// req.params[1] пока что всегда 'json'; будут другие дата-брокеры -- будет разговор;
 	var action = req.params[2];

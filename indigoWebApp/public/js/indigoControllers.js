@@ -181,5 +181,24 @@
 		};
 	});
 
-	indigoControllers.controller('Templates', ['$scope', function($scope) {}]);
+	indigoControllers.controller('Templates', ['$scope', 'Template', function($scope, Template) {
+
+		// Шаблоны с базы
+		$scope.list = Template.query();
+		// Пейджер: http://jsfiddle.net/2ZzZB/56/
+		$scope.currentPage = 0;
+		$scope.pageSize = 20;
+		$scope.numberOfPages = function() {
+			return Math.ceil($scope.list.length/$scope.pageSize);
+		};
+	}]);
+
+	// We already have a limitTo filter built-in to angular,
+	// let's make a startFrom filter
+	indigoControllers.filter('startFrom', function() {
+		return function(input, start) {
+			start = +start; //parse to int
+			return input.slice(start);
+		};
+	});
 })();
