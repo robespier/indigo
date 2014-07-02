@@ -181,7 +181,7 @@
 		};
 	});
 
-	indigoControllers.controller('Templates', ['$scope', 'Template', function($scope, Template) {
+	indigoControllers.controller('Templates', ['$scope', 'Job', 'Template', function($scope, Job, Template) {
 
 		// Шаблоны с базы
 		$scope.list = Template.query();
@@ -191,6 +191,12 @@
 		$scope.numberOfPages = function() {
 			return Math.ceil($scope.list.length/$scope.pageSize);
 		};
+		$scope.rescan = false;
+
+		$scope.submit = function() {
+			Job.save({run: 'chargeTS', rescan: $scope.rescan});
+		};
+
 	}]);
 
 	// We already have a limitTo filter built-in to angular,
