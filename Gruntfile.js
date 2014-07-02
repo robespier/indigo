@@ -129,7 +129,8 @@ module.exports = function(grunt) {
 			browser: {
 				src: [
 					'indigoWebApp/public/js/indigo.js',
-					'indigoWebApp/public/js/indigoServices.js'
+					'indigoWebApp/public/js/indigoServices.js',
+					'indigoWebApp/public/js/indigoControllers.js'
 				],
 			},
 		},
@@ -186,7 +187,10 @@ module.exports = function(grunt) {
 				customattrs: [
 					'smart-float',
 				],
-				relaxerror: [ 'The frameborder attribute on the iframe element is obsolete. Use CSS instead.' ],
+				relaxerror: [ 
+					'The frameborder attribute on the iframe element is obsolete. Use CSS instead.',
+					'Element head is missing a required instance of child element title.',
+				],
 				reportpath: null,
 			},
 			browser: {

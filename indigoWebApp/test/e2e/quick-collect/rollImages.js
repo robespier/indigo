@@ -8,7 +8,7 @@ describe('display roll image', function() {
 		roll_image;
 
 	beforeEach(function() {
-		browser.get('index.html');
+		browser.get('/#/jobs');
 		head_mashine = element(by.id('head_mashine'));
 		foot_mashine = element(by.id('foot_mashine'));
 		foot_forward = element(by.id('foot_forward'));

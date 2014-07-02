@@ -7,7 +7,7 @@ describe('upload illustrator job', function() {
 	var labels, sbm;
 
 	beforeEach(function() {
-		browser.get('index.html');
+		browser.get('/#/jobs');
 		labels = element(by.name('label_path'));
 		sbm = element(by.id('submit'));
 	});

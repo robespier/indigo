@@ -8,7 +8,7 @@ describe('select hotfolder', function() {
 		hotFolder;
 
 	beforeEach(function() {
-		browser.get('index.html');
+		browser.get('/#/jobs');
 		Op = element(by.name('ink_0'));
 		C  = element(by.name('ink_1'));
 		M  = element(by.name('ink_2'));
