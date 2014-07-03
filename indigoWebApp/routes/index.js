@@ -59,8 +59,11 @@ exports.data = function(req,res) {
 				var id = new ObjectID(message.jobid);
 				var jobsCollection = req.db.collection('indigoJobs');
 				jobsCollection.find({_id: id}).nextObject(function(err, parcel) {
+					// Возможно, именно этот запрос к info не требует дополнительной
+					// обработки. Другими словами, если в задании массив callbacks 
+					// пустой или его нет, то и предпринимать ничего не надо;
+					var callbacks = parcel.callbacks ? parcel.callbacks : [];
 					var i = message.info;
-					var callbacks = parcel.callbacks;
 					Object.keys(callbacks).forEach(function(key) {
 						try {
 							var fn = model[i][callbacks[key]];
@@ -99,6 +102,16 @@ exports.data = function(req,res) {
 				// Держи, кормилец:
 				res.json( 200, jobs );
 				res.end();
+				// Сохраняем отметку, что задание взял на себя какой-то хост из кластера.
+				// Имя исполнителя передается в запросе (а это GET) в параметре agent.
+				// В dev-логе Экспресса выглядеть это будет так: `GET /data/json/fetchJobs?agent=WINCLONE`
+				// где WINCLONE -- это имя хоста, который забрал задание.
+				// Если параметра agent в запросе нет, считаем, что это наши партизаны;
+				var agent = req.query.agent ? req.query.agent : 'PARTIZANEN';
+				var now = new Date();
+				jobsCollection.update({_id: parcel._id}, {$set: {status: "fetched", agent: agent, updated: now.getTime()}}, function() {
+					console.info('[%s]: Job %s fetched from database by %s', new Date(), parcel._id, agent);
+				});
 			});
 		},
 		pushJob: function() {
