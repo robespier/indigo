@@ -23,7 +23,8 @@ Indigo.BaseImposer.prototype = {
 		this.roll_number = "0"; // логику намоток не помню, так что 0 для проверки; job.roll; //и намотки, которые задаются в окне диалога или выцепляются из базы данных
 		this.hotfolderName = job.hot_folder;
 		this.hotFolder = new Folder (Indigo.config.HFRoot + this.hotfolderName); //Горячая папка
-		this.templateFolder = new Folder (Indigo.config.TmplRoot); //Каталог шаблонов сборки
+		this.templateFolder = new Folder (Indigo.config.TmplRoot); // Каталог шаблонов сборки
+		this.tempExt = '.ait';
 		this.printList = job.label_path.split('\n'); //Массив строк из принт-листа
 		this.PDFSettings = new PDFSaveOptions(); // Настройки экспорта в PDF
 		this.PDFSettings.acrobatLayers = false;
@@ -36,7 +37,7 @@ Indigo.BaseImposer.prototype = {
 	 * @return {File} template
 	 */
 	getTemplateName: function () {
-		var template = new File (this.templateFolder + '\\short\\' + this.temp + '_short' + '.ai');
+		var template = new File (this.templateFolder + '\\short\\' + this.temp + '_short' + this.tempExt);
 		return template;	
 	},
 

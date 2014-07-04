@@ -45,7 +45,7 @@ Indigo.TemplateScanner.prototype.run = function () {
 		var t = this.openTemplate();
 		
 		var info = {};
-		info.name = this.temp.name.replace('.ait','');
+		info.name = this.temp.name.replace(this.tempExt,'');
 		// Убираем первый слэш из имени, второй заменяем двоеточием:
 		// /d/work/template -> d:/work/template
 		info.path = this.temp.fullName.replace(/^\/(.)/,"$1:");
@@ -128,14 +128,14 @@ Indigo.TemplateScanner.prototype.validate = function () {
 Indigo.TemplateScanner.prototype.getTemplates = function() {
 	if (this.templateFolder.exists) {
 		// Все шаблоны с диска:
-		var whole = this.templateFolder.getFiles('*.ait').sort();
+		var whole = this.templateFolder.getFiles('*' + this.tempExt).sort();
 		// Массив шаблонов, которые уже обработаны:
 		var ready = this.job.templates.sort();
 		// Отфильтрованный массив шаблонов:
 		var todo = [];
 
 		for (var i = 0, l = whole.length; i < l; i++) {
-			var name = whole[i].name.replace('.ait','');
+			var name = whole[i].name.replace(this.tempExt,'');
 			if (!ready.contains(name)) {
 				todo.push(whole[i]);
 			}

@@ -14,7 +14,7 @@ Indigo.AssemblyImposer.prototype.name = 'AssemblyImposer';
  * @return {File} Файл шаблона
  */
 Indigo.AssemblyImposer.prototype.getTemplateName = function () {
-	var template = new File (this.templateFolder + '\\' + this.temp + '.ai');
+	var template = new File (this.templateFolder + '\\' + this.temp + this.tempExt);
 	return template;
 };
 
