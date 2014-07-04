@@ -112,6 +112,7 @@ Indigo.HTTPMessenger.prototype.get = function(from) {
 	var http = this.http;
 	http.url = encodeURI(from);
 	http.requestheaders = ["User-Agent", "Indigo 1.0"];
+	http.method = "GET";
 	http.execute();
 	var response = http.response;
 	return response;
@@ -125,6 +126,10 @@ Indigo.HTTPMessenger.prototype.get = function(from) {
  */
 Indigo.HTTPMessenger.prototype.fetchJobs = function() {
 	var from = this.remote + this.dataBroker.getURI() + 'fetchJobs';
+	from += '?agent=' + $.getenv('computername');
+	this.http.async = false;
+	this.http.mime = "application/" + this.dataBroker.type;
+	this.http.request = undefined;
 	var response = this.get(from);
 	var data = this.dataBroker.decode(response);
 	return data;
