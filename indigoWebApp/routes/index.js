@@ -4,7 +4,8 @@
  */
 
 var ObjectID = require('mongodb').ObjectID,
-	model = require('../lib/model');
+	model = require('../lib/model'),
+	_ = require('lodash');
 
 /**
  * Закодировать не-ASCII символы в текстовых полях передаваемого объекта
@@ -82,22 +83,20 @@ exports.data = function(req,res) {
 		},
 		fetchJobs: function() {
 			var jobsCollection = req.db.collection('indigoJobs');
-			jobsCollection.find({status:'pending'}).nextObject(function(err, parcel) {
+			// Болше двух заданий в одни руки не давать!
+			jobsCollection.find({status:'pending'}).limit(2).toArray(function(err, parcel) {
 				// Создаём массив заданий для Иллюстратора, если есть
-				if (!parcel) {
+				if (!parcel || parcel.lenght === 0) {
 					// а если нет, возвращаем пустой объект
 					res.json(200, {});
 					return;
 				}
 				var jobs = [];
-				var adobed = encodeAdobe(parcel); 
-				Object.keys(parcel.actions).forEach(function(key) {
-					if (parcel.actions[key].process) {
-						jobs.push({
-							action: parcel.actions[key].name,
-							data: adobed,
-						});
-					}
+				parcel.forEach(function(job) {
+					jobs.push({
+						action: job.action,
+						data: encodeAdobe(job),
+					});
 				});
 				// Держи, кормилец:
 				res.json( 200, jobs );
@@ -107,22 +106,68 @@ exports.data = function(req,res) {
 				// В dev-логе Экспресса выглядеть это будет так: `GET /data/json/fetchJobs?agent=WINCLONE`
 				// где WINCLONE -- это имя хоста, который забрал задание.
 				// Если параметра agent в запросе нет, считаем, что это наши партизаны;
-				var agent = req.query.agent ? req.query.agent : 'PARTIZANEN';
-				var now = new Date();
-				jobsCollection.update({_id: parcel._id}, {$set: {status: "fetched", agent: agent, updated: now.getTime()}}, function() {
-					console.info('[%s]: Job %s fetched from database by %s', new Date(), parcel._id, agent);
+				parcel.forEach(function(job) {
+					var agent = req.query.agent ? req.query.agent : 'PARTIZANEN';
+					var now = new Date();
+					jobsCollection.update({_id: job._id}, {$set: {status: "fetched", agent: agent, updated: now.getTime()}}, function() {
+						console.info('[%s]: Job %s fetched from database by %s', new Date(), job._id, agent);
+					});
 				});
 			});
 		},
 		pushJob: function() {
 			var workset = req.body;
-			// Если в запросе есть имя метода, выполнить его, иначе вставить что есть.
+			// Если в запросе есть имя метода для особой обработки задания, выполнить его, иначе вставить что есть.
 			if ((typeof(workset.run) !== 'undefined') && typeof(this[workset.run]) === 'function') {
 				this[workset.run]();
 			} else {
+				// 
+				// Распараллеливаем задания
+				//
+				// Мотивация: распиливание одного большого задания на много мелких
+				// позволит распределить их выполнение между хостами кластера; 
+				var actions = workset.actions ? workset.actions : [];
+				var splitJobs = [];
+				actions.forEach(function(action){
+					// this -- это объект workset
+					//
+					// Задание не отмечено галкой:
+					if (!action.process) { return; }
+					
+					var job = {};
+					
+					// Задание Assembly создаём для каждой этикетки в принт-листе
+					if (action.name === 'AssemblyImposer') {
+						var labels = this.label_path.split('\n');
+						labels.forEach(function(path) {
+							job = _.clone(this);
+							job.action = 'AssemblyImposer';
+							delete job.actions;
+							job.label_path = path;
+							splitJobs.push(job);
+						},this);
+					}
+					// Matching должен иметь весь принт-лист
+					if (action.name === 'MatchingImposer') {
+						job = _.clone(this);
+						job.action = 'MatchingImposer';
+						delete job.actions;
+						splitJobs.push(job);
+					}
+					// Achtung
+					if (action.name === 'AchtungImposer') {
+						job = _.clone(this);
+						job.action = 'AchtungImposer';
+						delete job.actions;
+						splitJobs.push(job);
+					}
+				}, workset);
 				var jobs = req.db.collection('indigoJobs');
+				
+				if (splitJobs.lenght === 0) { return; }
+				
 				jobs.remove(function(){
-					jobs.findAndModify({_id: 'current'}, [], workset, {upsert: true, w: 1}, function(err, result) {
+					jobs.insert(splitJobs, function(err, result) {
 						if (err) {
 							res.send(500);
 						} else {
