@@ -1,4 +1,4 @@
-﻿#include ../include/indigo.jsxinc
+#include ../include/indigo.jsxinc
 
 var webaccesslib;
 // Будет использован первый найденный webaccesslib из конфига indigo
