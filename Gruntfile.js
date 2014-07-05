@@ -199,10 +199,15 @@ module.exports = function(grunt) {
 				},
 			}
 		},
+		shell: {
+			codesynclin: {
+				command: 'misc/codesync.sh',
+			},
+		},
 		watch: {
 			estk: {
 				files: '<%= concat.estk.src %>',
-				tasks: ['concat', 'jshint', 'sed']
+				tasks: ['concat', 'jshint', 'sed', 'os_spec']
 			},
 			nodejs: {
 				files: '<%= jshint.nodejs.src %>',
@@ -240,6 +245,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-html-angular-validate');
+	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	//grunt.loadNpmTasks('grunt-jsdoc');
 	grunt.loadNpmTasks('grunt-notify');
@@ -252,6 +258,7 @@ module.exports = function(grunt) {
 		envTasks.push('env:windows');
 	} else {
 		envTasks.push('env:linux');
+		envTasks.push('shell:codesynclin');
 	}
 	grunt.registerTask('os_spec', envTasks);
 
@@ -260,5 +267,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('html', ['htmlangular']);
 	grunt.registerTask('instrument', ['concat', 'blanket', 'sed']);
 	// Default task.
-	grunt.registerTask('default', ['concat', 'os_spec', 'jshint:estk', 'sed']);
+	grunt.registerTask('default', ['concat', 'jshint:estk', 'sed']);
 };
