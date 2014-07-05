@@ -1,0 +1,8 @@
+({
+	//"achtungFile": 'Y:/ACHTUNG.eps',
+	//"webserver": 'http://indigo.aicdr.pro:8080/',
+	// Корень хотфолдеров
+	//"HFRoot" : 'X:/',
+	// Корень шаблонов
+	//"TmplRoot" : 'D:/work/template',
+})

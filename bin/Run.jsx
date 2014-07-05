@@ -33,6 +33,23 @@
 	#include ../include/indigo.jsxinc
 
 	/**
+	 * Объединение config.json со значениями по умолчанию из Indigo.config
+	 * 
+	 * Если необходимы переопределения дефолтных настроек, можно скопировать
+	 * файл config.json.example в $home/Application Data/Indigo/, переименовать
+	 * его в config.json и раскомментировать значения, которые надо изменить;
+	 */
+	var configOverrides = $.getenv('appdata') + '/Indigo/config.json';
+	if (File(configOverrides).exists) {
+		var conf = $.evalFile(configOverrides);
+		for (var prop in conf) {
+			if (conf.hasOwnProperty(prop)) {
+				Indigo.config[prop] = conf[prop];
+			}
+		};
+	}
+
+	/**
 	 * Подгрузка webaccesslib.dll необходима для обмена данными по HTTP
 	 * протоколу между estk и внешними источниками данных. Если Creative
 	 * Suite установлен не в Programm Files, необходимо явно указать, где
