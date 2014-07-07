@@ -219,5 +219,25 @@
 		$scope.go = function(path) {
 			$location.path(path);
 		};
+		$scope.statuses = {
+			pending: true,
+			fetched: true,
+			started: true,
+			finished: true,
+			error: true,
+			deleted: false,
+		};
 	}]);
+
+	indigoControllers.filter('jobStatuses', function() {
+		return function(items, options) {
+			var selected = [];
+			angular.forEach(items, function(value) {
+				if (options[value.status]) {
+					this.push(value);
+				}
+			}, selected);
+			return selected;
+		};
+	});
 })();

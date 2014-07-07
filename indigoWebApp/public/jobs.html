@@ -1,9 +1,19 @@
 <div ng-controller="Jobs">
 	<div class="row">
+		Filters: 
+		<input type="checkbox" ng-model="statuses.pending">pending
+		<input type="checkbox" ng-model="statuses.fetched">fetched
+		<input type="checkbox" ng-model="statuses.started">started
+		<input type="checkbox" ng-model="statuses.finished">finished
+		<input type="checkbox" ng-model="statuses.error">error
+		<input type="checkbox" ng-model="statuses.deleted">deleted
+
+	</div>
+	<div class="row">
 		<table class="table table-condensed table-hover">
-			<tr ng-repeat="job in list | startFrom: currentPage*pageSize | limitTo: 20">
+			<tr ng-repeat="job in list | jobStatuses: statuses | startFrom: currentPage*pageSize | limitTo: 20">
 				<td>{{job.updated | date : 'short'}}</td>
-				<td ng-class="{'text-danger': job.status==='error'}">{{job.action}}</td>
+				<td ng-class="{'text-danger': job.status==='error', 'text-success': job.status==='finished'}">{{job.action}}</td>
 				<td>{{job.status}}</td>
 				<td>{{job.agent}}</td>
 				<td>{{job.hot_folder}}</td>

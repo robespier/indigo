@@ -38,6 +38,12 @@ exports.data = function(req,res) {
 			var message = {};
 			if (req.method === 'POST') {
 				message = JSON.parse(req.body.parcel);
+				var id = new ObjectID(message.jobid);
+				var jobsCollection = req.db.collection('indigoJobs');
+				var now = new Date();
+				jobsCollection.update({_id: id}, {$set: {status: 'error', error: message.error, agent: message.host, updated: now.getTime()}}, function() {
+					console.info('[%s]: Job %s raised error on %s', new Date(), message.jobid, message.host, message.user);
+				});
 			}
 			res.end();
 		},
@@ -77,6 +83,10 @@ exports.data = function(req,res) {
 							console.error('Requested method not implemented yet: %s.%s', i, callbacks[key]);
 						}
 					});
+				});
+				var now = new Date();
+				jobsCollection.update({_id: id}, {$set: {status: message.info, agent: message.host, updated: now.getTime()}}, function() {
+					console.info('[%s]: Job %s %s from %s by %s', new Date(), message.jobid, message.info, message.host, message.user);
 				});
 			}
 			res.end();
@@ -144,6 +154,7 @@ exports.data = function(req,res) {
 							job.action = 'AssemblyImposer';
 							delete job.actions;
 							job.label_path = path;
+							job.updated = new Date().getTime();
 							splitJobs.push(job);
 						},this);
 					}
@@ -152,6 +163,7 @@ exports.data = function(req,res) {
 						job = _.clone(this);
 						job.action = 'MatchingImposer';
 						delete job.actions;
+						job.updated = new Date().getTime();
 						splitJobs.push(job);
 					}
 					// Achtung
@@ -159,6 +171,7 @@ exports.data = function(req,res) {
 						job = _.clone(this);
 						job.action = 'AchtungImposer';
 						delete job.actions;
+						job.updated = new Date().getTime();
 						splitJobs.push(job);
 					}
 				}, workset);
@@ -166,7 +179,7 @@ exports.data = function(req,res) {
 				
 				if (splitJobs.lenght === 0) { return; }
 				
-				jobs.insert(splitJobs, function(err, result) {
+				jobs.insert(splitJobs, function(err) {
 					if (err) {
 						res.send(500);
 					} else {
@@ -198,7 +211,8 @@ exports.data = function(req,res) {
 		},
 		jobs: function() {
 			var templates = req.db.collection('indigoJobs');
-			templates.find().toArray(function(err, docs) {
+			// Сортировка по умолчанию: сначала свежие задания
+			templates.find().sort('updated', -1).toArray(function(err, docs) {
 				res.json(docs);
 			});
 		},

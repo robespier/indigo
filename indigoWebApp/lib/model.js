@@ -8,22 +8,12 @@ var async = require('async');
  *
  */	
 
-var ObjectID = require('mongodb').ObjectID;
+//var ObjectID = require('mongodb').ObjectID;
 
-exports.start = {
-	/**
-	 * Обновляем статус задания: с `pending` на `running`
-	 */
-	storeTemplates: function(db, parcel) {
-		var id = new ObjectID(parcel.jobid);
-		var jobsCollection = db.collection('indigoJobs');
-		jobsCollection.update({_id: id}, {$set: {status: "running"}}, function() {
-			console.info('[%s]: Job %s started from %s by %s', new Date(), parcel.jobid, parcel.host, parcel.user);
-		});
-	},
+exports.started = {
 };
 
-exports.finish = {
+exports.finished = {
 	/**
 	 * Вставляем список шаблонов в коллекцию `indigoTemplates`
 	 * @todo Обновляем статус задания: `done` или `error`
@@ -61,11 +51,9 @@ exports.chargeTS = function(db, rescan) {
 	var templates = db.collection('indigoTemplates'),
 		jobs = db.collection('indigoJobs'),
 		todo = {
-			actions: [{
-				name: "TemplateScanner",
-				process: true
-			}],
+			action: "TemplateScanner",
 			status: "pending",
+			updated: new Date().getTime(),
 			label_path: "",
 			callbacks:["storeTemplates"],
 			templates: [],
