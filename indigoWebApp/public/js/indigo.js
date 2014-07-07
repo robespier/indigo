@@ -10,6 +10,10 @@
 			$routeProvider.
 				when('/jobs', {
 					templateUrl: 'jobs.html',
+					controller: 'Jobs',
+				}).
+				when('/addJob', {
+					templateUrl: 'jobPush.html',
 					controller: 'JobBlank',
 				}).
 				when('/templates', {

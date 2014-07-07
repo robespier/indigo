@@ -166,14 +166,12 @@ exports.data = function(req,res) {
 				
 				if (splitJobs.lenght === 0) { return; }
 				
-				jobs.remove(function(){
-					jobs.insert(splitJobs, function(err, result) {
-						if (err) {
-							res.send(500);
-						} else {
-							res.send(200, result);
-						}
-					});
+				jobs.insert(splitJobs, function(err, result) {
+					if (err) {
+						res.send(500);
+					} else {
+						res.send(200);//, result);
+					}
 				});
 			}
 		},
@@ -194,6 +192,12 @@ exports.data = function(req,res) {
 		},
 		templates: function() {
 			var templates = req.db.collection('indigoTemplates');
+			templates.find().toArray(function(err, docs) {
+				res.json(docs);
+			});
+		},
+		jobs: function() {
+			var templates = req.db.collection('indigoJobs');
 			templates.find().toArray(function(err, docs) {
 				res.json(docs);
 			});

@@ -37,7 +37,7 @@
 		};
 	}]);
 
-	indigoControllers.controller('JobBlank', ['$scope', 'Job', 'Blank', function($scope, Job, Blank) {
+	indigoControllers.controller('JobBlank', ['$scope', '$location', 'Job', 'Blank', function($scope, $location, Job, Blank) {
 
 		/**
 		 * Значения по умолчанию
@@ -102,6 +102,7 @@
 		$scope.submit = function() {
 			$scope.workset.status = 'pending';
 			Job.save($scope.workset);
+			$location.path('/jobs');
 		};
 		
 		/**
@@ -207,4 +208,16 @@
 			return input.slice(start);
 		};
 	});
+
+	indigoControllers.controller('Jobs', ['$scope', '$location', 'JobList', function($scope, $location, JobList) {
+		$scope.list = JobList.query();
+		$scope.currentPage = 0;
+		$scope.pageSize = 20;
+		$scope.numberOfPages = function() {
+			return Math.ceil($scope.list.length/$scope.pageSize);
+		};
+		$scope.go = function(path) {
+			$location.path(path);
+		};
+	}]);
 })();
