@@ -46,6 +46,7 @@
 			roll: 'hand',
 			roll_type: 'outside',
 			roll_dir: 'head_forward',
+			roll_name: 'roll_4_8',
 			inks: [ 
 				{ name: 'Opaque', used: false },
 				{ name: 'Cyan', used: true },
