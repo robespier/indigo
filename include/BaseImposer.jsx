@@ -149,9 +149,9 @@ Indigo.BaseImposer.prototype = {
 	getStyle: function() {
 		// Считываем массив намоток (графических стилей) документа
 		var myRolls = this.template.graphicStyles;
-		// Намотка по умолчанию - 1
-		var myStyle = this.roll_name;
-/*		switch(this.roll_number) {
+		// Намотка по умолчанию - 2
+		var myStyle = 'roll_2_5';
+		switch(this.roll_number) {
 			case "0":
 				if (this.transform()) {
 					myStyle=myRolls['roll_1_6']; // Крутить
@@ -189,7 +189,7 @@ Indigo.BaseImposer.prototype = {
 				break;
 		}
 		return myStyle;
-*/	},
+	},
 
 	/**
 	 * Логика определения намотки;
