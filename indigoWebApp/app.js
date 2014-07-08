@@ -8,6 +8,7 @@ var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 var mongods = require('./lib/mongods');
+var socket = require('./lib/socket');
 
 var exp = express();
 
@@ -32,6 +33,8 @@ exp.all('/data/:1/:2', routes.data);
 exp.all('/tests/:1', routes.tests);
 exp.all('/forms/:1', routes.forms);
 
-http.createServer(exp).listen(exp.get('port'), function(){
+var server = http.createServer(exp).listen(exp.get('port'), function(){
 	console.log('Express server listening on port ' + exp.get('port'));
 });
+
+socket.init(server);

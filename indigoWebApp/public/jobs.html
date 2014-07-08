@@ -13,7 +13,7 @@
 		<table class="table table-condensed table-hover">
 			<tr ng-repeat="job in list | jobStatuses: statuses | startFrom: currentPage*pageSize | limitTo: 20">
 				<td>{{job.updated | date : 'short'}}</td>
-				<td ng-class="{'text-danger': job.status==='error', 'text-success': job.status==='finished'}">{{job.action}}</td>
+				<td ng-class="{'text-danger': job.status==='error', 'text-success': job.status==='finished', 'text-warning': job.status==='started', 'text-info': job.status==='fetched'}">{{job.action}}</td>
 				<td>{{job.status}}</td>
 				<td>{{job.agent}}</td>
 				<td>{{job.hot_folder}}</td>

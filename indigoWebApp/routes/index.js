@@ -5,7 +5,8 @@
 
 var ObjectID = require('mongodb').ObjectID,
 	model = require('../lib/model'),
-	_ = require('lodash');
+	_ = require('lodash'),
+	io = require('../lib/socket.js');
 
 /**
  * Закодировать не-ASCII символы в текстовых полях передаваемого объекта
@@ -43,6 +44,7 @@ exports.data = function(req,res) {
 				var now = new Date();
 				jobsCollection.update({_id: id}, {$set: {status: 'error', error: message.error, agent: message.host, updated: now.getTime()}}, function() {
 					console.info('[%s]: Job %s raised error on %s', new Date(), message.jobid, message.host, message.user);
+					io.emit('jobstatus:changed', { status: message.info, _id: id });
 				});
 			}
 			res.end();
@@ -87,6 +89,7 @@ exports.data = function(req,res) {
 				var now = new Date();
 				jobsCollection.update({_id: id}, {$set: {status: message.info, agent: message.host, updated: now.getTime()}}, function() {
 					console.info('[%s]: Job %s %s from %s by %s', new Date(), message.jobid, message.info, message.host, message.user);
+					io.emit('jobstatus:changed', { status: message.info, _id: id });
 				});
 			}
 			res.end();
@@ -121,6 +124,7 @@ exports.data = function(req,res) {
 					var now = new Date();
 					jobsCollection.update({_id: job._id}, {$set: {status: "fetched", agent: agent, updated: now.getTime()}}, function() {
 						console.info('[%s]: Job %s fetched from database by %s', new Date(), job._id, agent);
+						io.emit('jobstatus:changed', { status: 'fetched', _id: job._id });
 					});
 				});
 			});

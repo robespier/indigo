@@ -209,7 +209,7 @@
 		};
 	});
 
-	indigoControllers.controller('Jobs', ['$scope', '$location', 'JobList', function($scope, $location, JobList) {
+	indigoControllers.controller('Jobs', ['$scope', '$location', 'JobList', 'socket', function($scope, $location, JobList, socket) {
 		$scope.list = JobList.query();
 		$scope.currentPage = 0;
 		$scope.pageSize = 20;
@@ -223,10 +223,17 @@
 			pending: true,
 			fetched: true,
 			started: true,
-			finished: true,
+			finished: false,
 			error: true,
 			deleted: false,
 		};
+		socket.on('jobstatus:changed', function(data) {
+			angular.forEach($scope.list, function(value) {
+				if (value._id === data._id) {
+					value.status = data.status;
+				}
+			});
+		});
 	}]);
 
 	indigoControllers.filter('jobStatuses', function() {
