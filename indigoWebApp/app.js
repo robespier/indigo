@@ -29,8 +29,11 @@ if ('development' === exp.get('env')) {
 	exp.use(express.errorHandler());
 }
 
-exp.all('/data/:1/:2', routes.data);
+exp.all('/data/json/:1', routes.data);
+exp.all('/data/json/jobs/:1', routes.jobs);
+exp.all('/data/json/templates/:1', routes.templates);
 exp.all('/tests/:1', routes.tests);
+exp.all('/tests/jobs/:1', routes.tests);
 exp.all('/forms/:1', routes.forms);
 
 var server = http.createServer(exp).listen(exp.get('port'), function(){

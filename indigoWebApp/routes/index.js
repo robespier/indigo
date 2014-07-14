@@ -1,240 +1,55 @@
-
-/*
- * GET home page.
- */
-
-var ObjectID = require('mongodb').ObjectID,
-	model = require('../lib/model'),
-	_ = require('lodash'),
-	io = require('../lib/socket.js');
+var _ = require('lodash'),
+	jobs = require('./jobs'),
+	templates = require('./templates');
 
 /**
- * Закодировать не-ASCII символы в текстовых полях передаваемого объекта
+ * Попытка вызова функции, пришедшей в запросе
  *
- * Похоже, что объект http из Adobe webaccesslib.dll кладёт с пробором на кодировку ответа. 
- * Ответ уходит в utf8 (проверено в Wireshark), однако в http.response оказывается хрень.
- * Установка http.responseencoding='utf8', как показано в документации Adobe, не помогает.
- *
- * Поэтому: здесь закодируем кириллицу в encodeURIComponent, а в Иллюстраторе вытащим ее 
- * обратно.
- *
- * @todo Рекурсивный обход объекта
- *
- * @param {object} 
- * @return {object}
+ * @param {function} fn Возможно, функция 
+ * @param {object} req passed form Express
+ * @param {object} res passed form Express
  */
-function encodeAdobe(obj) {
-	Object.keys(obj).forEach(function(key) {
-		if (typeof(obj[key]) === 'string') {
-			obj[key] = encodeURIComponent(obj[key]);
-		}
-	});
-	return obj;
-}
-
-exports.data = function(req,res) {
-
-	var megaSwitch = {
-		error: function() {
-			var message = {};
-			if (req.method === 'POST') {
-				message = JSON.parse(req.body.parcel);
-				var id = new ObjectID(message.jobid);
-				var jobsCollection = req.db.collection('indigoJobs');
-				var now = new Date();
-				jobsCollection.update({_id: id}, {$set: {status: 'error', error: message.error, agent: message.host, updated: now.getTime()}}, function() {
-					console.info('[%s]: Job %s raised error on %s', new Date(), message.jobid, message.host, message.user);
-					io.emit('jobstatus:changed', { status: message.info, _id: id });
-				});
-			}
-			res.end();
-		},
-		/**
-		 * Тут маршрутизируются запросы от Иллюстратора со статусом `info`
-		 *
-		 * При получении запроса мы:
-		 * 
-		 * * преобразуем сообщение из тела запроса в объект `message`;
-		 * * достаем из этого объекта id задания и делаем из него монговский ObjectID;
-		 * * тянем из коллекции indigoJobs это задание по его ObjectID и смотрим массив callbacks;
-		 * * если в массиве callbacks нашлись функции, которые можно выполнить, то 
-		 *   выполняем их асинхронно (точнее, ставим в очередь на выполнение в process.nextTick);
-		 * * 
-		 */
-		info: function() {
-			var message = {};
-			if (req.method === 'POST') {
-				message = JSON.parse(req.body.parcel);
-				var id = new ObjectID(message.jobid);
-				var jobsCollection = req.db.collection('indigoJobs');
-				jobsCollection.find({_id: id}).nextObject(function(err, parcel) {
-					// Возможно, именно этот запрос к info не требует дополнительной
-					// обработки. Другими словами, если в задании массив callbacks 
-					// пустой или его нет, то и предпринимать ничего не надо;
-					var callbacks = parcel.callbacks ? parcel.callbacks : [];
-					var i = message.info;
-					Object.keys(callbacks).forEach(function(key) {
-						try {
-							var fn = model[i][callbacks[key]];
-							if (typeof(fn) === 'function') {
-								process.nextTick(function() {
-									fn(req.db, message);
-								});
-							}
-						} catch (e) {
-							console.error('Requested method not implemented yet: %s.%s', i, callbacks[key]);
-						}
-					});
-				});
-				var now = new Date();
-				jobsCollection.update({_id: id}, {$set: {status: message.info, agent: message.host, updated: now.getTime()}}, function() {
-					console.info('[%s]: Job %s %s from %s by %s', new Date(), message.jobid, message.info, message.host, message.user);
-					io.emit('jobstatus:changed', { status: message.info, _id: id });
-				});
-			}
-			res.end();
-		},
-		fetchJobs: function() {
-			var jobsCollection = req.db.collection('indigoJobs');
-			// Болше двух заданий в одни руки не давать!
-			jobsCollection.find({status:'pending'}).limit(2).toArray(function(err, parcel) {
-				// Создаём массив заданий для Иллюстратора, если есть
-				if (!parcel || parcel.lenght === 0) {
-					// а если нет, возвращаем пустой объект
-					res.json(200, {});
-					return;
-				}
-				var jobs = [];
-				parcel.forEach(function(job) {
-					jobs.push({
-						action: job.action,
-						data: encodeAdobe(job),
-					});
-				});
-				// Держи, кормилец:
-				res.json( 200, jobs );
-				res.end();
-				// Сохраняем отметку, что задание взял на себя какой-то хост из кластера.
-				// Имя исполнителя передается в запросе (а это GET) в параметре agent.
-				// В dev-логе Экспресса выглядеть это будет так: `GET /data/json/fetchJobs?agent=WINCLONE`
-				// где WINCLONE -- это имя хоста, который забрал задание.
-				// Если параметра agent в запросе нет, считаем, что это наши партизаны;
-				parcel.forEach(function(job) {
-					var agent = req.query.agent ? req.query.agent : 'PARTIZANEN';
-					var now = new Date();
-					jobsCollection.update({_id: job._id}, {$set: {status: "fetched", agent: agent, updated: now.getTime()}}, function() {
-						console.info('[%s]: Job %s fetched from database by %s', new Date(), job._id, agent);
-						io.emit('jobstatus:changed', { status: 'fetched', _id: job._id });
-					});
-				});
-			});
-		},
-		pushJob: function() {
-			var workset = req.body;
-			// Если в запросе есть имя метода для особой обработки задания, выполнить его, иначе вставить что есть.
-			if ((typeof(workset.run) !== 'undefined') && typeof(this[workset.run]) === 'function') {
-				this[workset.run]();
-			} else {
-				// 
-				// Распараллеливаем задания
-				//
-				// Мотивация: распиливание одного большого задания на много мелких
-				// позволит распределить их выполнение между хостами кластера; 
-				var actions = workset.actions ? workset.actions : [];
-				var splitJobs = [];
-				actions.forEach(function(action){
-					// this -- это объект workset
-					//
-					// Задание не отмечено галкой:
-					if (!action.process) { return; }
-					
-					var job = {};
-					
-					// Задание Assembly создаём для каждой этикетки в принт-листе
-					if (action.name === 'AssemblyImposer') {
-						var labels = this.label_path.split('\n');
-						labels.forEach(function(path) {
-							job = _.clone(this);
-							job.action = 'AssemblyImposer';
-							delete job.actions;
-							job.label_path = path;
-							job.updated = new Date().getTime();
-							splitJobs.push(job);
-						},this);
-					}
-					// Matching должен иметь весь принт-лист
-					if (action.name === 'MatchingImposer') {
-						job = _.clone(this);
-						job.action = 'MatchingImposer';
-						delete job.actions;
-						job.updated = new Date().getTime();
-						splitJobs.push(job);
-					}
-					// Achtung
-					if (action.name === 'AchtungImposer') {
-						job = _.clone(this);
-						job.action = 'AchtungImposer';
-						delete job.actions;
-						job.updated = new Date().getTime();
-						splitJobs.push(job);
-					}
-				}, workset);
-				var jobs = req.db.collection('indigoJobs');
-				
-				if (splitJobs.lenght === 0) { return; }
-				
-				jobs.insert(splitJobs, function(err) {
-					if (err) {
-						res.send(500);
-					} else {
-						res.send(200);//, result);
-					}
-				});
-			}
-		},
-		//
-		// Запрос на создание задания для TemplateScanner, из браузера:
-		// 
-		// Если параметр rescan установлен, то база шаблонов будет сброшена 
-		// и сканирование шаблонов будет выполнено "с чистого листа".
-		// По умолчанию (т.е. когда rescan не установлен) будут сканироваться 
-		// только недостающие шаблоны, которые есть на диске, но отсутствуют в базе.
-		// 
-		chargeTS: function() {
-			var rescan = req.body['rescan'] ? true : false;
-			process.nextTick(function() {
-				model.chargeTS(req.db, rescan);
-			});
-			res.end();
-		},
-		templates: function() {
-			var templates = req.db.collection('indigoTemplates');
-			templates.find().toArray(function(err, docs) {
-				res.json(docs);
-			});
-		},
-		jobs: function() {
-			var templates = req.db.collection('indigoJobs');
-			// Сортировка по умолчанию: сначала свежие задания
-			templates.find().sort('updated', -1).toArray(function(err, docs) {
-				res.json(docs);
-			});
-		},
-	};
-	// req.params[1] пока что всегда 'json'; будут другие дата-брокеры -- будет разговор;
-	var action = req.params[2];
-
-	if (typeof(megaSwitch[action]) !== 'function') {
+function route(fn, req, res) {
+	if (_.isFunction(fn)) {
+		fn(req, res);
+	} else {
 		res.send(404);
 		return;
 	}
+}
 
-	megaSwitch[action]();
+/**
+ * Задания
+ */
+exports.jobs = function(req, res) {
+	var method = req.params[1];
+	route(jobs[method], req, res);
 };
 
+/**
+ * Шаблоны
+ */
+exports.templates = function(req, res) {
+	var method = req.params[1];
+	route(templates[method], req, res);
+};
+
+/**
+ * info и error
+ * 
+ * Маршрутизируются в job
+ */
+exports.data = function(req, res) {
+	var method = req.params[1];
+	route(jobs[method], req, res);
+};
+
+/**
+ * Ответы для тестов estk
+ */
 exports.tests = function(req, res) {
 	switch(req.params[1]) {
-		case 'fetchJobs':
+		case 'fetch':
 			res.send(200, 'fetchjob.test');
 		break;
 		case 'info':
@@ -247,6 +62,9 @@ exports.tests = function(req, res) {
 	res.end();
 };
 
+/**
+ * Какой-то legacy код
+ */
 exports.forms = function(req, res) {
     // Если в запросе есть `_id`, заполним форму из базы, иначе покажем пустую
     if (typeof(req.query._id) !== 'undefined') {
