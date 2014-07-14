@@ -378,6 +378,13 @@ Indigo.BaseImposer.prototype = {
 				_id : this.job._id,
 				result: { data: parcel },
 			};
+			// Если импозер прислал свой собственный статус, не info 
+			// и не error, то сохраняем этот статус в сообщении
+			if (type && type !== 'info' && type !== 'error') {
+				wrapper.status = type;
+				type = 'info';
+			}
+
 			this.messenger.send(type, wrapper);
 		} else {
 			sended = false;

@@ -30,7 +30,7 @@ Indigo.TemplateScanner.prototype.run = function () {
 	function sendChunk(piece) {
 		var success = true;
 		try {
-			this.send(piece);
+			this.send('running',piece);
 		} catch (e) {
 			success = false;
 		}
