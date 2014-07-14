@@ -34,10 +34,10 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
 		worker.messenger = this.messenger;
 		// Отправить асинхронное уведомление о начале работы над заданием
 		var feedback = {
-			host: $.getenv('computername'),
-			info: 'started',
-			jobid: data._id,
-			source: worker.name,
+			agent: $.getenv('computername'),
+			status: 'started',
+			_id: data._id,
+			src: worker.name,
 			user: $.getenv('username') };
 		this.messenger.send('info', feedback);
 		var start = new Date().getTime();
@@ -47,11 +47,12 @@ Indigo.Controller.prototype.processJobs = function(jobs) {
 			feedback.result = worker.run();
 			// Затраты по времени в миллисекундах  
 			feedback.duration = new Date().getTime() - start;
-			feedback.info = 'finished';
+			feedback.status = 'finished';
 			// Отправить уведомление о результатах работы
 			this.messenger.send('info', feedback);
 		} catch (err) {
 			feedback.error = err;
+			feedback.status = 'error';
 			this.messenger.send('error', feedback);
 		}
 	}

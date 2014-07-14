@@ -355,7 +355,7 @@ Indigo.BaseImposer.prototype = {
 	},
 
 	/**
-	 * Интерфейс к мессенджеру
+	 * Интерфейс импозера к мессенджеру
 	 *
 	 * @param {string} status
 	 * @param {object} message
@@ -377,7 +377,7 @@ Indigo.BaseImposer.prototype = {
 			// _id : required,
 			// result: {data: required}
 			var wrapper = {
-				jobid : this.job._id,
+				_id : this.job._id,
 				result: { data: parcel },
 			};
 			this.messenger.send(type, wrapper);

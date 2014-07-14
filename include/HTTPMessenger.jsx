@@ -59,8 +59,8 @@ Indigo.HTTPMessenger.prototype.receive = function(type, data) {
 
 Indigo.HTTPMessenger.prototype.send = function(type, data) {
 	// Установка значений по умолчанию
-	if (typeof(data.info) === 'undefined') {
-		data.info = 'finish';
+	if (typeof(data.status) === 'undefined') {
+		data.status = 'finished';
 	}
 	// Запрос будет асинхронным, если свойство async не установлено явно в false
 	if (typeof(data.async) === 'undefined') {
