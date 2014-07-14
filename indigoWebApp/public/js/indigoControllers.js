@@ -100,8 +100,7 @@
 		};
 
 		$scope.submit = function() {
-			$scope.workset.status = 'pending';
-			Job.save($scope.workset);
+			Job.save({parcel: angular.toJson($scope.workset)});
 			$location.path('/jobs');
 		};
 		
@@ -195,7 +194,7 @@
 		$scope.rescan = false;
 
 		$scope.submit = function() {
-			Job.save({run: 'chargeTS', rescan: $scope.rescan});
+			Job.save({parcel: angular.toJson({run: 'chargeTS', rescan: $scope.rescan})});
 		};
 
 	}]);
