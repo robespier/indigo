@@ -100,7 +100,7 @@
 		};
 
 		$scope.submit = function() {
-			Job.save({parcel: angular.toJson($scope.workset)});
+			Job.push({parcel: angular.toJson($scope.workset)});
 			$location.path('/jobs');
 		};
 		
@@ -194,7 +194,7 @@
 		$scope.rescan = false;
 
 		$scope.submit = function() {
-			Job.save({parcel: angular.toJson({run: 'chargeTS', rescan: $scope.rescan})});
+			Job.push({parcel: angular.toJson({run: 'chargeTS', rescan: $scope.rescan})});
 		};
 
 	}]);
@@ -208,8 +208,8 @@
 		};
 	});
 
-	indigoControllers.controller('Jobs', ['$scope', '$location', 'JobList', 'socket', function($scope, $location, JobList, socket) {
-		$scope.list = JobList.query();
+	indigoControllers.controller('Jobs', ['$scope', '$location', 'Job', 'socket', function($scope, $location, Job, socket) {
+		$scope.list = Job.query();
 		$scope.currentPage = 0;
 		$scope.pageSize = 20;
 		$scope.numberOfPages = function() {
