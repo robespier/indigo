@@ -102,6 +102,9 @@ Indigo.HTTPMessenger.prototype.post = function(message) {
 	http.request = 'parcel=' + parcel;
 	http.method = "POST";
 	http.execute();
+	var response = http.response;
+	var result = this.dataBroker.decode(response);
+	return result;
 };
 
 /**
@@ -125,12 +128,13 @@ Indigo.HTTPMessenger.prototype.get = function(from) {
  * @return {array} data Array of Job objects
  */
 Indigo.HTTPMessenger.prototype.fetchJobs = function() {
-	var from = this.remote + this.dataBroker.getURI() + 'fetchJobs';
-	from += '?agent=' + $.getenv('computername');
+	var message = {
+		agent: $.getenv('computername'),
+		user: $.getenv('username'),
+		limit: Indigo.config.limit,
+		path: 'jobs/fetch',
+	};
 	this.http.async = false;
-	this.http.mime = "application/" + this.dataBroker.type;
-	this.http.request = undefined;
-	var response = this.get(from);
-	var data = this.dataBroker.decode(response);
-	return data;
+	var response = this.post(message);
+	return response;
 };
