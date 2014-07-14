@@ -58,10 +58,8 @@ Indigo.BaseImposer.prototype = {
 			// interrupt normal flow
 			throw {
 				message: e.message,
-				source: 'openTemplate',
+				src: 'openTemplate',
 				file: templateFile.fullName,
-				severity: 'error',
-				jobid: this.job.id,
 			};
 		}
 	},

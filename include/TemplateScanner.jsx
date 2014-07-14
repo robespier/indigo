@@ -145,7 +145,7 @@ Indigo.TemplateScanner.prototype.getTemplates = function() {
 		throw {
 			message: 'Template folder not found',
 			file: this.templateFolder.fullName,
-			jobid: this.job._id,
+			src: 'getTemplates',
 		};
 	}
 };

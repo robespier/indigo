@@ -40,12 +40,11 @@ Indigo.MatchingImposer.prototype.imposeLabels = function() {
 				this.applyStyle();
 			} catch (e) {
 				// interrupt normal flow
+				this.closeTemplate();
 				throw {
 					message: e.message,
-					source: 'MatchingImposer',
+					src: 'imposeLabels',
 					file: this.labels[i].fullName,
-					severity: 'error',
-					jobid: this.job.id,
 				};
 			}
 		}

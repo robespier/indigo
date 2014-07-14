@@ -44,16 +44,13 @@ Indigo.AssemblyImposer.prototype.imposeLabels = function() {
 			this.sendtoHotFolder(); // Кидаем сборку в горячую папку
 			this.currentLabel.remove();
 		} catch (err) {
-			// Continue flow
-			$.writeln('Continue.AssemblyImposer.v3');
-			var errobj = {
+			// Interrupt flow
+			this.closeTemplate();
+			throw {
 				message: err.message,
-				source: 'AssemblyImposer',
+				src: 'imposeLabels',
 				file: this.labels[i].fullName,
-				severity: 'warning',
-				jobid: this.job.id,
 			};
-			this.job.errors.push(errobj);
 		}
 	}
 };
