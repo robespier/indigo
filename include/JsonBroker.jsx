@@ -84,7 +84,6 @@ Indigo.JsonBroker.prototype.json_encode = function(obj, jsonString) {
 		if (obj.hasOwnProperty(i)) {
 			var Pocient = obj[i];
 			if (typeof(Pocient) === 'undefined') {
-				jsonString += '"' + i + '":"undefined",';
 				continue;
 			}
 			if (Pocient instanceof Array) {
