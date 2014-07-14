@@ -36,6 +36,10 @@ module.exports = function(grunt) {
 				dest: 'include/<%= pkg.name %>.jsxinc'
 			},
 			tests: {
+				options: {
+					banner: '(function() {\n',
+					footer: '})();',
+				},
 				src: [
 					'tests/testSuite.jsx',
 					'tests/html-reporter.jsx',
