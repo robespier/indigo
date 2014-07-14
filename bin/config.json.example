@@ -1,6 +1,7 @@
 ({
 	//"achtungFile": 'Y:/ACHTUNG.eps',
 	//"webserver": 'http://indigo.aicdr.pro:8080/',
+	//"limit": 2,
 	// Корень хотфолдеров
 	//"HFRoot" : 'X:/',
 	// Корень шаблонов

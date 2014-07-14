@@ -15,6 +15,8 @@ Indigo.config = {
 		'D:/bin/Adobe/Adobe Bridge CS3/webaccesslib.dll'
 	],
 	webserver : 'http://indigo.aicdr.pro:8080/',
+	// Количество заданий на один активный цикл работы агента
+	limit: 2,
 	// Корень хотфолдеров
 	HFRoot : 'X:/',
 	// Корень шаблонов
