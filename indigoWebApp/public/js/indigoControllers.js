@@ -223,6 +223,7 @@
 			pending: true,
 			fetched: true,
 			started: true,
+			running: true,
 			finished: false,
 			error: true,
 			deleted: false,
