@@ -29,7 +29,7 @@ Indigo.Tests.testHTTPMessenger.prototype.setUp = function() {
 };
 
 Indigo.Tests.testHTTPMessenger.prototype.run = function() {
-	// Проверка получнеия списка заданий с помощью `HTTP GET`
+	// Проверка получнеия списка заданий с помощью `HTTP POST`
 	var jobs = this.assertEq(this.pocient.receive('fetchJobs'),'fetchjob.test');
 	this.log(jobs, 'Synchronously fetch job list from REAL webserver');
 	
@@ -66,7 +66,7 @@ Indigo.Tests.testHTTPMessenger.prototype.run = function() {
 	this.post = function(data) {
 		this.log(this.assertEq(data.async, true), 'Defaults: async is true');
 		this.log(this.assertEq(data.path, 'info'), 'Defaults: route === info');
-		this.log(this.assertEq(data.info, 'finish'), 'Defaults: info === finish');
+		this.log(this.assertEq(data.status, 'finished'), 'Defaults: status === finished');
 	};
 	this.pocient.send.call(this,null,{});
 	// WTF? Вместе с исключением estk передаёт код, который его бросил. 

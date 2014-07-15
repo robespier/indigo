@@ -52,25 +52,28 @@ Indigo.Tests.testBaseImposer.prototype.run = function() {
 	// send()
 	//
 	this.pocient.job._id = 'unitTest';	
+	
 	// Нету messenger в этой инкарнации
 	delete this.pocient.messenger;
 	this.log(this.assertEq(this.pocient.send('question','main'), false), 'send() without messenger');
+	
 	// Начинаем подсовывать самозванцев: якобы мессенджеров с готовыми вариантами запросов
 	this.pocient.messenger = {
 		test: this,
 		send: function(type, wrapper) {
 			var suite = this.test;
-			var isOmitType = ((type === null) && (wrapper.jobid === 'unitTest') && (wrapper.result.data.type === 'question'));
+			var isOmitType = ((type === null) && (wrapper._id === 'unitTest') && (wrapper.result.data.type === 'question'));
 			suite.log(suite.assertEq(isOmitType, true), 'send() without type parameter');
 		},
 	};
 	this.pocient.send({type: 'question'});
+
 	this.pocient.messenger = {
 		test: this,
 		send: function(type, wrapper) {
 			var suite = this.test;
-			var isOmitType = ((type === 'question') && (wrapper.jobid === 'unitTest') && (wrapper.result.data.severity === 'main'));
-			suite.log(suite.assertEq(isOmitType, true), 'send() with type parameter');
+			var isOmitType = ((type === 'info') && (wrapper._id === 'unitTest') && (wrapper.status === 'question') && (wrapper.result.data.severity === 'main'));
+			suite.log(suite.assertEq(isOmitType, true), 'send() custom status');
 		},
 	};
 	this.pocient.send('question', {severity: 'main'});

@@ -44,7 +44,7 @@ Indigo.Tests.testTemplateScanner.prototype.run = function() {
 	var sendCount = 0;
 	var expectedSpecs = [];
 	// Инъекция send():
-	this.pocient.send = function(data) {
+	this.pocient.send = function(status, data) {
 		if (sendCount === 0) {
 			expectedSpecs.push(data[0]);
 			expectedSpecs.push(data[1]);

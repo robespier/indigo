@@ -112,7 +112,7 @@ Indigo.Tests.testController.prototype.run = function() {
 			if (type === 'error') {
 				var rst = this.test.assertEq(type, 'error');
 				this.test.log(rst, 'Intercept worker exceptions with expected status');
-				var rms = this.test.assertEq(data.message, 'worker throw test');
+				var rms = this.test.assertEq(data.error.message, 'worker throw test');
 				this.test.log(rms, 'Intercept worker exceptions with expected message');
 			}
 		}
