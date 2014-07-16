@@ -2,9 +2,8 @@ indigoControllers.controller('JobBlank', [
 	'$scope',
 	'$location',
 	'Job',
-	'Blank',
 	'strings',
-	function($scope, $location, Job, Blank, strings) {
+	function($scope, $location, Job, strings) {
 
 	$scope.strings = strings;
 	
@@ -33,25 +32,26 @@ indigoControllers.controller('JobBlank', [
 	};
 	
 	/**
-	 * Загрузка данных бланка откуда-нибудь
-	 * _id на шару, нода сейчас отвечает единственным набором данных
+	 * Сопоставление 'имя намотки' => стиль/имя файла
+	 * 
+	 * @type {object}
 	 */
-	$scope.order = Blank.get({_id:'example'});
-
+	var dirMap = {
+		head_mashine: 'roll_1_6',
+		foot_mashine: 'roll_2_5',
+		foot_forward: 'roll_3_7',
+		head_forward: 'roll_4_8'
+	};
+	
 	/**
 	 * Get image of roll direction
 	 *
 	 * @param {string} direction Predefined direction
 	 * @returns {string} img Icon relative filename
 	 */
-	$scope.getRollImage = function(direction) {
-		var dirMap = {
-			head_mashine: 'roll_1_6',
-			foot_mashine: 'roll_2_5',
-			foot_forward: 'roll_3_7',
-			head_forward: 'roll_4_8',
-		};
-		var img = 'roll_undefinded';
+	$scope.getRollImage = function() {
+		var direction = $scope.workset.roll_dir,
+			img = 'roll_undefinded';
 
 		if (dirMap[direction]) {
 			img = dirMap[direction];
@@ -65,9 +65,14 @@ indigoControllers.controller('JobBlank', [
 	 * @param {string} direction Predefined direction
 	 */
 	$scope.setRollImage = function(direction) {
-		this.order.roll_dir = direction;
+		$scope.workset.roll_dir = direction;
 	};
 
+	/**
+	 * Отправка формы и перенаправление на список заданий
+	 * 
+	 * @returns {undefined}
+	 */
 	$scope.submit = function() {
 		Job.push({parcel: angular.toJson($scope.workset)});
 		$location.path('/jobs');
