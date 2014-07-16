@@ -9,7 +9,9 @@ module.exports = function(grunt) {
 			' * Copyright (c) <%= grunt.template.today("yyyy") %> ' +
 			'<%= pkg.author %>; Licensed MIT\n */\n\n',
 		// Custom properties
-		adobe_startup: "/Adobe/Startup Scripts CS3/Adobe Bridge",
+		paths: {
+			webapp:	'indigoWebApp',
+		},
 		// Task configuration.
 		concat: {
 			// Очередность файлов важна, поэтому они перечисляются явно
@@ -51,19 +53,19 @@ module.exports = function(grunt) {
 			},
 			styles: {
 				src: [
-					'indigoWebApp/bower_components/bootstrap/dist/css/bootstrap.css',
-					'indigoWebApp/public/css/<%= pkg.name %>.css',
+					'<%= paths.webapp %>/bower_components/bootstrap/dist/css/bootstrap.css',
+					'<%= paths.webapp %>/public/css/<%= pkg.name %>.css',
 				],
-				dest: 'indigoWebApp/public/css/styles.css',
+				dest: '<%= paths.webapp %>/public/css/styles.css',
 			},
 			scripts: {
 				src: [
-					'indigoWebApp/bower_components/angular/angular.js',
-					'indigoWebApp/bower_components/jquery/dist/jquery.js',
-					'indigoWebApp/bower_components/bootstrap/dist/js/bootstrap.js',
-					'indigoWebApp/public/js/<%= pkg.name %>.js',
+					'<%= paths.webapp %>/bower_components/angular/angular.js',
+					'<%= paths.webapp %>/bower_components/jquery/dist/jquery.js',
+					'<%= paths.webapp %>/bower_components/bootstrap/dist/js/bootstrap.js',
+					'<%= paths.webapp %>/public/js/<%= pkg.name %>.js',
 				],
-				dest: 'indigoWebApp/public/js/scripts.js',
+				dest: '<%= paths.webapp %>/public/js/scripts.js',
 			},
 		},
 		jshint: {
@@ -125,16 +127,16 @@ module.exports = function(grunt) {
 				},
 			},
 			tests: {
-				src: ['<%= concat.tests.dest %>', 'indigoWebApp/test/**/*.js'],
+				src: ['<%= concat.tests.dest %>', '<%= paths.webapp %>/test/**/*.js'],
 			},
 			nodejs: {
-				src: ['indigoWebApp/app.js', 'indigoWebApp/routes/*.js', 'Gruntfile.js', 'indigoWebApp/lib/*.js'],
+				src: ['<%= paths.webapp %>/app.js', '<%= paths.webapp %>/routes/*.js', 'Gruntfile.js', '<%= paths.webapp %>/lib/*.js'],
 			},
 			browser: {
 				src: [
-					'indigoWebApp/public/js/indigo.js',
-					'indigoWebApp/public/js/indigoServices.js',
-					'indigoWebApp/public/js/indigoControllers.js'
+					'<%= paths.webapp %>/public/js/indigo.js',
+					'<%= paths.webapp %>/public/js/indigoServices.js',
+					'<%= paths.webapp %>/public/js/indigoControllers.js'
 				],
 			},
 		},
@@ -199,7 +201,7 @@ module.exports = function(grunt) {
 			},
 			browser: {
 				files: {
-					src: ['indigoWebApp/public/**/*.html'],
+					src: ['<%= paths.webapp %>/public/**/*.html'],
 				},
 			}
 		},
@@ -218,7 +220,7 @@ module.exports = function(grunt) {
 				tasks: ['jshint:nodejs']
 			},
 			tests: {
-				files: ['<%= concat.tests.src %>', 'indigoWebApp/test/**/*.js'],
+				files: ['<%= concat.tests.src %>', '<%= paths.webapp %>/test/**/*.js'],
 				tasks: ['concat:tests','jshint:tests', 'sed']
 			},
 			browser: {
