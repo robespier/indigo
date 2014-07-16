@@ -14,12 +14,12 @@ module.exports = function(grunt) {
 		},
 		// Task configuration.
 		concat: {
-			// Очередность файлов важна, поэтому они перечисляются явно
 			options: {
 				banner: '<%= banner %>',
 				separator: '\n'
 			},
 			estk: {
+				// Очередность файлов важна, поэтому они перечисляются явно
 				src: [
 					'include/Config.jsx',
 					'include/Utils.jsx',
@@ -37,6 +37,7 @@ module.exports = function(grunt) {
 				],
 				dest: 'include/<%= pkg.name %>.jsxinc'
 			},
+			// тесты для estk только
 			tests: {
 				options: {
 					banner: '(function() {\n',
@@ -143,7 +144,10 @@ module.exports = function(grunt) {
 				src: ['<%= concat.tests.dest %>', '<%= paths.webapp %>/test/**/*.js'],
 			},
 			nodejs: {
-				src: ['<%= paths.webapp %>/app.js', '<%= paths.webapp %>/routes/*.js', 'Gruntfile.js', '<%= paths.webapp %>/lib/*.js'],
+				src: ['<%= paths.webapp %>/app.js', '<%= paths.webapp %>/routes/*.js', '<%= paths.webapp %>/lib/*.js'],
+			},
+			grunt: {
+				src: ['Gruntfile.js']
 			},
 			browser: {
 				src: [
@@ -242,6 +246,10 @@ module.exports = function(grunt) {
 				files: ['<%= htmlangular.browser.files.src %>'],
 				tasks: [ 'html' ],
 			},
+			grunt: {
+				files: ['<%= jshint.grunt.src %>'],
+				tasks: ['jshint:grunt'],
+			},
 			/**
 			 * С сетевого диска не работает;
 			 * С локального работает, но тогда теряет смысл;
@@ -284,5 +292,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('html', ['htmlangular']);
 	grunt.registerTask('instrument', ['concat', 'blanket', 'sed']);
 	// Default task.
-	grunt.registerTask('default', ['concat', 'jshint:estk', 'sed']);
+	grunt.registerTask('default', ['concat', 'jshint', 'sed']);
 };
