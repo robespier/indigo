@@ -25,14 +25,14 @@
 	<div class="row">
 		<form class="form" ng-submit="submit()" name="addJob">
 			<button type="button" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-				Назад
+				{{strings.goback}}
 			</button>
 			{{currentPage+1}}/{{numberOfPages()}}
 			<button type="button" class="btn btn-default" ng-disabled="currentPage >= list.length/pageSize - 1" ng-click="currentPage=currentPage+1">
-				Вперёд
+				{{strings.goforward}}
 			</button>
 			<button type="submit" class="btn btn-success" ng-click="go('/addJob')">
-				Добавить
+				{{strings.add}}
 			</button>
 		</form>
 	</div>

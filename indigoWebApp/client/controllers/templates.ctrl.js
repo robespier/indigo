@@ -2,7 +2,9 @@ indigoControllers.controller('Templates', [
 	'$scope',
 	'Job',
 	'Template',
-	function($scope, Job, Template) {
+	'strings',
+	function($scope, Job, Template, strings) {
+		$scope.strings = strings;
 		// Шаблоны с базы
 		$scope.list = Template.query();
 		// Пейджер: http://jsfiddle.net/2ZzZB/56/

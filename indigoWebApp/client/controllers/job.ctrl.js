@@ -3,8 +3,11 @@ indigoControllers.controller('JobBlank', [
 	'$location',
 	'Job',
 	'Blank',
-	function($scope, $location, Job, Blank) {
+	'strings',
+	function($scope, $location, Job, Blank, strings) {
 
+	$scope.strings = strings;
+	
 	/**
 	 * Значения по умолчанию
 	 */

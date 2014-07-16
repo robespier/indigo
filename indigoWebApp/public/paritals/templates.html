@@ -4,7 +4,7 @@
 			<table class="table table-condensed table-hover">
 				<tr ng-repeat="template in list | startFrom: currentPage*pageSize | limitTo: 20">
 					<td ng-class="{'text-danger': template.status==='error'}">{{template.name}}</td>
-					<td><a href="file:///{{template.path}}">open</a></td>
+					<td><a href="file:///{{template.path}}">{{strings.open}}</a></td>
 					<td>{{template.errors}}</td>
 				</tr>
 			</table>
@@ -12,21 +12,21 @@
 		<div class="col-lg-4">
 			<div class="panel">
 				<button type="button" class="btn btn-default" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-					Назад
+					{{strings.goback}}
 				</button>
 				{{currentPage+1}}/{{numberOfPages()}}
 				<button type="button" class="btn btn-default" ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
-					Вперёд
+					{{strings.goforward}}
 				</button>
 			</div>
 			<div class="panel">
 				<form class="form" ng-submit="submit()" name="templateScanner">
 					<button type="submit" class="btn" ng-class="rescan ? 'btn-danger' : 'btn-success'">
-						Сканировать
+						{{strings.doscan}}
 					</button>
 					<div class="checkbox">
 						<label>
-							<input type="checkbox" ng-model="rescan" id="full-rescan"> Полностью
+							<input type="checkbox" ng-model="rescan" id="full-rescan"> {{strings.dofullscan}}
 						</label>
 					</div>
 				</form>

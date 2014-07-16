@@ -3,7 +3,9 @@ indigoControllers.controller('Jobs', [
 	'$location',
 	'Job',
 	'socket',
-	function($scope, $location, Job, socket) {
+	'strings',
+	function($scope, $location, Job, socket, strings) {
+		$scope.strings = strings;
 		$scope.list = Job.query();
 		$scope.currentPage = 0;
 		$scope.pageSize = 20;
