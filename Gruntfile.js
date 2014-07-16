@@ -72,6 +72,8 @@ module.exports = function(grunt) {
 			scripts: {
 				src: [
 					'<%= paths.webapp %>/bower_components/angular/angular.js',
+					'<%= paths.webapp %>/bower_components/angular-resource/angular-resource.js',
+					'<%= paths.webapp %>/bower_components/angular-route/angular-route.js',
 					'<%= paths.webapp %>/bower_components/jquery/dist/jquery.js',
 					'<%= paths.webapp %>/bower_components/bootstrap/dist/js/bootstrap.js',
 					'<%= paths.webapp %>/public/js/<%= pkg.name %>.js',

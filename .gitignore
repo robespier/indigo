@@ -10,6 +10,6 @@ node_modules/
 bin/contours/
 /nbproject/private/
 bower_components/
-indigoWebApp/public/css/styles.css
-indigoWebApp/public/js/scripts.js
+indigoWebApp/public/css/
+indigoWebApp/public/js/
 *.log
