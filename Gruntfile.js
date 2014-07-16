@@ -51,6 +51,17 @@ module.exports = function(grunt) {
 				],
 				dest: 'bin/tests.js',
 			},
+			client: {
+				options: {
+					banner: '<%= banner %>\n(function() {\n',
+					footer: '\n})();',
+				},
+				src: [
+					'<%= paths.webapp %>/client/header.concat.js',
+					'<%= paths.webapp %>/client/**/*.js',
+				],
+				dest: '<%= paths.webapp %>/public/js/<%= pkg.name %>.js',
+			},
 			styles: {
 				src: [
 					'<%= paths.webapp %>/bower_components/bootstrap/dist/css/bootstrap.css',
@@ -134,9 +145,7 @@ module.exports = function(grunt) {
 			},
 			browser: {
 				src: [
-					'<%= paths.webapp %>/public/js/indigo.js',
-					'<%= paths.webapp %>/public/js/indigoServices.js',
-					'<%= paths.webapp %>/public/js/indigoControllers.js'
+					'<%= concat.client.dest %>'
 				],
 			},
 		},
@@ -224,8 +233,8 @@ module.exports = function(grunt) {
 				tasks: ['concat:tests','jshint:tests', 'sed']
 			},
 			browser: {
-				files: '<%= jshint.browser.src %>',
-				tasks: ['jshint:browser'],
+				files: ['<%= concat.client.src %>'],
+				tasks: ['concat:client', 'concat:scripts', 'jshint:browser'],
 			},
 			validate: {
 				files: ['<%= htmlangular.browser.files.src %>'],
