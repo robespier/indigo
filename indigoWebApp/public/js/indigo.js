@@ -1,49 +1,12 @@
-(function() {
+﻿(function() {
 	var app = angular.module('indigo', ['indigoDatasource']);
-	app.controller('OrderBlank', ['$scope', 'Blank', function($scope, Blank) {
-		/**
-		 * Загрузка данных бланка откуда-нибудь
-		 * _id на шару, нода сейчас отвечает единственным набором данных
-		 */
-		$scope.order = Blank.get({_id:'example'});
-		/**
-		 * Get image of roll direction
-		 *
-		 * @param {string} direction Predefined direction
-		 * @returns {string} img Icon relative filename
-		 */
-		$scope.getRollImage = function(direction) {
-			var dirMap = {
-				head_mashine: 'roll_1_6',
-				foot_mashine: 'roll_2_5',
-				foot_forward: 'roll_3_7',
-				head_forward: 'roll_4_8',
-			};
-			var img = 'roll_undefinded';
-
-			if (dirMap[direction]) {
-				img = dirMap[direction];
-			}
-			return img + '.png';
-		};
-
-		/**
-		 * Set roll image from click on rolls radio group
-		 *
-		 * @param {string} direction Predefined direction
-		 */
-		$scope.setRollImage = function(direction) {
-			this.order.roll_dir = direction;
-		};
-	}]);
-
-	app.controller('JobBlank', ['$scope', 'Job', 'Blank', function($scope, Job, Blank) {
+	app.controller('JobBlank', ['$scope', 'Job', function($scope, Job) {
 
 		/**
 		 * Значения по умолчанию
 		 */
 		$scope.workset = {
-			roll: 'hand',
+			roll_var: 'auto',
 			roll_type: 'outside',
 			roll_dir: 'head_forward',
 			inks: [ 
@@ -58,24 +21,18 @@
 			hot_folder: 'CMYK',
 			actions: [
 				{ name: 'AssemblyImposer', process: true },
-				{ name: 'MatchingImposer', process: true },
-				{ name: 'AchtungImposer', process: true },
+				{ name: 'MatchingImposer', process: false },
+				{ name: 'AchtungImposer', process: false },
 			],
 		};
 		
-		/**
-		 * Загрузка данных бланка откуда-нибудь
-		 * _id на шару, нода сейчас отвечает единственным набором данных
-		 */
-		$scope.order = Blank.get({_id:'example'});
-
 		/**
 		 * Get image of roll direction
 		 *
 		 * @param {string} direction Predefined direction
 		 * @returns {string} img Icon relative filename
 		 */
-		$scope.getRollImage = function(direction) {
+/*		$scope.getRollImage = function(direction) {
 			var dirMap = {
 				head_mashine: 'roll_1_6',
 				foot_mashine: 'roll_2_5',
@@ -89,16 +46,48 @@
 			}
 			return img + '.png';
 		};
-
+*/
+		$scope.getRoll = function() {
+			var roll;
+			if((this.workset.roll_type==='outside')&&(this.workset.roll_dir==='head_mashine')){
+				roll='roll_1_6';
+			}	
+			if((this.workset.roll_type==='inside')&&(this.workset.roll_dir==='head_mashine')){
+				roll='roll_1_6';
+			}
+			if((this.workset.roll_type==='outside')&&(this.workset.roll_dir==='foot_mashine')){
+				roll='roll_2_5';
+			}
+			if((this.workset.roll_type==='inside')&&(this.workset.roll_dir==='foot_mashine')){
+				roll='roll_2_5';
+			}
+			if((this.workset.roll_type==='outside')&&(this.workset.roll_dir==='foot_forward')){
+				roll='roll_3_7';
+			}	
+			if((this.workset.roll_type==='inside')&&(this.workset.roll_dir==='foot_forward')){
+				roll='roll_3_7';
+			}
+			if((this.workset.roll_type==='outside')&&(this.workset.roll_dir==='head_forward')){
+				roll='roll_4_8';
+			}
+			if((this.workset.roll_type==='inside')&&(this.workset.roll_dir==='head_forward')){
+				roll='roll_4_8';
+			}
+			$scope.workset.roll = roll;
+			return roll;
+		};
 		/**
 		 * Set roll image from click on rolls radio group
 		 *
 		 * @param {string} direction Predefined direction
 		 */
-		$scope.setRollImage = function(direction) {
-			this.order.roll_dir = direction;
+		$scope.setRolltype = function(roll_type) {
+			this.workset.roll_type = roll_type;
 		};
-
+		$scope.setRolldir = function(roll_dir) {
+			this.workset.roll_dir = roll_dir;
+		};
+		
 		$scope.submit = function() {
 			$scope.workset.status = 'pending';
 			Job.save($scope.workset);
