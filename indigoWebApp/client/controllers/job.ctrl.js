@@ -6,12 +6,11 @@ indigoControllers.controller('JobBlank', [
 	function($scope, $location, Job, strings) {
 
 	$scope.strings = strings;
-	
 	/**
 	 * Значения по умолчанию
 	 */
 	$scope.workset = {
-		roll: 'hand',
+		roll_var: 'auto',
 		roll_type: 'outside',
 		roll_dir: 'head_forward',
 		inks: [ 
@@ -26,37 +25,39 @@ indigoControllers.controller('JobBlank', [
 		hot_folder: 'CMYK',
 		actions: [
 			{ name: 'AssemblyImposer', process: true },
-			{ name: 'MatchingImposer', process: true },
-			{ name: 'AchtungImposer', process: true },
+			{ name: 'MatchingImposer', process: false },
+			{ name: 'AchtungImposer', process: false },
 		],
 	};
 	
-	/**
-	 * Сопоставление 'имя намотки' => стиль/имя файла
-	 * 
-	 * @type {object}
-	 */
-	var dirMap = {
-		head_mashine: 'roll_1_6',
-		foot_mashine: 'roll_2_5',
-		foot_forward: 'roll_3_7',
-		head_forward: 'roll_4_8'
-	};
-	
-	/**
-	 * Get image of roll direction
-	 *
-	 * @param {string} direction Predefined direction
-	 * @returns {string} img Icon relative filename
-	 */
-	$scope.getRollImage = function() {
-		var direction = $scope.workset.roll_dir,
-			img = 'roll_undefinded';
-
-		if (dirMap[direction]) {
-			img = dirMap[direction];
+	$scope.getRoll = function() {
+		var roll;
+		if((this.workset.roll_type==='outside')&&(this.workset.roll_dir==='head_mashine')){
+			roll='roll_1_6';
+		}	
+		if((this.workset.roll_type==='inside')&&(this.workset.roll_dir==='head_mashine')){
+			roll='roll_1_6';
 		}
-		return img + '.png';
+		if((this.workset.roll_type==='outside')&&(this.workset.roll_dir==='foot_mashine')){
+			roll='roll_2_5';
+		}
+		if((this.workset.roll_type==='inside')&&(this.workset.roll_dir==='foot_mashine')){
+			roll='roll_2_5';
+		}
+		if((this.workset.roll_type==='outside')&&(this.workset.roll_dir==='foot_forward')){
+			roll='roll_3_7';
+		}	
+		if((this.workset.roll_type==='inside')&&(this.workset.roll_dir==='foot_forward')){
+			roll='roll_3_7';
+		}
+		if((this.workset.roll_type==='outside')&&(this.workset.roll_dir==='head_forward')){
+			roll='roll_4_8';
+		}
+		if((this.workset.roll_type==='inside')&&(this.workset.roll_dir==='head_forward')){
+			roll='roll_4_8';
+		}
+		$scope.workset.roll = roll;
+		return roll;
 	};
 
 	/**
@@ -64,15 +65,13 @@ indigoControllers.controller('JobBlank', [
 	 *
 	 * @param {string} direction Predefined direction
 	 */
-	$scope.setRollImage = function(direction) {
-		$scope.workset.roll_dir = direction;
+	$scope.setRolltype = function(roll_type) {
+		this.workset.roll_type = roll_type;
+	};
+	$scope.setRolldir = function(roll_dir) {
+		this.workset.roll_dir = roll_dir;
 	};
 
-	/**
-	 * Отправка формы и перенаправление на список заданий
-	 * 
-	 * @returns {undefined}
-	 */
 	$scope.submit = function() {
 		Job.push({parcel: angular.toJson($scope.workset)});
 		$location.path('/jobs');
