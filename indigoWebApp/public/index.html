@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html ng-app="indigo" ng-controller="JobBlank">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -15,88 +15,69 @@
 					<h1>Quick Collect</h1>
 					<div class="col-md-3">
 						<div class="row">
-							<label for="cut_number" class="col-md-1 control-label">Штамп</label>
+							<label for="cut_number" class="col-md-1 control-label">Номер_штампа</label>
 							<input ng-model="workset.cut_number" name="cut_number" id="cut_number" class="form-control" type="text">
 						</div>	
-<!--					<div class="row">
-						<div class="col-md-6">
-							<label for="size_x" class="col-md-0 control-label">Размер_X</label>
-							<div>
-								<input ng-model="workset.size_x" name="size_x" id="size_x" class="form-control" type="text">
-							</div>
-						</div>	
-						<div class="col-md-6">
-							<label for="size_y" class="col-md-0 control-label">Размер_Y
-							</label>
-							<div>
-								<input ng-model="workset.size_y" name="size_y" id="size_y" class="form-control" type="text">
-							</div>
-						</div>
-					</div>
-						<p> </p>
-						<div class="row">
+					<div class="row">
+							<p> </p>
 							<div class="col-md-5">
-								<label for="hand">Намотка</label>
+								<label for="head_mashine"> </label>
+
+								<label for="hand">Тип намотки</label>
 								<div>
 									<div class="radio">
 										<label>
-											<input ng-model="workset.roll" name="roll" value="hand" id="hand" type="radio">ручная
+											<input ng-model="workset.roll_var" name="roll_var" value="hand" id="hand" type="radio">ручная
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input ng-model="workset.roll" name="roll" value="auto" id="auto" type="radio">автомат.
+											<input ng-model="workset.roll_var" name="roll_var" value="auto" id="auto" type="radio">автомат.
 										</label>
 									</div>
 								</div>
+								<p> </p>								
+								<img id="roll_image" ng-src="images/{{ getRoll(roll)+'.png' }}" alt="Расположение этикетки на сборке">
 							</div>
 
-							<div class="col-md-7">
-								<label for="outside">Тип_намотки
+							<div class="col-md-7">					
+							
+							<div>
+								<label for="outside">Напр. намотки
 								</label>
 								<div>
 									<div class="radio">
 										<label>
-											<input ng-model="workset.roll_type" name="roll_type" value="outside" id="outside" type="radio">наружная
+											<input ng-model="workset.roll_type" ng-change="setRolltype('outside')" name="roll_type" value="outside" id="outside" type="radio">наружная
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input ng-model="workset.roll_type" name="roll_type" value="inside" id="inside" type="radio">внутреняя
+											<input ng-model="workset.roll_type" ng-change="setRolltype('inside')" name="roll_type" value="inside" id="inside" type="radio">внутреняя
 										</label>
 									</div>
 								</div>
 							</div>
-						</div>
--->						<div class="row">
-							<p> </p>
-							<div class="col-md-5">
-								<label for="head_mashine">Намотка
-								</label>
-								<img id="roll_image" src="images/roll_1_6.png" ng-src="images/{{ getRollImage(order.roll_dir) }}" alt="Расположение этикетки на сборке">
-							</div>
-
-							<div class="col-md-7">
-							<p> </p>
-								<div>
+							<p> </p>							
+							<div>
 									<div class="radio">
 										<label>
-											<input ng-model="workset.roll_dir" ng-click="setRollImage('head_mashine')" name="roll_dir" value="head_mashine" id="head_mashine" type="radio">головой к машине
+											<input ng-model="workset.roll_dir" ng-click="setRolldir('head_mashine')" name="roll_dir" value="head_mashine" id="head_mashine" type="radio">головой к машине
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input ng-model="workset.roll_dir" ng-click="setRollImage('foot_mashine')" name="roll_dir" value="foot_mashine" id="foot_mashine" type="radio">ногами к машине
+											<input ng-model="workset.roll_dir" ng-click="setRolldir('foot_mashine')" name="roll_dir" value="foot_mashine" id="foot_mashine" type="radio">ногами к машине
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input ng-model="workset.roll_dir" ng-click="setRollImage('foot_forward')" name="roll_dir" value="foot_forward" id="foot_forward" type="radio">ногами вперед
+											<input ng-model="workset.roll_dir" ng-click="setRolldir('foot_forward')" name="roll_dir" value="foot_forward" id="foot_forward" type="radio">ногами вперед
 										</label>
 									</div>
 									<div class="radio">
 										<label>
-											<input ng-model="workset.roll_dir" ng-click="setRollImage('head_forward')" name="roll_dir" value="head_forward" id="head_forward" type="radio">головой вперед
+											<input ng-model="workset.roll_dir" ng-click="setRolldir('head_forward')" name="roll_dir" value="head_forward" id="head_forward" type="radio">головой вперед
 										</label>
 									</div>
 								</div>
