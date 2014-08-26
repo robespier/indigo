@@ -6,16 +6,12 @@
  */
 Indigo.HTTPMessenger = function(dataBroker) {
 	this.dataBroker = dataBroker;
+	this.remote = Indigo.config.webserver;
 	this.http = new HttpConnection();
 };
 
 Indigo.HTTPMessenger.prototype = new Indigo.Messenger();
 Indigo.HTTPMessenger.prototype.constructor = Indigo.HTTPMessenger;
-
-/**
- * @prop {string} remote Адрес Web-сервера
- */
-Indigo.HTTPMessenger.prototype.remote = Indigo.config.webserver;
 
 /**
  * Соединение закрываем в конце цикла жизни приложения
