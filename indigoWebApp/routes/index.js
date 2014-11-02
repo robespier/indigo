@@ -1,4 +1,5 @@
-var _ = require('lodash'),
+﻿var _ = require('lodash'),
+	orders = require('./orders'),
 	jobs = require('./jobs'),
 	templates = require('./templates');
 
@@ -17,6 +18,14 @@ function route(fn, req, res) {
 		return;
 	}
 }
+
+/**
+ * Заказы
+ */
+exports.orders = function(req, res) {
+	var method = req.params[1];
+	route(orders[method], req, res);
+};
 
 /**
  * Задания
