@@ -1,4 +1,4 @@
-var app = angular.module('indigo', [
+﻿var app = angular.module('indigo', [
 	'ngRoute',
 	'indigoControllers',
 	'indigoDatasource',
@@ -17,7 +17,7 @@ app.config(['$routeProvider',
 				templateUrl: 'paritals/templates.html',
 			}).
 			otherwise({
-				redirectTo: 'paritals/dashboard.html'
+				redirectTo: 'index.html'
 			});
 	}
 ]);
